@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELED
+}
+
+enum UserRole {
+  ADMIN
+  PROFESSIONAL
+}
+
+model Consultory {
+  id           Int           @id @default(autoincrement())
+  name         String
+  slug         String        @unique
+  city         String
+  address      String
+  phone        String
+  description  String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  professionals Professional[]
+  appointments Appointment[]
+}
+
+model Professional {
+  id            Int           @id @default(autoincrement())
+  fullName      String
+  specialty     String
+  bio           String
+  photoUrl      String?
+  serves        String?
+  yearsPractice Int
+  email         String        @unique
+  colorToken    String
+  consultoryId  Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  consultory    Consultory    @relation(fields: [consultoryId], references: [id], onDelete: Cascade)
+  schedules     Schedule[]
+  appointments  Appointment[]
+  authUser      AuthUser?
+}
+
+model Schedule {
+  id             Int          @id @default(autoincrement())
+  dayOfWeek      Int
+  startTime      String
+  endTime        String
+  telehealth     Boolean      @default(false)
+  professionalId Int
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId])
+}
+
+model Appointment {
+  id             Int               @id @default(autoincrement())
+  patientName    String
+  patientEmail   String
+  reason         String
+  startsAt       DateTime
+  status         AppointmentStatus @default(PENDING)
+  consultoryId   Int
+  professionalId Int
+  createdAt      DateTime          @default(now())
+  consultory     Consultory        @relation(fields: [consultoryId], references: [id], onDelete: Cascade)
+  professional   Professional      @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([startsAt])
+  @@index([consultoryId])
+  @@index([professionalId])
+}
+
+model AuthUser {
+  id             Int          @id @default(autoincrement())
+  email          String       @unique
+  passwordHash   String
+  role           UserRole
+  professionalId Int?         @unique
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  professional   Professional? @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([role])
+}

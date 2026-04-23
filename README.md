@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Consultorios Multi-Sede
 
-## Getting Started
+Aplicacion simple en Next.js para administrar varios consultorios, su equipo profesional y turnos proximos.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) + React + TypeScript
+- Prisma ORM
+- SQLite local
+
+## Primer inicio
 
 ```bash
+npm install
+npm run db:migrate -- --name init
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts utiles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev        # entorno de desarrollo
+npm run build      # build de produccion
+npm run lint       # chequeo ESLint
+npm run db:migrate # crear/aplicar migraciones
+npm run db:seed    # cargar datos demo
+```
 
-## Learn More
+## Datos incluidos en seed
 
-To learn more about Next.js, take a look at the following resources:
+- 2 consultorios
+- 2 profesionales con disponibilidad semanal
+- turnos de ejemplo para visualizar el tablero
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Rutas MVP implementadas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/profesionales` listado publico de profesionales
+- `/profesionales/[id]` disponibilidad y reserva de turnos
+- `/auth/login` login para admin y profesionales
+- `/dashboard` tablero admin (protegido)
+- `/professional` tablero profesional (protegido)
 
-## Deploy on Vercel
+## Credenciales demo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Admin:
+	- email: `admin@consultorios.local`
+	- password: `demo1234`
+- Profesional 1:
+	- email: `agustina.ferraro@centrovida.ar`
+	- password: `demo1234`
+- Profesional 2:
+	- email: `tomas.ibarra@puertosalud.ar`
+	- password: `demo1234`
