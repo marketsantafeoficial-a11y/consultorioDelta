@@ -9,6 +9,11 @@ const loginSchema = z.object({
   password: z.string().min(4),
 });
 
+const DEMO_ADMIN = {
+  email: "admin@delta.local",
+  password: "admin1234",
+};
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -16,6 +21,20 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json({ error: "Credenciales invalidas." }, { status: 400 });
+    }
+
+    if (
+      parsed.data.email.toLowerCase() === DEMO_ADMIN.email &&
+      parsed.data.password === DEMO_ADMIN.password
+    ) {
+      const token = await signSession({ userId: 0, role: "ADMIN" });
+      await setSessionCookie(token);
+
+      return NextResponse.json({
+        ok: true,
+        role: "ADMIN",
+        redirectTo: "/dashboard",
+      });
     }
 
     const user = await prisma.authUser.findUnique({

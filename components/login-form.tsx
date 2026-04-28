@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@delta.local");
+  const [password, setPassword] = useState("admin1234");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +64,9 @@ export function LoginForm() {
           </h1>
           <p style={{ color: 'var(--color-muted)', fontSize: '0.95rem' }}>
             Acceso para pacientes y profesionales
+          </p>
+          <p style={{ color: 'var(--color-primary)', fontSize: '0.85rem', fontWeight: 700, marginTop: '0.5rem' }}>
+            Admin demo: admin@delta.local / admin1234
           </p>
         </div>
 

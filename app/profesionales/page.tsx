@@ -13,8 +13,8 @@ export default async function ProfesionalesPage() {
     <main className="page-wrap">
       <section className="section-stack">
         <div className="section-head">
-          <h1>Profesionales</h1>
-          <p>Elige un perfil para ver disponibilidad y reservar turno.</p>
+          <h1>Consultorios disponibles</h1>
+          <p>Elegi un espacio para ver disponibilidad y reservar un modulo.</p>
         </div>
         <div className="cards-grid professionals-grid">
           {professionals.map((professional) => (

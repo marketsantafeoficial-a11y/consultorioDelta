@@ -4,7 +4,7 @@ import ProfessionalCalendar from "@/components/ProfessionalCalendar.client";
 
 export const metadata = {
   title: "Agenda | Delta Consultorios",
-  description: "Consultá la disponibilidad de cada profesional y reservá tu turno.",
+  description: "Consulta la disponibilidad de consultorios y reserva tu modulo.",
 };
 
 export default async function CalendarioPage() {
@@ -25,10 +25,10 @@ export default async function CalendarioPage() {
 
       <main className="cal-main">
         <div className="cal-hero-text">
-          <h1 className="cal-hero-title">Nuestr@s profesionales</h1>
+          <h1 className="cal-hero-title">Agenda de consultorios</h1>
           <p className="cal-hero-sub">
-            {professionals.length} profesionales disponibles ·{" "}
-            {consultories.length} sedes en La Plata
+            {professionals.length} espacios disponibles ·{" "}
+            {consultories.length} sedes en City Bell
           </p>
         </div>
 

@@ -1,6 +1,6 @@
+import { LogoutButton } from "@/components/logout-button";
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import { LogoutButton } from "@/components/logout-button";
 
 const dtFormatter = new Intl.DateTimeFormat("es-AR", {
   dateStyle: "short",
@@ -10,102 +10,169 @@ const dtFormatter = new Intl.DateTimeFormat("es-AR", {
 export default async function DashboardPage() {
   await requireRole("ADMIN");
 
-  const [consultoriesCount, professionalsCount, appointments] = await Promise.all([
-    prisma.consultory.count(),
-    prisma.professional.count(),
+  const [sedes, recursos, reservas] = await Promise.all([
+    prisma.consultory.findMany({ orderBy: { name: "asc" } }),
+    prisma.professional.findMany({
+      include: { consultory: true, schedules: true },
+      orderBy: { fullName: "asc" },
+    }),
     prisma.appointment.findMany({
-      include: { professional: true, consultory: true },
+      include: { consultory: true, professional: true },
       orderBy: { startsAt: "asc" },
-      take: 20,
+      take: 40,
     }),
   ]);
 
+  const reservasPendientes = reservas.filter((item) => item.status === "PENDING").length;
+  const reservasConfirmadas = reservas.filter((item) => item.status === "CONFIRMED").length;
+
   return (
     <div style={{ background: "var(--color-background)", minHeight: "100vh" }}>
-      <header style={{ 
-        background: "white", 
-        borderBottom: "1px solid var(--color-border)", 
-        padding: "1rem 2rem",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center"
-      }}>
-        <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>Delta Administrador</h1>
+      <header
+        style={{
+          alignItems: "center",
+          background: "white",
+          borderBottom: "1px solid var(--color-border)",
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "1rem 2rem",
+        }}
+      >
+        <div>
+          <p style={{ color: "var(--color-muted)", fontSize: "0.8rem", fontWeight: 700, margin: 0 }}>
+            ADMINISTRACION
+          </p>
+          <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>
+            Gestion de reservas Delta
+          </h1>
+        </div>
         <LogoutButton />
       </header>
 
-      <main style={{ maxWidth: "1200px", margin: "2rem auto", padding: "0 2rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
-        
-        {/* Estadísticas */}
-        <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem" }}>
+      <main
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.5rem",
+          margin: "0 auto",
+          maxWidth: "1200px",
+          padding: "2rem",
+        }}
+      >
+        <section style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
           {[
-            { value: consultoriesCount, label: "Consultorios Activos" },
-            { value: professionalsCount, label: "Profesionales Registrados" },
-            { value: appointments.length, label: "Turnos Próximos" },
-          ].map((stat, i) => (
-            <div key={i} style={{ 
-              background: "white", 
-              padding: "2rem", 
-              borderRadius: "16px", 
-              boxShadow: "var(--shadow)",
-              border: "1px solid var(--color-border)"
-            }}>
-              <strong style={{ display: "block", fontSize: "2.5rem", color: "var(--color-primary)", lineHeight: 1 }}>{stat.value}</strong>
-              <span style={{ color: "var(--color-muted)", fontWeight: "600", fontSize: "0.9rem", textTransform: "uppercase" }}>{stat.label}</span>
-            </div>
+            { label: "Sedes", value: sedes.length },
+            { label: "Consultorios reservables", value: recursos.length },
+            { label: "Pendientes", value: reservasPendientes },
+            { label: "Confirmadas", value: reservasConfirmadas },
+          ].map((stat) => (
+            <article
+              key={stat.label}
+              style={{
+                background: "white",
+                border: "1px solid var(--color-border)",
+                borderRadius: "8px",
+                boxShadow: "var(--shadow)",
+                padding: "1.25rem",
+              }}
+            >
+              <strong style={{ color: "var(--color-primary)", display: "block", fontSize: "2rem" }}>
+                {stat.value}
+              </strong>
+              <span style={{ color: "var(--color-muted)", fontSize: "0.85rem", fontWeight: 800 }}>
+                {stat.label}
+              </span>
+            </article>
           ))}
         </section>
 
-        {/* Tabla de turnos */}
-        <section style={{ 
-          background: "white", 
-          borderRadius: "16px", 
-          boxShadow: "var(--shadow)", 
-          border: "1px solid var(--color-border)",
-          overflow: "hidden" 
-        }}>
-          <div style={{ padding: "1.5rem", borderBottom: "1px solid var(--color-border)" }}>
-            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Últimos turnos agendados</h2>
+        <section
+          style={{
+            background: "white",
+            border: "1px solid var(--color-border)",
+            borderRadius: "8px",
+            boxShadow: "var(--shadow)",
+            overflow: "hidden",
+          }}
+        >
+          <div style={{ borderBottom: "1px solid var(--color-border)", padding: "1.25rem" }}>
+            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Reservas de consultorios</h2>
+            <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>
+              Control de solicitudes, profesionales, recursos y horarios reservados.
+            </p>
           </div>
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-              <thead style={{ background: "var(--color-muted-bg)" }}>
+            <table>
+              <thead>
                 <tr>
-                  <th style={{ padding: "1rem 1.5rem", color: "var(--color-muted)", fontSize: "0.85rem", textTransform: "uppercase" }}>Paciente</th>
-                  <th style={{ padding: "1rem 1.5rem", color: "var(--color-muted)", fontSize: "0.85rem", textTransform: "uppercase" }}>Profesional</th>
-                  <th style={{ padding: "1rem 1.5rem", color: "var(--color-muted)", fontSize: "0.85rem", textTransform: "uppercase" }}>Sede</th>
-                  <th style={{ padding: "1rem 1.5rem", color: "var(--color-muted)", fontSize: "0.85rem", textTransform: "uppercase" }}>Fecha</th>
-                  <th style={{ padding: "1rem 1.5rem", color: "var(--color-muted)", fontSize: "0.85rem", textTransform: "uppercase" }}>Estado</th>
+                  <th>Cliente / profesional</th>
+                  <th>Consultorio</th>
+                  <th>Sede</th>
+                  <th>Fecha</th>
+                  <th>Motivo</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments.map((item) => (
-                  <tr key={item.id} style={{ borderBottom: "1px solid var(--color-border)" }}>
-                    <td style={{ padding: "1rem 1.5rem", fontWeight: "600" }}>{item.patientName}</td>
-                    <td style={{ padding: "1rem 1.5rem" }}>{item.professional.fullName}</td>
-                    <td style={{ padding: "1rem 1.5rem", color: "var(--color-muted)" }}>{item.consultory.name}</td>
-                    <td style={{ padding: "1rem 1.5rem" }}>{dtFormatter.format(item.startsAt)}</td>
-                    <td style={{ padding: "1rem 1.5rem" }}>
-                      <span style={{ 
-                        background: "var(--color-muted-bg)", 
-                        color: "var(--color-primary)", 
-                        padding: "0.25rem 0.75rem", 
-                        borderRadius: "99px",
-                        fontSize: "0.8rem",
-                        fontWeight: "700"
-                      }}>
-                        {item.status}
-                      </span>
+                {reservas.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <strong style={{ display: "block" }}>{item.patientName}</strong>
+                      <span style={{ color: "var(--color-muted)", fontSize: "0.8rem" }}>{item.patientEmail}</span>
+                    </td>
+                    <td>{item.professional.fullName}</td>
+                    <td>{item.consultory.name}</td>
+                    <td>{dtFormatter.format(item.startsAt)}</td>
+                    <td>{item.reason}</td>
+                    <td>
+                      <span className="status-pill">{item.status}</span>
                     </td>
                   </tr>
                 ))}
-                {appointments.length === 0 && (
+                {reservas.length === 0 && (
                   <tr>
-                    <td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: "var(--color-muted)" }}>No hay turnos registrados.</td>
+                    <td colSpan={6} style={{ color: "var(--color-muted)", padding: "2rem", textAlign: "center" }}>
+                      Todavia no hay reservas registradas.
+                    </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        <section
+          style={{
+            background: "white",
+            border: "1px solid var(--color-border)",
+            borderRadius: "8px",
+            boxShadow: "var(--shadow)",
+            padding: "1.25rem",
+          }}
+        >
+          <h2 style={{ fontSize: "1.25rem", margin: "0 0 1rem" }}>Usuarios demo</h2>
+          <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+            {[
+              ["Administrador", "admin@delta.local", "admin1234"],
+              ["Gestion consultorio", "gestion@delta.local", "gestion1234"],
+              ["Cliente demo", "cliente@delta.local", "cliente1234"],
+            ].map(([role, email, password]) => (
+              <div
+                key={email}
+                style={{
+                  background: "var(--color-muted-bg)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "8px",
+                  padding: "1rem",
+                }}
+              >
+                <strong>{role}</strong>
+                <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>{email}</p>
+                <p style={{ color: "var(--color-primary)", fontWeight: 800, margin: "0.25rem 0 0" }}>
+                  {password}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
       </main>

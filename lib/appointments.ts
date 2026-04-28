@@ -85,7 +85,7 @@ export async function createPendingAppointment(input: {
     });
 
     if (!professional) {
-      throw new Error("Profesional no encontrado.");
+      throw new Error("Consultorio no encontrado.");
     }
 
     const existing = await tx.appointment.findFirst({
@@ -111,7 +111,7 @@ export async function createPendingAppointment(input: {
     });
 
     if (patientActive) {
-      throw new Error("Este paciente ya tiene un turno activo.");
+      throw new Error("Este cliente ya tiene una reserva activa.");
     }
 
     return tx.appointment.create({

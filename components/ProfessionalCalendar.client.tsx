@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 
 type Professional = {
   id: string;
@@ -123,7 +124,7 @@ function ProfCard({
             className="prof-avatar"
           />
           <div className="prof-mode-badges">
-            {hasOnline && <span className="mode-badge online">Online</span>}
+            {hasOnline && <span className="mode-badge online">Virtual</span>}
             {hasPresencial && <span className="mode-badge presencial">Presencial</span>}
           </div>
         </div>
@@ -141,18 +142,21 @@ function ProfCard({
               {specs.map((s) => <SpecialtyTag key={s} label={s} />)}
             </div>
           )}
+          <Link href={`/profesionales/${professional.id}`} className="link-button" style={{ marginTop: "0.75rem", width: "fit-content" }}>
+            Reservar modulo
+          </Link>
         </div>
       </div>
 
       {/* ── Right: calendar ── */}
       <div className="prof-card-calendar">
-        {/* Online / Presencial toggle */}
+        {/* Modalidad */}
         <div className="mode-toggle">
           <button
             className={`mode-btn ${mode === "online" ? "active" : ""}`}
             onClick={() => setMode("online")}
           >
-            Online
+            Virtual
           </button>
           <button
             className={`mode-btn ${mode === "presencial" ? "active" : ""}`}
@@ -211,7 +215,7 @@ function ProfCard({
                           key={slot}
                           className={`slot-btn ${busy ? "slot-busy" : "slot-free"}`}
                           disabled={busy}
-                          title={busy ? "Ocupado" : `Reservar ${slot}`}
+                          title={busy ? "Ocupado" : `Disponible ${slot}`}
                         >
                           {slot}
                         </button>
@@ -241,7 +245,7 @@ export default function ProfessionalCalendar({
 }) {
   const [filter, setFilter] = useState<string>("Todos");
 
-  // Collect unique specialties
+  // Collect unique resource types
   const specialties = useMemo(() => {
     const set = new Set<string>();
     professionals.forEach((p) => {
@@ -265,7 +269,7 @@ export default function ProfessionalCalendar({
 
   return (
     <div className="agenda-root">
-      {/* Specialty filter pills */}
+      {/* Resource filter pills */}
       {specialties.length > 1 && (
         <div className="specialty-filters">
           {specialties.map((s) => (
@@ -290,7 +294,7 @@ export default function ProfessionalCalendar({
           />
         ))}
         {filtered.length === 0 && (
-          <p className="no-results">No hay profesionales disponibles con ese filtro.</p>
+          <p className="no-results">No hay consultorios disponibles con ese filtro.</p>
         )}
       </div>
     </div>

@@ -34,7 +34,9 @@ export default async function ProfesionalDetallePage({ params }: Params) {
         <h1>{professional.fullName}</h1>
         <p>{professional.specialty}</p>
         <p>{professional.bio}</p>
-        <p>{professional.consultory.name}</p>
+        <p>
+          {professional.consultory.name} · {professional.consultory.address}
+        </p>
       </section>
       <BookingForm professionalId={professional.id} />
     </main>

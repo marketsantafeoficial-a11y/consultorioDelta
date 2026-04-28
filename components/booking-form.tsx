@@ -69,7 +69,7 @@ export function BookingForm({ professionalId }: BookingFormProps) {
       return;
     }
 
-    setFeedback("Turno reservado en estado pendiente.");
+    setFeedback("Reserva solicitada en estado pendiente.");
     setPatientName("");
     setPatientEmail("");
     setReason("");
@@ -79,7 +79,7 @@ export function BookingForm({ professionalId }: BookingFormProps) {
 
   return (
     <div className="card booking-card">
-      <h2>Reservar turno</h2>
+      <h2>Reservar modulo</h2>
       <div className="booking-row">
         <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
         <button type="button" onClick={loadAvailability}>
@@ -97,12 +97,12 @@ export function BookingForm({ professionalId }: BookingFormProps) {
           ))}
         </select>
       ) : (
-        <p className="muted">Primero elige fecha y presiona &quot;Ver horarios&quot;.</p>
+        <p className="muted">Primero elegi fecha y presiona &quot;Ver horarios&quot;.</p>
       )}
 
       <form onSubmit={onSubmit} className="booking-form-fields">
         <input
-          placeholder="Nombre y apellido"
+          placeholder="Nombre, apellido o estudio"
           value={patientName}
           onChange={(event) => setPatientName(event.target.value)}
           required
@@ -115,13 +115,13 @@ export function BookingForm({ professionalId }: BookingFormProps) {
           required
         />
         <textarea
-          placeholder="Motivo de consulta"
+          placeholder="Uso del espacio o comentario"
           value={reason}
           onChange={(event) => setReason(event.target.value)}
           rows={3}
           required
         />
-        <button type="submit">Reservar</button>
+        <button type="submit">Solicitar reserva</button>
       </form>
 
       {feedback ? <p className="status-text">{feedback}</p> : null}
