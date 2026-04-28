@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { DrawTitle, TypewriterText } from "@/components/TextAnimations.client";
+import { RevealOnScroll } from "@/components/RevealOnScroll.client";
 import { instagramDemo } from "@/lib/instagram-demo";
 
 export const metadata = {
@@ -12,6 +14,13 @@ const features = [
   "Alquiler por modulos",
   "Centro de City Bell",
   "Gestion de reservas online",
+];
+
+const steps = [
+  ["01", "Elegir consultorio"],
+  ["02", "Seleccionar fecha y modulo"],
+  ["03", "Enviar solicitud"],
+  ["04", "Gestion confirma"],
 ];
 
 export default function HomePage() {
@@ -33,74 +42,87 @@ export default function HomePage() {
         <section className="lp-hero">
           <div className="lp-hero-inner">
             <div className="lp-hero-content">
-              <p className="lp-eyebrow">Cantilo N 146 · City Bell</p>
-              <h1 className="lp-hero-title">
-                Reserva consultorios equipados por modulo
-              </h1>
-              <p className="lp-hero-sub">
-                Delta ofrece espacios listos para profesionales de la salud,
-                entrevistas, terapia, reuniones y atencion presencial.
-              </p>
-              <div className="lp-hero-actions">
-                <Link href="/calendario" className="lp-cta-primary">
-                  Ver agenda
-                </Link>
-                <Link href="/auth/login" className="lp-cta-secondary">
-                  Panel administrador
-                </Link>
-              </div>
-              <div className="lp-hero-badges">
-                {features.map((item) => (
-                  <span className="lp-badge" key={item}>{item}</span>
-                ))}
-              </div>
+              <RevealOnScroll direction="left">
+                <p className="lp-eyebrow">Cantilo N 146 · City Bell</p>
+                <h1 className="lp-hero-title">
+                  <TypewriterText text="Reserva consultorios" speed={55} startDelay={250} />
+                  <br />
+                  <span className="lp-hero-title-accent">equipados por modulo</span>
+                </h1>
+                <p className="lp-hero-sub">
+                  Delta ofrece espacios listos para profesionales de la salud,
+                  entrevistas, terapia, reuniones y atencion presencial.
+                </p>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={180}>
+                <div className="lp-hero-actions">
+                  <Link href="/calendario" className="lp-cta-primary">
+                    Ver agenda
+                  </Link>
+                  <Link href="/auth/login" className="lp-cta-secondary">
+                    Panel administrador
+                  </Link>
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={300}>
+                <div className="lp-hero-badges">
+                  {features.map((item) => (
+                    <span className="lp-badge" key={item}>{item}</span>
+                  ))}
+                </div>
+              </RevealOnScroll>
             </div>
 
             <div className="lp-hero-card-wrap">
-              <div className="lp-hero-card">
-                <img
-                  alt="Consultorio Delta City Bell"
-                  src={instagramDemo.posts[1].image}
-                  style={{
-                    aspectRatio: "4 / 5",
-                    borderRadius: "12px",
-                    display: "block",
-                    objectFit: "cover",
-                    width: "100%",
-                  }}
-                />
-                <div style={{ marginTop: "1rem" }}>
-                  <div className="lp-hero-card-head">
-                    <span className="lp-availability-dot" />
-                    <span>Disponibilidad por agenda</span>
+              <RevealOnScroll direction="right" delay={120}>
+                <div className="lp-hero-card">
+                  <img
+                    alt="Consultorio Delta City Bell"
+                    src={instagramDemo.posts[1].image}
+                    style={{
+                      aspectRatio: "4 / 5",
+                      borderRadius: "12px",
+                      display: "block",
+                      objectFit: "cover",
+                      width: "100%",
+                    }}
+                  />
+                  <div style={{ marginTop: "1rem" }}>
+                    <div className="lp-hero-card-head">
+                      <span className="lp-availability-dot" />
+                      <span>Disponibilidad por agenda</span>
+                    </div>
+                    <p className="lp-card-note">
+                      Solicitudes pendientes y confirmadas desde el panel admin.
+                    </p>
                   </div>
-                  <p className="lp-card-note">
-                    Solicitudes pendientes y confirmadas desde el panel admin.
-                  </p>
                 </div>
-              </div>
+              </RevealOnScroll>
             </div>
           </div>
         </section>
 
         <section id="espacios" className="lp-section lp-how">
           <div className="lp-section-inner">
-            <h2 className="lp-section-title">Como funciona</h2>
-            <p className="lp-section-sub">
-              La demo permite elegir un espacio, ver horarios disponibles y enviar
-              una solicitud de reserva para que administracion la gestione.
-            </p>
+            <RevealOnScroll>
+              <DrawTitle tag="h2" className="lp-section-title">
+                Como funciona
+              </DrawTitle>
+            </RevealOnScroll>
+            <RevealOnScroll delay={120}>
+              <p className="lp-section-sub">
+                La demo permite elegir un espacio, ver horarios disponibles y enviar
+                una solicitud de reserva para que administracion la gestione.
+              </p>
+            </RevealOnScroll>
             <div className="lp-trust-inner">
-              {[
-                ["01", "Elegir consultorio"],
-                ["02", "Seleccionar fecha y modulo"],
-                ["03", "Enviar solicitud"],
-                ["04", "Gestion confirma"],
-              ].map(([value, label]) => (
-                <div key={label}>
+              {steps.map(([value, label], index) => (
+                <RevealOnScroll key={label} delay={index * 100}>
                   <span className="lp-trust-value">{value}</span>
                   <span className="lp-trust-label">{label}</span>
-                </div>
+                </RevealOnScroll>
               ))}
             </div>
           </div>
@@ -108,34 +130,44 @@ export default function HomePage() {
 
         <section id="fotos" className="lp-section">
           <div className="lp-section-inner">
-            <h2 className="lp-section-title">Espacios Delta</h2>
-            <p className="lp-section-sub">
-              Fotos cargadas desde el material del emprendimiento para mostrar los
-              ambientes y servicios durante la demo.
-            </p>
+            <RevealOnScroll>
+              <DrawTitle tag="h2" className="lp-section-title" accentColor="#059669">
+                Espacios Delta
+              </DrawTitle>
+            </RevealOnScroll>
+            <RevealOnScroll delay={120}>
+              <p className="lp-section-sub">
+                Fotos cargadas desde el material del emprendimiento para mostrar los
+                ambientes y servicios durante la demo.
+              </p>
+            </RevealOnScroll>
             <div className="lp-spec-grid">
-              {instagramDemo.posts.slice(0, 6).map((post) => (
-                <article className="lp-spec-card" key={post.image}>
-                  <img
-                    alt={post.title}
-                    src={post.image}
-                    style={{
-                      aspectRatio: "4 / 5",
-                      borderRadius: "8px",
-                      display: "block",
-                      marginBottom: "1rem",
-                      objectFit: "cover",
-                      width: "100%",
-                    }}
-                  />
-                  <h3 className="lp-spec-name">{post.title}</h3>
-                  <p className="lp-spec-desc">{post.type}</p>
-                </article>
+              {instagramDemo.posts.slice(0, 6).map((post, index) => (
+                <RevealOnScroll key={post.image} delay={index * 80}>
+                  <article className="lp-spec-card">
+                    <img
+                      alt={post.title}
+                      src={post.image}
+                      style={{
+                        aspectRatio: "4 / 5",
+                        borderRadius: "8px",
+                        display: "block",
+                        marginBottom: "1rem",
+                        objectFit: "cover",
+                        width: "100%",
+                      }}
+                    />
+                    <h3 className="lp-spec-name">{post.title}</h3>
+                    <p className="lp-spec-desc">{post.type}</p>
+                  </article>
+                </RevealOnScroll>
               ))}
             </div>
-            <Link href="/calendario" className="lp-cta-primary lp-cta-center">
-              Reservar un consultorio
-            </Link>
+            <RevealOnScroll delay={160}>
+              <Link href="/calendario" className="lp-cta-primary lp-cta-center">
+                Reservar un consultorio
+              </Link>
+            </RevealOnScroll>
           </div>
         </section>
       </main>
