@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { ProfessionalAvailabilityEditor } from "@/components/professional-availability-editor";
 import { LogoutButton } from "@/components/logout-button";
 
+export const dynamic = "force-dynamic";
+
 const dtFormatter = new Intl.DateTimeFormat("es-AR", {
   dateStyle: "short",
   timeStyle: "short",

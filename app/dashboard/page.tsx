@@ -2,6 +2,8 @@ import { LogoutButton } from "@/components/logout-button";
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 const dtFormatter = new Intl.DateTimeFormat("es-AR", {
   dateStyle: "short",
   timeStyle: "short",

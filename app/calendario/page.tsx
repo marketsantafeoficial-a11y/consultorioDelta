@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getDashboardData } from "@/lib/dashboard-data";
 import ProfessionalCalendar from "@/components/ProfessionalCalendar.client";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Agenda | Delta Consultorios",
   description: "Consulta la disponibilidad de consultorios y reserva tu modulo.",

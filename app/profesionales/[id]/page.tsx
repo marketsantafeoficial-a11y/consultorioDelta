@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { BookingForm } from "@/components/booking-form";
 
+export const dynamic = "force-dynamic";
+
 type Params = {
   params: Promise<{ id: string }>;
 };
