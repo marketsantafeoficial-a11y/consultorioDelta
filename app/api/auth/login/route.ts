@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       role: user.role,
-      redirectTo: user.role === "ADMIN" ? "/dashboard" : "/professional",
+      redirectTo: user.role === "ADMIN" ? "/dashboard" : user.role === "PROFESSIONAL" ? "/professional" : "/calendario",
     });
   } catch {
     return NextResponse.json({ error: "No se pudo iniciar sesion." }, { status: 500 });

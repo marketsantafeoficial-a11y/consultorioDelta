@@ -1,142 +1,101 @@
-import { AppointmentStatus, PrismaClient } from "@prisma/client";
-import { hashPassword } from "../lib/auth";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.authUser.deleteMany();
+  console.log("Limpiando base de datos...");
   await prisma.appointment.deleteMany();
   await prisma.schedule.deleteMany();
+  await prisma.authUser.deleteMany();
   await prisma.professional.deleteMany();
   await prisma.consultory.deleteMany();
 
-  const defaultPasswordHash = await hashPassword("demo1234");
-
-  const centro = await prisma.consultory.create({
+  console.log("Creando consultorios...");
+  const sedeCentro = await prisma.consultory.create({
     data: {
-      name: "Centro Vida Norte",
-      slug: "centro-vida-norte",
-      city: "Palermo",
-      address: "Armenia 1487",
-      phone: "+54 11 4981-3920",
-      description:
-        "Equipo interdisciplinario para terapia individual, pareja y familia.",
+      name: "Sede Centro",
+      slug: "sede-centro",
+      city: "La Plata",
+      address: "Calle 12 N 1234",
+      phone: "221-555-1234",
+      description: "Consultorios en el corazon de la ciudad.",
     },
   });
 
-  const puerto = await prisma.consultory.create({
+  const sedeCityBell = await prisma.consultory.create({
     data: {
-      name: "Consultorio Puerto Salud",
-      slug: "consultorio-puerto-salud",
-      city: "Puerto Madero",
-      address: "Juana Manso 740",
-      phone: "+54 11 4112-8440",
-      description:
-        "Atencion presencial y online para adultos, adolescentes y orientacion vocacional.",
+      name: "Sede City Bell",
+      slug: "sede-city-bell",
+      city: "City Bell",
+      address: "Camino Belgrano y 473",
+      phone: "221-555-4321",
+      description: "Nuestra sede norte, amplia y moderna.",
     },
   });
 
-  const profileA = await prisma.professional.create({
+  console.log("Creando usuarios y profesionales...");
+  
+  // 1. Super Admin
+  await prisma.authUser.create({
     data: {
-      fullName: "Lic. Agustina Ferraro",
-      specialty: "Psicoterapia Cognitivo Conductual",
-      bio: "Especialista en ansiedad y estres laboral con enfoque breve.",
-      photoUrl: "https://images.unsplash.com/photo-1601582589907-f92af5ed9db8?auto=format&fit=crop&w=600&q=80",
-      serves: "Adultos",
-      yearsPractice: 8,
-      email: "agustina.ferraro@centrovida.ar",
-      colorToken: "sunset",
-      consultoryId: centro.id,
-      schedules: {
-        create: [
-          { dayOfWeek: 1, startTime: "09:00", endTime: "14:00", telehealth: true },
-          { dayOfWeek: 3, startTime: "11:00", endTime: "18:00", telehealth: false },
-        ],
-      },
+      email: "admin@deltaconsultorios.com.ar",
+      passwordHash: bcrypt.hashSync("admin123", 10),
+      role: "ADMIN",
     },
   });
 
-  const profileB = await prisma.professional.create({
+  // 2. Profesional
+  const prof1 = await prisma.professional.create({
     data: {
-      fullName: "Lic. Tomas Ibarra",
-      specialty: "Terapia de Pareja",
-      bio: "Acompana procesos vinculares y comunicacion en crisis.",
-      photoUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
-      serves: "Parejas y adultos",
-      yearsPractice: 11,
-      email: "tomas.ibarra@puertosalud.ar",
-      colorToken: "forest",
-      consultoryId: puerto.id,
-      schedules: {
-        create: [
-          { dayOfWeek: 2, startTime: "10:00", endTime: "17:00", telehealth: true },
-          { dayOfWeek: 5, startTime: "13:00", endTime: "20:00", telehealth: false },
-        ],
-      },
+      fullName: "Dra. Laura Gonzalez",
+      specialty: "Psicologia Clinica",
+      bio: "Especialista en ansiedad y depresion con mas de 10 anos de experiencia.",
+      email: "laura.gonzalez@example.com",
+      yearsPractice: 10,
+      colorToken: "blue",
+      consultoryId: sedeCentro.id,
+      serves: "Adultos y adolescentes",
     },
   });
 
-  await prisma.appointment.createMany({
-    data: [
-      {
-        patientName: "Camila R.",
-        patientEmail: "camila@email.com",
-        reason: "Gestion de ansiedad",
-        startsAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
-        status: AppointmentStatus.CONFIRMED,
-        consultoryId: centro.id,
-        professionalId: profileA.id,
-      },
-      {
-        patientName: "Nicolas P.",
-        patientEmail: "nicolas@email.com",
-        reason: "Sesion de pareja",
-        startsAt: new Date(Date.now() + 1000 * 60 * 60 * 30),
-        status: AppointmentStatus.PENDING,
-        consultoryId: puerto.id,
-        professionalId: profileB.id,
-      },
-      {
-        patientName: "Valentina S.",
-        patientEmail: "valen@email.com",
-        reason: "Orientacion vocacional",
-        startsAt: new Date(Date.now() + 1000 * 60 * 60 * 54),
-        status: AppointmentStatus.CONFIRMED,
-        consultoryId: centro.id,
-        professionalId: profileA.id,
-      },
-    ],
+  await prisma.authUser.create({
+    data: {
+      email: "profesional@deltaconsultorios.com.ar",
+      passwordHash: bcrypt.hashSync("prof123", 10),
+      role: "PROFESSIONAL",
+      professionalId: prof1.id,
+    },
   });
 
-  await prisma.authUser.createMany({
-    data: [
-      {
-        email: "admin@consultorios.local",
-        passwordHash: defaultPasswordHash,
-        role: "ADMIN",
-      },
-      {
-        email: "agustina.ferraro@centrovida.ar",
-        passwordHash: defaultPasswordHash,
-        role: "PROFESSIONAL",
-        professionalId: profileA.id,
-      },
-      {
-        email: "tomas.ibarra@puertosalud.ar",
-        passwordHash: defaultPasswordHash,
-        role: "PROFESSIONAL",
-        professionalId: profileB.id,
-      },
-    ],
+  // 3. Paciente
+  await prisma.authUser.create({
+    data: {
+      email: "paciente@example.com",
+      passwordHash: bcrypt.hashSync("paciente123", 10),
+      role: "PATIENT",
+    },
   });
+
+  console.log("Creando horarios...");
+  await prisma.schedule.create({
+    data: {
+      dayOfWeek: 1, // Lunes
+      startTime: "09:00",
+      endTime: "13:00",
+      telehealth: false,
+      professionalId: prof1.id,
+    },
+  });
+
+  console.log("Semilla plantada exitosamente.");
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (error) => {
-    console.error(error);
-    await prisma.$disconnect();
+  .catch((e) => {
+    console.error(e);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

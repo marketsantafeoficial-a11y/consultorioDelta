@@ -22,6 +22,7 @@ enum AppointmentStatus {
 enum UserRole {
   ADMIN
   PROFESSIONAL
+  PATIENT
 }
 
 model Consultory {

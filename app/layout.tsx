@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Figtree, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-geist-sans",
+const figtree = Figtree({
   subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-geist-mono",
+const notoSans = Noto_Sans({
   subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+  weight: ["300", "400", "500", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Consultorios | Agenda Multi-Sede",
-  description: "Panel simple para gestion de consultorios, profesionales y turnos.",
+  title: "Delta Consultorios | Psicólogos en La Plata",
+  description:
+    "Encontrá tu psicólogo, terapeuta o especialista en salud en La Plata. Turnos online y presenciales, confirmación inmediata.",
 };
 
 export default function RootLayout({
@@ -23,11 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${manrope.variable} ${spaceGrotesk.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="es" className={`${figtree.variable} ${notoSans.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

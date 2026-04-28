@@ -35,7 +35,7 @@ export async function getSessionPayload() {
   }
 }
 
-export async function requireRole(role: "ADMIN" | "PROFESSIONAL") {
+export async function requireRole(role: "ADMIN" | "PROFESSIONAL" | "PATIENT") {
   const session = await getSessionPayload();
 
   if (!session || session.role !== role) {
