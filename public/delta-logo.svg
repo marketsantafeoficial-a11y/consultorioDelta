@@ -1,0 +1,8 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="110" cy="110" r="97" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <path d="M110 39L174 166H46L110 39Z" stroke="#DDAA2A" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M110 55L158 153H62L110 55Z" stroke="#DDAA2A" stroke-width="2" stroke-linejoin="round"/>
+  <text x="110" y="113" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#2F241B" font-style="italic">Delta</text>
+  <text x="110" y="132" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6B5A4D" letter-spacing="1">CONSULTORIOS</text>
+  <text x="110" y="154" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#2F241B" font-style="italic">City Bell</text>
+</svg>

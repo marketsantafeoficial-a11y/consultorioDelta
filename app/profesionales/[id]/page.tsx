@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { BookingForm } from "@/components/booking-form";
+import { isSpaceResource } from "@/lib/resource-kind";
 
 export const dynamic = "force-dynamic";
 
@@ -30,8 +32,14 @@ export default async function ProfesionalDetallePage({ params }: Params) {
     notFound();
   }
 
+  const purpose = isSpaceResource(professional) ? "spaces" : "appointments";
+
   return (
     <main className="page-wrap">
+      <div className="header-actions">
+        <Link href="/" className="header-home-link">Inicio</Link>
+        <Link href="/calendario" className="header-home-link">Agenda publica</Link>
+      </div>
       <section className="card">
         <h1>{professional.fullName}</h1>
         <p>{professional.specialty}</p>
@@ -40,7 +48,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
           {professional.consultory.name} · {professional.consultory.address}
         </p>
       </section>
-      <BookingForm professionalId={professional.id} />
+      <BookingForm professionalId={professional.id} purpose={purpose} />
     </main>
   );
 }

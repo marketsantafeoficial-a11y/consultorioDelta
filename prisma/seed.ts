@@ -88,12 +88,49 @@ async function main() {
     },
   });
 
+  const licAgustina = await prisma.professional.create({
+    data: {
+      fullName: "Lic. Agustina Ferraro",
+      specialty: "Psicologia clinica",
+      bio: "Atencion psicologica para adolescentes y adultos con agenda propia de turnos.",
+      email: "agustina.ferraro@centrovida.ar",
+      yearsPractice: 8,
+      colorToken: "violet",
+      consultoryId: sedeCentro.id,
+      serves: "Ansiedad, terapia individual, orientacion familiar",
+      photoUrl: "https://ui-avatars.com/api/?name=Agustina+Ferraro&size=160&background=e8e4f8&color=4a4080&bold=true&rounded=true",
+    },
+  });
+
+  const licTomas = await prisma.professional.create({
+    data: {
+      fullName: "Lic. Tomas Ibarra",
+      specialty: "Kinesiologia",
+      bio: "Rehabilitacion, evaluaciones funcionales y seguimiento de tratamientos.",
+      email: "tomas.ibarra@puertosalud.ar",
+      yearsPractice: 6,
+      colorToken: "emerald",
+      consultoryId: sedeCityBell.id,
+      serves: "Rehabilitacion, postura, dolor cronico",
+      photoUrl: "https://ui-avatars.com/api/?name=Tomas+Ibarra&size=160&background=dcfce7&color=166534&bold=true&rounded=true",
+    },
+  });
+
   await prisma.authUser.create({
     data: {
-      email: "gestion@delta.local",
-      passwordHash: bcrypt.hashSync("gestion1234", 10),
+      email: "agustina.ferraro@centrovida.ar",
+      passwordHash: bcrypt.hashSync("agustina1234", 10),
       role: "PROFESSIONAL",
-      professionalId: consultorio1.id,
+      professionalId: licAgustina.id,
+    },
+  });
+
+  await prisma.authUser.create({
+    data: {
+      email: "tomas.ibarra@puertosalud.ar",
+      passwordHash: bcrypt.hashSync("tomas1234", 10),
+      role: "PROFESSIONAL",
+      professionalId: licTomas.id,
     },
   });
 
@@ -107,7 +144,7 @@ async function main() {
   });
 
   console.log("Creando horarios...");
-  const resources = [consultorio1, consultorio2, oficina];
+  const resources = [consultorio1, consultorio2, oficina, licAgustina, licTomas];
   for (const resource of resources) {
     for (const dayOfWeek of [1, 2, 3, 4, 5]) {
       await prisma.schedule.create({
@@ -194,6 +231,36 @@ async function main() {
       consultoryId: sedeCityBell.id,
       dayOffset: 5,
       hour: 12,
+      status: "PENDING" as const,
+    },
+    {
+      patientName: "Marina Lopez",
+      patientEmail: "marina.lopez@example.com",
+      reason: "Primera entrevista psicologica",
+      professionalId: licAgustina.id,
+      consultoryId: sedeCentro.id,
+      dayOffset: 2,
+      hour: 16,
+      status: "PENDING" as const,
+    },
+    {
+      patientName: "Sofia Garcia",
+      patientEmail: "sofia.garcia@example.com",
+      reason: "Sesion de seguimiento",
+      professionalId: licAgustina.id,
+      consultoryId: sedeCentro.id,
+      dayOffset: 4,
+      hour: 11,
+      status: "CONFIRMED" as const,
+    },
+    {
+      patientName: "Juan Perez",
+      patientEmail: "juan.perez@example.com",
+      reason: "Evaluacion funcional",
+      professionalId: licTomas.id,
+      consultoryId: sedeCityBell.id,
+      dayOffset: 3,
+      hour: 18,
       status: "PENDING" as const,
     },
   ];

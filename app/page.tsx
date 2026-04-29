@@ -4,23 +4,23 @@ import { RevealOnScroll } from "@/components/RevealOnScroll.client";
 import { instagramDemo } from "@/lib/instagram-demo";
 
 export const metadata = {
-  title: "Delta Consultorios | Reserva de consultorios en City Bell",
+  title: "Delta Consultorios | Consultorios en City Bell",
   description:
-    "Alquiler de consultorios y oficinas equipadas en City Bell. Reserva por modulos con agenda online.",
+    "Alquiler de consultorios y oficinas equipadas en City Bell. Consulta disponibilidad y coordina con administracion.",
 };
 
 const features = [
   "Consultorios equipados",
   "Alquiler por modulos",
   "Centro de City Bell",
-  "Gestion de reservas online",
+  "Gestion administrada",
 ];
 
 const steps = [
-  ["01", "Elegir consultorio"],
-  ["02", "Seleccionar fecha y modulo"],
-  ["03", "Enviar solicitud"],
-  ["04", "Gestion confirma"],
+  ["01", "Ver agenda"],
+  ["02", "Detectar horarios libres"],
+  ["03", "Contactar administracion"],
+  ["04", "Admin confirma la reserva"],
 ];
 
 export default function HomePage() {
@@ -28,11 +28,17 @@ export default function HomePage() {
     <div className="lp-shell">
       <header className="lp-nav-wrap">
         <nav className="lp-nav">
-          <span className="lp-brand">Delta Consultorios</span>
+          <span className="lp-brand">
+            <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo" />
+            Delta Consultorios
+          </span>
           <div className="lp-nav-links">
             <a href="#espacios">Espacios</a>
             <a href="#fotos">Fotos</a>
             <Link href="/calendario">Agenda</Link>
+            <a href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20consultar%20por%20Delta%20Consultorios." target="_blank" rel="noreferrer">
+              221 477 8280
+            </a>
             <Link href="/auth/login" className="lp-nav-cta">Admin</Link>
           </div>
         </nav>
@@ -45,20 +51,21 @@ export default function HomePage() {
               <RevealOnScroll direction="left">
                 <p className="lp-eyebrow">Cantilo N 146 · City Bell</p>
                 <h1 className="lp-hero-title">
-                  <TypewriterText text="Reserva consultorios" speed={55} startDelay={250} />
+                  <TypewriterText text="Consulta disponibilidad" speed={55} startDelay={250} />
                   <br />
-                  <span className="lp-hero-title-accent">equipados por modulo</span>
+                  <span className="lp-hero-title-accent">y coordina por administracion</span>
                 </h1>
                 <p className="lp-hero-sub">
                   Delta ofrece espacios listos para profesionales de la salud,
-                  entrevistas, terapia, reuniones y atencion presencial.
+                  entrevistas, terapia, reuniones y atencion presencial. La demo
+                  separa alquiler de modulos y turnos de profesionales.
                 </p>
               </RevealOnScroll>
 
               <RevealOnScroll delay={180}>
                 <div className="lp-hero-actions">
                   <Link href="/calendario" className="lp-cta-primary">
-                    Ver agenda
+                    Ver agenda publica
                   </Link>
                   <Link href="/auth/login" className="lp-cta-secondary">
                     Panel administrador
@@ -95,7 +102,8 @@ export default function HomePage() {
                       <span>Disponibilidad por agenda</span>
                     </div>
                     <p className="lp-card-note">
-                      Solicitudes pendientes y confirmadas desde el panel admin.
+                      Modulos administrados por Delta y turnos independientes
+                      para cada profesional.
                     </p>
                   </div>
                 </div>
@@ -113,8 +121,8 @@ export default function HomePage() {
             </RevealOnScroll>
             <RevealOnScroll delay={120}>
               <p className="lp-section-sub">
-                La demo permite elegir un espacio, ver horarios disponibles y enviar
-                una solicitud de reserva para que administracion la gestione.
+                La demo muestra dos circuitos: administracion gestiona el alquiler
+                de modulos, y cada profesional recibe sus propios pedidos de turno.
               </p>
             </RevealOnScroll>
             <div className="lp-trust-inner">
@@ -165,7 +173,7 @@ export default function HomePage() {
             </div>
             <RevealOnScroll delay={160}>
               <Link href="/calendario" className="lp-cta-primary lp-cta-center">
-                Reservar un consultorio
+                Ver disponibilidad
               </Link>
             </RevealOnScroll>
           </div>

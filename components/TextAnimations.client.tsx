@@ -22,7 +22,10 @@ export function DrawTitle({
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) { setVisible(true); return; }
+    if (reduced) {
+      const timer = window.setTimeout(() => setVisible(true), 0);
+      return () => window.clearTimeout(timer);
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -103,7 +106,10 @@ export function TypewriterText({
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) { setDisplayed(text); return; }
+    if (reduced) {
+      const timer = window.setTimeout(() => setDisplayed(text), 0);
+      return () => window.clearTimeout(timer);
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {

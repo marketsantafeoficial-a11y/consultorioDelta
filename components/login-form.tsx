@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function LoginForm() {
@@ -53,6 +54,10 @@ export function LoginForm() {
         gap: '1.25rem'
       }}>
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <Link href="/" className="lp-brand" style={{ justifyContent: "center", marginBottom: "1rem" }}>
+            <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo" />
+            Delta Consultorios
+          </Link>
           <h1 style={{ 
             fontSize: '1.75rem', 
             fontWeight: '800', 
@@ -68,6 +73,9 @@ export function LoginForm() {
           <p style={{ color: 'var(--color-primary)', fontSize: '0.85rem', fontWeight: 700, marginTop: '0.5rem' }}>
             Admin demo: admin@delta.local / admin1234
           </p>
+          <Link href="/" className="header-home-link" style={{ display: "inline-flex", marginTop: "0.8rem" }}>
+            Volver al inicio
+          </Link>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

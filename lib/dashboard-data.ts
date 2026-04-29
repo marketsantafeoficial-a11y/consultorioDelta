@@ -36,7 +36,7 @@ export async function getDashboardData() {
       orderBy: {
         startsAt: "asc",
       },
-      take: 6,
+      take: 60,
     }),
   ]);
 

@@ -2,6 +2,7 @@ import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { ProfessionalAvailabilityEditor } from "@/components/professional-availability-editor";
 import { LogoutButton } from "@/components/logout-button";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -48,8 +49,15 @@ export default async function ProfessionalPage() {
         justifyContent: "space-between",
         alignItems: "center"
       }}>
-        <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>Delta | Panel Profesional</h1>
-        <LogoutButton />
+        <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
+          <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo small" />
+          <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>Delta | Panel Profesional</h1>
+        </div>
+        <div className="header-actions">
+          <Link href="/" className="header-home-link">Inicio</Link>
+          <Link href="/calendario" className="header-home-link">Agenda publica</Link>
+          <LogoutButton />
+        </div>
       </header>
 
       <main style={{ maxWidth: "1200px", margin: "2rem auto", padding: "0 2rem", display: "flex", flexDirection: "column", gap: "2rem" }}>

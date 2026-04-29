@@ -1,6 +1,7 @@
 import { LogoutButton } from "@/components/logout-button";
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -40,15 +41,23 @@ export default async function DashboardPage() {
           padding: "1rem 2rem",
         }}
       >
-        <div>
+        <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
+          <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo small" />
+          <div>
           <p style={{ color: "var(--color-muted)", fontSize: "0.8rem", fontWeight: 700, margin: 0 }}>
             ADMINISTRACION
           </p>
           <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>
             Gestion de reservas Delta
           </h1>
+          <span className="admin-phone">Administradora: 221 477 8280</span>
+          </div>
         </div>
-        <LogoutButton />
+        <div className="header-actions">
+          <Link href="/" className="header-home-link">Inicio</Link>
+          <Link href="/calendario" className="header-home-link">Agenda publica</Link>
+          <LogoutButton />
+        </div>
       </header>
 
       <main
@@ -156,7 +165,8 @@ export default async function DashboardPage() {
           <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
             {[
               ["Administrador", "admin@delta.local", "admin1234"],
-              ["Gestion consultorio", "gestion@delta.local", "gestion1234"],
+              ["Psicologa - agenda propia", "agustina.ferraro@centrovida.ar", "agustina1234"],
+              ["Kinesiologo - agenda propia", "tomas.ibarra@puertosalud.ar", "tomas1234"],
               ["Cliente demo", "cliente@delta.local", "cliente1234"],
             ].map(([role, email, password]) => (
               <div
