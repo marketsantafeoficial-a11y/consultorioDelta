@@ -2,6 +2,9 @@ import { LogoutButton } from "@/components/logout-button";
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { AdminProfessionalForm } from "@/components/admin-professional-form.client";
+import { isSpaceResource } from "@/lib/resource-kind";
+import { AdminModulesManager } from "@/components/admin-modules-manager.client";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +31,8 @@ export default async function DashboardPage() {
 
   const reservasPendientes = reservas.filter((item) => item.status === "PENDING").length;
   const reservasConfirmadas = reservas.filter((item) => item.status === "CONFIRMED").length;
+  const profesionalesEquipo = recursos.filter((item) => !isSpaceResource(item));
+  const consultoriosReservables = recursos.filter(isSpaceResource);
 
   return (
     <div style={{ background: "var(--color-background)", minHeight: "100vh" }}>
@@ -73,7 +78,8 @@ export default async function DashboardPage() {
         <section style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
           {[
             { label: "Sedes", value: sedes.length },
-            { label: "Consultorios reservables", value: recursos.length },
+            { label: "Consultorios reservables", value: consultoriosReservables.length },
+            { label: "Profesionales", value: profesionalesEquipo.length },
             { label: "Pendientes", value: reservasPendientes },
             { label: "Confirmadas", value: reservasConfirmadas },
           ].map((stat) => (
@@ -97,7 +103,110 @@ export default async function DashboardPage() {
           ))}
         </section>
 
+        <section className="admin-hub-grid" aria-label="Accesos del tablero">
+          <Link href="/admin/modulos" className="admin-hub-card">
+            <span>01</span>
+            <strong>Modulos y agenda</strong>
+            <p>Crear gabinetes, editar horarios, ocupar, mover y liberar turnos.</p>
+          </Link>
+          <Link href="/admin/profesionales" className="admin-hub-card">
+            <span>02</span>
+            <strong>Profesionales</strong>
+            <p>Cargar perfiles publicos para la seccion Nuestro equipo.</p>
+          </Link>
+          <Link href="/admin/reservas" className="admin-hub-card">
+            <span>03</span>
+            <strong>Reservas</strong>
+            <p>Ver el listado completo de ocupaciones y solicitudes.</p>
+          </Link>
+          <a href="#acceso-admin" className="admin-hub-card">
+            <span>04</span>
+            <strong>Acceso</strong>
+            <p>Recordatorio del usuario administrador activo.</p>
+          </a>
+        </section>
+
         <section
+          id="modulos"
+          className="admin-panel-card"
+          style={{
+            background: "white",
+            border: "1px solid var(--color-border)",
+            borderRadius: "8px",
+            boxShadow: "var(--shadow)",
+            padding: "1.25rem",
+          }}
+        >
+          <div className="admin-panel-head">
+            <span>Modulo de administracion</span>
+            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Editar modulos y horarios</h2>
+            <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>
+              Desde aca podes crear gabinetes, cambiar su disponibilidad semanal y cargar nombres ocupando dia/hora como en la planilla.
+            </p>
+          </div>
+          <AdminModulesManager
+            consultories={sedes.map((sede) => ({
+              id: sede.id,
+              name: sede.name,
+              city: sede.city,
+            }))}
+            modules={consultoriosReservables.map((room) => ({
+              id: room.id,
+              fullName: room.fullName,
+              specialty: room.specialty,
+              bio: room.bio,
+              serves: room.serves,
+              photoUrl: room.photoUrl,
+              consultoryId: room.consultoryId,
+              schedules: room.schedules.map((schedule) => ({
+                id: schedule.id,
+                dayOfWeek: schedule.dayOfWeek,
+                startTime: schedule.startTime,
+                endTime: schedule.endTime,
+              })),
+            }))}
+            occupancies={reservas
+              .filter((item) => consultoriosReservables.some((room) => room.id === item.professionalId))
+              .map((item) => ({
+                id: item.id,
+                patientName: item.patientName,
+                startsAt: item.startsAt.toISOString(),
+                professionalId: item.professionalId,
+                professionalName: item.professional.fullName,
+                status: item.status,
+              }))}
+          />
+        </section>
+
+        <section
+          id="profesionales-admin"
+          className="admin-panel-card"
+          style={{
+            background: "white",
+            border: "1px solid var(--color-border)",
+            borderRadius: "8px",
+            boxShadow: "var(--shadow)",
+            padding: "1.25rem",
+          }}
+        >
+          <div className="admin-panel-head">
+            <span>Equipo publico</span>
+            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Cargar profesional</h2>
+            <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>
+              El administrador carga los profesionales que aparecen en la pagina publica Nuestro equipo.
+            </p>
+          </div>
+          <AdminProfessionalForm
+            consultories={sedes.map((sede) => ({
+              id: sede.id,
+              name: sede.name,
+              city: sede.city,
+            }))}
+          />
+        </section>
+
+        <section
+          className="admin-panel-card"
           style={{
             background: "white",
             border: "1px solid var(--color-border)",
@@ -106,12 +215,56 @@ export default async function DashboardPage() {
             overflow: "hidden",
           }}
         >
-          <div style={{ borderBottom: "1px solid var(--color-border)", padding: "1.25rem" }}>
-            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Reservas de consultorios</h2>
+          <div className="admin-panel-head" style={{ borderBottom: "1px solid var(--color-border)", padding: "1.25rem" }}>
+            <span>Listado publico</span>
+            <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Profesionales del equipo</h2>
             <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>
-              Control de solicitudes, profesionales, recursos y horarios reservados.
+              Estos perfiles se muestran en el popup de la seccion Nuestro equipo.
             </p>
           </div>
+          <div style={{ overflowX: "auto" }}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Profesional</th>
+                  <th>Especialidad</th>
+                  <th>Areas</th>
+                  <th>Sede</th>
+                </tr>
+              </thead>
+              <tbody>
+                {profesionalesEquipo.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <strong style={{ display: "block" }}>{item.fullName}</strong>
+                      <span style={{ color: "var(--color-muted)", fontSize: "0.8rem" }}>{item.email}</span>
+                    </td>
+                    <td>{item.specialty}</td>
+                    <td>{item.serves ?? "Sin cargar"}</td>
+                    <td>{item.consultory.name}</td>
+                  </tr>
+                ))}
+                {profesionalesEquipo.length === 0 && (
+                  <tr>
+                    <td colSpan={4} style={{ color: "var(--color-muted)", padding: "2rem", textAlign: "center" }}>
+                      Todavia no hay profesionales cargados.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <details id="reservas-admin" className="admin-details-panel">
+          <summary>
+            <div>
+              <span>Listado completo</span>
+              <h2>Reservas de consultorios</h2>
+              <p>Control de solicitudes, profesionales, recursos y horarios reservados.</p>
+            </div>
+            <strong>Ver tabla</strong>
+          </summary>
           <div style={{ overflowX: "auto" }}>
             <table>
               <thead>
@@ -150,9 +303,11 @@ export default async function DashboardPage() {
               </tbody>
             </table>
           </div>
-        </section>
+        </details>
 
         <section
+          id="acceso-admin"
+          className="admin-panel-card"
           style={{
             background: "white",
             border: "1px solid var(--color-border)",
@@ -161,31 +316,10 @@ export default async function DashboardPage() {
             padding: "1.25rem",
           }}
         >
-          <h2 style={{ fontSize: "1.25rem", margin: "0 0 1rem" }}>Usuarios demo</h2>
-          <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-            {[
-              ["Administrador", "admin@delta.local", "admin1234"],
-              ["Psicologa - agenda propia", "agustina.ferraro@centrovida.ar", "agustina1234"],
-              ["Kinesiologo - agenda propia", "tomas.ibarra@puertosalud.ar", "tomas1234"],
-              ["Cliente demo", "cliente@delta.local", "cliente1234"],
-            ].map(([role, email, password]) => (
-              <div
-                key={email}
-                style={{
-                  background: "var(--color-muted-bg)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "8px",
-                  padding: "1rem",
-                }}
-              >
-                <strong>{role}</strong>
-                <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>{email}</p>
-                <p style={{ color: "var(--color-primary)", fontWeight: 800, margin: "0.25rem 0 0" }}>
-                  {password}
-                </p>
-              </div>
-            ))}
-          </div>
+          <h2 style={{ fontSize: "1.25rem", margin: "0 0 0.5rem" }}>Acceso actual</h2>
+          <p style={{ color: "var(--color-muted)", margin: 0 }}>
+            Por ahora solo administra <strong>admin@delta.local</strong>. Los profesionales se cargan como perfiles publicos, sin usuario propio.
+          </p>
         </section>
       </main>
     </div>

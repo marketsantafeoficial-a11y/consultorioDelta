@@ -1,13 +1,13 @@
-import Link from "next/link";
 import { getDashboardData } from "@/lib/dashboard-data";
 import { isSpaceResource } from "@/lib/resource-kind";
 import ProfessionalCalendar from "@/components/ProfessionalCalendar.client";
+import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Agenda | Delta Consultorios",
-  description: "Agenda de modulos alquilables y turnos profesionales.",
+  description: "Agenda publica de modulos alquilables.",
 };
 
 function mapAppointments(upcomingAppointments: Awaited<ReturnType<typeof getDashboardData>>["upcomingAppointments"]) {
@@ -36,38 +36,26 @@ function mapResources(resources: Awaited<ReturnType<typeof getDashboardData>>["p
 export default async function CalendarioPage() {
   const { professionals, upcomingAppointments } = await getDashboardData();
   const spaces = professionals.filter(isSpaceResource);
-  const agendaProfessionals = professionals.filter((item) => !isSpaceResource(item));
-  const appointments = mapAppointments(upcomingAppointments);
+  const spaceIds = new Set(spaces.map((space) => space.id));
+  const appointments = mapAppointments(
+    upcomingAppointments.filter((appointment) => spaceIds.has(appointment.professionalId)),
+  );
 
   return (
     <div className="cal-shell">
-      <header className="cal-navbar">
-        <nav className="cal-navbar-inner">
-          <Link href="/" className="cal-brand">
-            <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo" />
-            Delta Consultorios
-          </Link>
-          <div className="cal-nav-links">
-            <Link href="/">Inicio</Link>
-            <a href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20consultar%20por%20Delta%20Consultorios." target="_blank" rel="noreferrer">
-              221 477 8280
-            </a>
-            <Link href="/auth/login" className="cal-nav-cta">Ingresar</Link>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader />
 
       <main className="cal-main">
         <div className="cal-hero-text">
-          <h1 className="cal-hero-title">Agendas Delta</h1>
+          <h1 className="cal-hero-title">Agenda de modulos Delta</h1>
           <p className="cal-hero-sub">
-            {spaces.length} espacios para alquilar y {agendaProfessionals.length} profesionales con agenda propia.
+            Consulta la disponibilidad de {spaces.length} espacios para alquilar por modulo.
           </p>
           <div className="cal-flow-panel">
-            <strong>Dos flujos independientes para la demo:</strong>
-            <span>1. Alquiler de modulos: lo consulta el interesado y lo confirma administracion.</span>
-            <span>2. Turnos profesionales: el paciente solicita turno con su profesional.</span>
-            <span>3. Cada profesional ve sus turnos en su panel, separado del alquiler de espacios.</span>
+            <strong>Reserva administrada:</strong>
+            <span>1. Elegi un modulo libre como referencia.</span>
+            <span>2. Contacta a administracion por WhatsApp con el dia y horario.</span>
+            <span>3. Administracion valida disponibilidad, condiciones y confirma la reserva.</span>
           </div>
         </div>
 
@@ -83,20 +71,8 @@ export default async function CalendarioPage() {
             appointments={appointments}
           />
         </section>
-
-        <section className="calendar-demo-section">
-          <div className="calendar-demo-head">
-            <span>Flujo 2</span>
-            <h2>Turnos con profesionales</h2>
-            <p>Los pacientes piden turno con un profesional. Ese pedido aparece en el panel independiente del profesional.</p>
-          </div>
-          <ProfessionalCalendar
-            purpose="appointments"
-            professionals={mapResources(agendaProfessionals)}
-            appointments={appointments}
-          />
-        </section>
       </main>
+      <FloatingWhatsApp />
     </div>
   );
 }

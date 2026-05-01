@@ -116,32 +116,78 @@ async function main() {
     },
   });
 
-  await prisma.authUser.create({
-    data: {
-      email: "agustina.ferraro@centrovida.ar",
-      passwordHash: bcrypt.hashSync("agustina1234", 10),
-      role: "PROFESSIONAL",
-      professionalId: licAgustina.id,
+  await Promise.all([
+    {
+      fullName: "Lic. Veronica Glucksmann",
+      specialty: "Psicologa",
+      bio: "Acompana procesos de ansiedad, autoestima, duelos y vinculos en jovenes y adultos.",
+      email: "veronica.glucksmann@delta.local",
+      yearsPractice: 12,
+      colorToken: "rose",
+      serves: "Adultos, ansiedad, autoestima, duelos",
+      photoUrl: "https://ui-avatars.com/api/?name=Veronica+Glucksmann&size=240&background=efe4df&color=62615d&bold=true&rounded=true",
     },
-  });
+    {
+      fullName: "Lic. Jose Luna",
+      specialty: "Psicologo",
+      bio: "Trabajo clinico con adultos, orientacion en crisis vitales y acompanamiento emocional.",
+      email: "jose.luna@delta.local",
+      yearsPractice: 10,
+      colorToken: "slate",
+      serves: "Adultos, crisis vitales, terapia individual",
+      photoUrl: "https://ui-avatars.com/api/?name=Jose+Luna&size=240&background=e7e3dc&color=62615d&bold=true&rounded=true",
+    },
+    {
+      fullName: "Lic. Julieta Gonzalez",
+      specialty: "Psicologa",
+      bio: "Atencion a adolescentes y adultos con enfoque integrativo y perspectiva vincular.",
+      email: "julieta.gonzalez@delta.local",
+      yearsPractice: 7,
+      colorToken: "lavender",
+      serves: "Adolescentes, adultos, vinculos, autoestima",
+      photoUrl: "https://ui-avatars.com/api/?name=Julieta+Gonzalez&size=240&background=eadff0&color=62615d&bold=true&rounded=true",
+    },
+    {
+      fullName: "Lic. Belen Requejo",
+      specialty: "Psicologa",
+      bio: "Especializada en terapia individual, gestion emocional y acompanamiento de procesos personales.",
+      email: "belen.requejo@delta.local",
+      yearsPractice: 6,
+      colorToken: "sand",
+      serves: "Terapia individual, gestion emocional, adultos jovenes",
+      photoUrl: "https://ui-avatars.com/api/?name=Belen+Requejo&size=240&background=f1e4d1&color=62615d&bold=true&rounded=true",
+    },
+    {
+      fullName: "Lic. Martina Salvatierra",
+      specialty: "Psicologa infanto juvenil",
+      bio: "Acompana infancias, adolescencias y familias en evaluaciones, orientacion y seguimiento.",
+      email: "martina.salvatierra@delta.local",
+      yearsPractice: 9,
+      colorToken: "mint",
+      serves: "Infancias, adolescentes, familias, orientacion a padres",
+      photoUrl: "https://ui-avatars.com/api/?name=Martina+Salvatierra&size=240&background=dfece5&color=62615d&bold=true&rounded=true",
+    },
+    {
+      fullName: "Lic. Nicolas Pereyra",
+      specialty: "Psicologo",
+      bio: "Atencion individual para adultos, estres laboral, habitos y transiciones personales.",
+      email: "nicolas.pereyra@delta.local",
+      yearsPractice: 8,
+      colorToken: "bluegray",
+      serves: "Adultos, estres laboral, habitos, cambios vitales",
+      photoUrl: "https://ui-avatars.com/api/?name=Nicolas+Pereyra&size=240&background=dfe7ec&color=62615d&bold=true&rounded=true",
+    },
+  ].map((professional) =>
+    prisma.professional.create({
+      data: {
+        ...professional,
+        consultoryId: sedeCentro.id,
+      },
+    }),
+  ));
 
-  await prisma.authUser.create({
-    data: {
-      email: "tomas.ibarra@puertosalud.ar",
-      passwordHash: bcrypt.hashSync("tomas1234", 10),
-      role: "PROFESSIONAL",
-      professionalId: licTomas.id,
-    },
-  });
-
-  // 3. Paciente
-  await prisma.authUser.create({
-    data: {
-      email: "cliente@delta.local",
-      passwordHash: bcrypt.hashSync("cliente1234", 10),
-      role: "PATIENT",
-    },
-  });
+  // Los profesionales son perfiles publicos cargados por administracion.
+  // Por ahora no se crean usuarios para profesionales ni pacientes.
 
   console.log("Creando horarios...");
   const resources = [consultorio1, consultorio2, oficina, licAgustina, licTomas];

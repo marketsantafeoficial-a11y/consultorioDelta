@@ -53,6 +53,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Usuario no encontrado." }, { status: 401 });
     }
 
+    if (user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Por ahora solo accede administracion." }, { status: 403 });
+    }
+
     const valid = await verifyPassword(parsed.data.password, user.passwordHash);
     if (!valid) {
       return NextResponse.json({ error: "Contrasena incorrecta." }, { status: 401 });
@@ -69,7 +73,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       role: user.role,
-      redirectTo: user.role === "ADMIN" ? "/dashboard" : user.role === "PROFESSIONAL" ? "/professional" : "/calendario",
+      redirectTo: "/dashboard",
     });
   } catch {
     return NextResponse.json({ error: "No se pudo iniciar sesion." }, { status: 500 });

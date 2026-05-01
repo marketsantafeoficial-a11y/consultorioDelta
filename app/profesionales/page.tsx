@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { isSpaceResource } from "@/lib/resource-kind";
+import { TeamReferralForm } from "@/components/team-referral-form.client";
+import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
+import { TeamDirectory } from "@/components/team-directory.client";
 
 export const dynamic = "force-dynamic";
 
@@ -11,53 +13,48 @@ export default async function ProfesionalesPage() {
     },
     orderBy: { fullName: "asc" },
   });
-  const spaces = professionals.filter(isSpaceResource);
-  const agendaProfessionals = professionals.filter((item) => !isSpaceResource(item));
+  const teamProfessionals = professionals.filter((item) => !isSpaceResource(item));
 
   return (
-    <main className="page-wrap">
-      <Link href="/" className="header-home-link">Volver al inicio</Link>
-      <section className="section-stack">
+    <>
+      <SiteHeader />
+      <main className="page-wrap team-page">
+      <section className="section-stack team-section">
         <div className="section-head">
-          <h1>Agendas Delta</h1>
-          <p>Consulta modulos de alquiler o pedi turno con un profesional.</p>
-        </div>
-        <h2>Alquiler de modulos</h2>
-        <div className="cards-grid professionals-grid">
-          {spaces.map((professional) => (
-            <article className="card professional-card" key={professional.id}>
-              <h3>{professional.fullName}</h3>
-              <p>{professional.specialty}</p>
-              <p>{professional.bio}</p>
-              <div className="meta-row">
-                <span>{professional.consultory.name}</span>
-                <span>{professional.serves ?? "Adultos y adolescentes"}</span>
-              </div>
-              <Link href={`/profesionales/${professional.id}`} className="link-button">
-                Consultar modulo
-              </Link>
-            </article>
-          ))}
+          <h1>Nuestro equipo</h1>
+          <p>
+            Encontraras profesionales de la salud mental con diferentes
+            especialidades, recorridos y modalidades de atencion.
+          </p>
         </div>
 
-        <h2>Turnos profesionales</h2>
-        <div className="cards-grid professionals-grid">
-          {agendaProfessionals.map((professional) => (
-            <article className="card professional-card" key={professional.id}>
-              <h3>{professional.fullName}</h3>
-              <p>{professional.specialty}</p>
-              <p>{professional.bio}</p>
-              <div className="meta-row">
-                <span>{professional.consultory.name}</span>
-                <span>{professional.serves ?? "Adultos y adolescentes"}</span>
-              </div>
-              <Link href={`/profesionales/${professional.id}`} className="link-button">
-                Pedir turno
-              </Link>
-            </article>
-          ))}
-        </div>
+        <TeamDirectory
+          professionals={teamProfessionals.map((professional) => ({
+            id: professional.id,
+            fullName: professional.fullName,
+            specialty: professional.specialty,
+            bio: professional.bio,
+            photoUrl: professional.photoUrl,
+            serves: professional.serves,
+            consultory: professional.consultory
+              ? {
+                  name: professional.consultory.name,
+                  city: professional.consultory.city,
+                }
+              : null,
+          }))}
+        />
+
+        <TeamReferralForm
+          professionals={teamProfessionals.map((professional) => ({
+            id: professional.id,
+            fullName: professional.fullName,
+            specialty: professional.specialty,
+          }))}
+        />
       </section>
     </main>
+    <FloatingWhatsApp />
+    </>
   );
 }

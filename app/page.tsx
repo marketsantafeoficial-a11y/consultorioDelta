@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DrawTitle, TypewriterText } from "@/components/TextAnimations.client";
 import { RevealOnScroll } from "@/components/RevealOnScroll.client";
 import { instagramDemo } from "@/lib/instagram-demo";
+import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
 
 export const metadata = {
   title: "Delta Consultorios | Consultorios en City Bell",
@@ -17,58 +18,45 @@ const features = [
 ];
 
 const steps = [
-  ["01", "Ver agenda"],
-  ["02", "Detectar horarios libres"],
-  ["03", "Contactar administracion"],
-  ["04", "Admin confirma la reserva"],
+  ["01", "Ver modulos"],
+  ["02", "Contactar administracion"],
+  ["03", "Conocer equipo"],
+  ["04", "Derivacion por WhatsApp"],
 ];
 
 export default function HomePage() {
   return (
     <div className="lp-shell">
-      <header className="lp-nav-wrap">
-        <nav className="lp-nav">
-          <span className="lp-brand">
-            <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo" />
-            Delta Consultorios
-          </span>
-          <div className="lp-nav-links">
-            <a href="#espacios">Espacios</a>
-            <a href="#fotos">Fotos</a>
-            <Link href="/calendario">Agenda</Link>
-            <a href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20consultar%20por%20Delta%20Consultorios." target="_blank" rel="noreferrer">
-              221 477 8280
-            </a>
-            <Link href="/auth/login" className="lp-nav-cta">Admin</Link>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader />
 
       <main>
         <section className="lp-hero">
-          <div className="lp-hero-inner">
+          <div className="lp-hero-inner lp-hero-centered">
             <div className="lp-hero-content">
+              <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="lp-hero-logo" />
               <RevealOnScroll direction="left">
                 <p className="lp-eyebrow">Cantilo N 146 · City Bell</p>
                 <h1 className="lp-hero-title">
-                  <TypewriterText text="Consulta disponibilidad" speed={55} startDelay={250} />
+                  <TypewriterText text="Hoy es el dia" speed={55} startDelay={250} />
                   <br />
-                  <span className="lp-hero-title-accent">y coordina por administracion</span>
+                  <span className="lp-hero-title-accent">para encontrar tu espacio</span>
                 </h1>
+                <div className="lp-hero-divider" aria-hidden="true" />
                 <p className="lp-hero-sub">
                   Delta ofrece espacios listos para profesionales de la salud,
-                  entrevistas, terapia, reuniones y atencion presencial. La demo
-                  separa alquiler de modulos y turnos de profesionales.
+                  entrevistas, terapia, reuniones y atencion presencial. Los
+                  modulos se consultan por agenda y las derivaciones del equipo
+                  se coordinan por WhatsApp.
                 </p>
               </RevealOnScroll>
 
               <RevealOnScroll delay={180}>
                 <div className="lp-hero-actions">
                   <Link href="/calendario" className="lp-cta-primary">
-                    Ver agenda publica
+                    Ver agenda de modulos
                   </Link>
-                  <Link href="/auth/login" className="lp-cta-secondary">
-                    Panel administrador
+                  <Link href="/profesionales" className="lp-cta-secondary">
+                    Nuestro equipo
                   </Link>
                 </div>
               </RevealOnScroll>
@@ -82,28 +70,23 @@ export default function HomePage() {
               </RevealOnScroll>
             </div>
 
-            <div className="lp-hero-card-wrap">
+            <div className="lp-hero-card-wrap lp-hero-photo-strip">
               <RevealOnScroll direction="right" delay={120}>
                 <div className="lp-hero-card">
-                  <img
-                    alt="Consultorio Delta City Bell"
-                    src={instagramDemo.posts[1].image}
-                    style={{
-                      aspectRatio: "4 / 5",
-                      borderRadius: "12px",
-                      display: "block",
-                      objectFit: "cover",
-                      width: "100%",
-                    }}
-                  />
+                  <div className="lp-featured-media">
+                    <img
+                      alt="Consultorio Delta City Bell"
+                      src={instagramDemo.posts[0].image}
+                    />
+                  </div>
                   <div style={{ marginTop: "1rem" }}>
                     <div className="lp-hero-card-head">
                       <span className="lp-availability-dot" />
                       <span>Disponibilidad por agenda</span>
                     </div>
                     <p className="lp-card-note">
-                      Modulos administrados por Delta y turnos independientes
-                      para cada profesional.
+                      Modulos administrados por Delta con confirmacion por
+                      WhatsApp.
                     </p>
                   </div>
                 </div>
@@ -112,31 +95,44 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="espacios" className="lp-section lp-how">
+        <section id="como-trabajamos" className="lp-section lp-how">
           <div className="lp-section-inner">
             <RevealOnScroll>
               <DrawTitle tag="h2" className="lp-section-title">
-                Como funciona
+                Como trabajamos
               </DrawTitle>
             </RevealOnScroll>
             <RevealOnScroll delay={120}>
               <p className="lp-section-sub">
-                La demo muestra dos circuitos: administracion gestiona el alquiler
-                de modulos, y cada profesional recibe sus propios pedidos de turno.
+                Te orientamos para elegir el mejor camino: si buscas atencion,
+                te conectamos con el profesional adecuado; si sos profesional,
+                podes consultar por alquiler de gabinetes equipados.
               </p>
             </RevealOnScroll>
-            <div className="lp-trust-inner">
-              {steps.map(([value, label], index) => (
-                <RevealOnScroll key={label} delay={index * 100}>
-                  <span className="lp-trust-value">{value}</span>
-                  <span className="lp-trust-label">{label}</span>
-                </RevealOnScroll>
-              ))}
+            <div className="work-steps-grid">
+              {steps.map(([value, label], index) => {
+                const bodies = [
+                  "Miramos juntos que estas necesitando para orientarte con criterio.",
+                  "Te ofrecemos profesionales del equipo y modalidades posibles.",
+                  "Podes entrar al perfil de cada profesional y consultar por WhatsApp.",
+                  "Administracion acompaña la coordinacion y tambien gestiona gabinetes.",
+                ];
+
+                return (
+                  <RevealOnScroll key={label} delay={index * 100}>
+                    <article className="work-step-card">
+                      <span>{value}</span>
+                      <h3>{label}</h3>
+                      <p>{bodies[index]}</p>
+                    </article>
+                  </RevealOnScroll>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        <section id="fotos" className="lp-section">
+        <section id="alquiler-gabinetes" className="lp-section">
           <div className="lp-section-inner">
             <RevealOnScroll>
               <DrawTitle tag="h2" className="lp-section-title" accentColor="#059669">
@@ -153,18 +149,9 @@ export default function HomePage() {
               {instagramDemo.posts.slice(0, 6).map((post, index) => (
                 <RevealOnScroll key={post.image} delay={index * 80}>
                   <article className="lp-spec-card">
-                    <img
-                      alt={post.title}
-                      src={post.image}
-                      style={{
-                        aspectRatio: "4 / 5",
-                        borderRadius: "8px",
-                        display: "block",
-                        marginBottom: "1rem",
-                        objectFit: "cover",
-                        width: "100%",
-                      }}
-                    />
+                    <div className="lp-gallery-media">
+                      <img alt={post.title} src={post.image} />
+                    </div>
                     <h3 className="lp-spec-name">{post.title}</h3>
                     <p className="lp-spec-desc">{post.type}</p>
                   </article>
@@ -173,7 +160,7 @@ export default function HomePage() {
             </div>
             <RevealOnScroll delay={160}>
               <Link href="/calendario" className="lp-cta-primary lp-cta-center">
-                Ver disponibilidad
+                Ver disponibilidad de modulos
               </Link>
             </RevealOnScroll>
           </div>
@@ -187,11 +174,13 @@ export default function HomePage() {
             <p className="lp-footer-tagline">{instagramDemo.location}</p>
           </div>
           <div className="lp-footer-links">
-            <Link href="/calendario">Agenda</Link>
-            <Link href="/auth/login">Admin</Link>
+            <Link href="/calendario">Modulos</Link>
+            <Link href="/profesionales">Equipo</Link>
+            <Link href="/admin">Admin</Link>
           </div>
         </div>
       </footer>
+      <FloatingWhatsApp />
     </div>
   );
 }

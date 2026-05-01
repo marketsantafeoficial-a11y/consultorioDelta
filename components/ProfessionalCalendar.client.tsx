@@ -37,9 +37,15 @@ const ADMIN_PHONE = "5492214778280";
 const ADMIN_EMAIL = "administracion@delta.local";
 
 function getWeekDays(offset = 0) {
-  return Array.from({ length: 7 }).map((_, i) => {
+  const start = new Date();
+  const day = start.getDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  start.setDate(start.getDate() + diffToMonday + offset * 7);
+  start.setHours(0, 0, 0, 0);
+
+  return Array.from({ length: 6 }).map((_, i) => {
     const d = new Date();
-    d.setDate(d.getDate() + offset * 7 + i);
+    d.setDate(start.getDate() + i);
     d.setHours(0, 0, 0, 0);
     return d;
   });
@@ -48,6 +54,8 @@ function getWeekDays(offset = 0) {
 function generateSlots(
   schedules: Professional["schedules"],
   mode: "online" | "presencial",
+  intervalMinutes = 30,
+  includeEnd = false,
 ): string[] {
   const slots: string[] = [];
   if (!schedules) return slots;
@@ -62,9 +70,9 @@ function generateSlots(
     let h = sh;
     let m = sm;
 
-    while (h < eh || (h === eh && m < em)) {
+    while (h < eh || (h === eh && (includeEnd ? m <= em : m < em))) {
       slots.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
-      m += 30;
+      m += intervalMinutes;
       if (m >= 60) {
         h++;
         m -= 60;
@@ -129,12 +137,19 @@ function ProfCard({
 
   const days = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
   const allSlots = useMemo(
-    () => generateSlots(professional.schedules, mode),
-    [professional.schedules, mode],
+    () => generateSlots(
+      professional.schedules,
+      mode,
+      purpose === "spaces" ? 60 : 30,
+      purpose === "spaces",
+    ),
+    [professional.schedules, mode, purpose],
   );
   const displaySlots = allSlots.length > 0
     ? allSlots
-    : ["09:00", "09:30", "10:00", "10:30", "11:00", "14:00", "14:30", "15:00", "16:00"];
+    : purpose === "spaces"
+      ? ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"]
+      : ["09:00", "09:30", "10:00", "10:30", "11:00", "14:00", "14:30", "15:00", "16:00"];
 
   const hasOnline = professional.schedules?.some((s) => s.telehealth) ?? false;
   const hasPresencial = professional.schedules?.some((s) => !s.telehealth) ?? true;
@@ -263,7 +278,13 @@ function ProfCard({
                           title={busy ? getStatusLabel(appointment?.status) : purpose === "spaces" ? `Consultar ${slot}` : `Pedir turno ${slot}`}
                         >
                           {slot}
-                          <span>{busy ? getStatusLabel(appointment?.status) : purpose === "spaces" ? "Libre" : "Turno"}</span>
+                          <span>
+                            {busy
+                              ? purpose === "spaces"
+                                ? appointment?.patientName ?? getStatusLabel(appointment?.status)
+                                : getStatusLabel(appointment?.status)
+                              : purpose === "spaces" ? "Libre" : "Turno"}
+                          </span>
                         </a>
                       );
                     })

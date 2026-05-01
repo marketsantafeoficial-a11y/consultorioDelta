@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Figtree, Noto_Sans } from "next/font/google";
+import { Cormorant_Garamond, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const figtree = Figtree({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-heading",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const notoSans = Noto_Sans({
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${figtree.variable} ${notoSans.variable}`}>
+    <html lang="es" className={`${cormorant.variable} ${notoSans.variable}`}>
       <body>{children}</body>
     </html>
   );
