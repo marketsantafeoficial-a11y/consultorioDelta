@@ -53,6 +53,7 @@ export default async function AdminProfesionalesPage() {
                   <th>Profesional</th>
                   <th>Especialidad</th>
                   <th>Areas</th>
+                  <th>WhatsApp</th>
                   <th>Sede</th>
                 </tr>
               </thead>
@@ -65,6 +66,7 @@ export default async function AdminProfesionalesPage() {
                     </td>
                     <td>{item.specialty}</td>
                     <td>{item.serves ?? "Sin cargar"}</td>
+                    <td>{item.whatsapp ?? "General"}</td>
                     <td>{item.consultory.name}</td>
                   </tr>
                 ))}

@@ -9,6 +9,7 @@ type TeamProfessional = {
   specialty: string;
   bio: string;
   photoUrl?: string | null;
+  whatsapp?: string | null;
   serves?: string | null;
   consultory?: {
     name: string;
@@ -18,6 +19,17 @@ type TeamProfessional = {
 
 export function TeamDirectory({ professionals }: { professionals: TeamProfessional[] }) {
   const [selected, setSelected] = useState<TeamProfessional | null>(null);
+
+  function getProfessionalWhatsAppHref(professional: TeamProfessional) {
+    const message = `Hola, quiero consultar por ${professional.fullName} de Delta Consultorios.`;
+
+    if (!professional.whatsapp) {
+      return getWhatsAppHref(message);
+    }
+
+    const phone = professional.whatsapp.replace(/\D/g, "");
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  }
 
   return (
     <>
@@ -31,7 +43,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
               aria-label={`Ver perfil de ${professional.fullName}`}
             >
               <img
-                src={professional.photoUrl ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(professional.fullName)}&size=240&background=eee5df&color=62615d&bold=true&rounded=true`}
+                src={professional.photoUrl ?? "/delta-assets/professional-avatar.svg"}
                 alt={professional.fullName}
                 className="team-avatar"
               />
@@ -43,7 +55,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
             </button>
             <a
               className="team-whatsapp-link"
-              href={getWhatsAppHref(`Hola, quiero consultar por ${professional.fullName} de Delta Consultorios.`)}
+              href={getProfessionalWhatsAppHref(professional)}
               target="_blank"
               rel="noreferrer"
             >
@@ -71,7 +83,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
               x
             </button>
             <img
-              src={selected.photoUrl ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(selected.fullName)}&size=260&background=eee5df&color=62615d&bold=true&rounded=true`}
+              src={selected.photoUrl ?? "/delta-assets/professional-avatar.svg"}
               alt={selected.fullName}
               className="profile-avatar"
             />
@@ -89,7 +101,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
               <div className="profile-actions">
                 <a
                   className="lp-cta-primary"
-                  href={getWhatsAppHref(`Hola, quiero consultar por ${selected.fullName} de Delta Consultorios.`)}
+                  href={getProfessionalWhatsAppHref(selected)}
                   target="_blank"
                   rel="noreferrer"
                 >

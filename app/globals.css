@@ -837,6 +837,43 @@ input, textarea, select { border: 1px solid var(--color-border); background: whi
   margin-bottom: 0.8rem;
 }
 .work-step-card p { color: var(--color-muted); font-size: 0.94rem; }
+.module-info-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: -2rem auto 3rem;
+  max-width: 860px;
+}
+.module-info-grid article {
+  background: rgba(255, 254, 252, 0.72);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+.module-info-grid span {
+  color: var(--color-secondary);
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+.module-info-grid strong {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.lp-section-note,
+.form-note {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  margin: 1rem auto 0;
+  max-width: 560px;
+  text-align: center;
+}
 .cal-main, .page-wrap { max-width: 1120px; }
 .cal-hero-text, .section-head { margin-left: auto; margin-right: auto; text-align: center; }
 .cal-flow-panel, .agenda-contact-strip, .card, .booking-card, .profile-hero, .referral-form, .referral-copy, .prof-card {
@@ -997,6 +1034,7 @@ input, textarea, select {
   .referral-section, .profile-hero, .team-modal { grid-template-columns: 1fr; }
   .referral-copy { position: static; }
   .work-steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .module-info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .team-modal { text-align: center; }
   .team-modal .profile-actions { justify-content: center; }
   .admin-module-grid, .admin-board-grid { grid-template-columns: 1fr; }
@@ -1020,6 +1058,7 @@ input, textarea, select {
   .lp-hero-badges { gap: 0.8rem; }
   .team-grid { grid-template-columns: 1fr; }
   .work-steps-grid { grid-template-columns: 1fr; }
+  .module-info-grid { grid-template-columns: 1fr; margin-top: -1rem; }
   .work-step-card { min-height: auto; text-align: center; }
   .whatsapp-float span:last-child { display: none; }
   .whatsapp-float { padding: 0.55rem; }

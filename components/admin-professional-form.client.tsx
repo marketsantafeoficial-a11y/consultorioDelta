@@ -19,6 +19,7 @@ const initialState = {
   bio: "",
   serves: "",
   photoUrl: "",
+  whatsapp: "",
   email: "",
   consultoryId: "",
 };
@@ -115,6 +116,18 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
             placeholder="https://..."
           />
         </label>
+        <label>
+          WhatsApp directo
+          <input
+            type="tel"
+            value={form.whatsapp}
+            onChange={(event) => updateField("whatsapp", event.target.value)}
+            placeholder="549221..."
+          />
+        </label>
+      </div>
+
+      <div className="form-two-cols">
         <label>
           Email interno
           <input

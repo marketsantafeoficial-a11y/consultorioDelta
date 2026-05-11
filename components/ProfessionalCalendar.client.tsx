@@ -162,7 +162,7 @@ function ProfCard({
         <div className="prof-avatar-wrap">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={professional.photoUrl ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(professional.fullName)}&size=160&background=e8e4f8&color=4a4080&bold=true&rounded=true`}
+            src={professional.photoUrl ?? "/delta-assets/professional-avatar.svg"}
             alt={professional.fullName}
             className="prof-avatar"
           />

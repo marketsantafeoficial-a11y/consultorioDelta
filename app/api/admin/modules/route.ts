@@ -3,13 +3,15 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionPayload } from "@/lib/session";
 
+const imagePathSchema = z.string().trim().optional().or(z.literal(""));
+
 const moduleSchema = z.object({
   id: z.number().int().positive().optional(),
   fullName: z.string().trim().min(2),
   specialty: z.string().trim().min(2),
   bio: z.string().trim().min(4),
   serves: z.string().trim().optional(),
-  photoUrl: z.string().trim().url().optional().or(z.literal("")),
+  photoUrl: imagePathSchema,
   consultoryId: z.number().int().positive(),
 });
 

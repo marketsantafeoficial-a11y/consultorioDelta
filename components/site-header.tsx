@@ -24,9 +24,9 @@ export function SiteHeader() {
           >
             Soy profesional
           </a>
-          <Link href="/calendario">Alquiler de gabinetes</Link>
+          <Link href="/calendario">Alquiler de consultorios</Link>
           <Link href="/profesionales#derivacion" className="lp-nav-cta">
-            Quiero mi sesion
+            Consultar turno
           </Link>
         </div>
       </nav>

@@ -16,15 +16,17 @@ type TeamReferralFormProps = {
 const ADMIN_PHONE = "5492214778280";
 
 const startOptions = [
-  "Terapia individual (solo un consultante)",
-  "Terapia de pareja (dos consultantes juntos con el mismo profesional)",
-  "Terapia familiar / vincular (dos o mas consultantes con un mismo profesional)",
+  "Terapia individual",
+  "Terapia de pareja",
+  "Terapia familiar / vincular",
+  "Alquiler de consultorio",
+  "Otra consulta",
 ];
 
 const modalityOptions = [
-  "Si, solo presencial",
-  "Prefiero online",
-  "Si hay presencial por mi zona mejor, si no online esta bien tambien",
+  "Presencial",
+  "Virtual",
+  "Me sirve cualquiera",
 ];
 
 export function TeamReferralForm({
@@ -38,12 +40,9 @@ export function TeamReferralForm({
     modality: modalityOptions[2],
     phone: "",
     age: "",
-    province: "",
-    country: "",
-    neighborhood: "",
+    availability: "",
     reason: "",
     professionalPreference: preferredProfessional,
-    whatsappContact: "",
   });
   const [feedback, setFeedback] = useState<string | null>(null);
 
@@ -62,22 +61,17 @@ export function TeamReferralForm({
     const message = [
       "Hola, quiero iniciar una derivacion para terapia con el equipo de Delta Consultorios.",
       "",
-      "Estas a un paso de tener tu turno con un psicologo de nuestro equipo.",
-      "La derivacion no es al azar: elegimos al mejor profesional para cada consultante.",
-      "",
       `Correo electronico: ${form.email}`,
       `Nombre y apellido: ${form.fullName}`,
-      `Quiero comenzar: ${form.startType}`,
+      `Tipo de consulta: ${form.startType}`,
       `Modalidad preferida: ${form.modality}`,
       `Telefono: ${form.phone}`,
       `Edad: ${form.age}`,
-      `Provincia en Argentina: ${form.province || "No indicado"}`,
-      `Pais / ciudad si no vive en Argentina: ${form.country || "No indicado"}`,
-      `Barrio si vive en CABA o Buenos Aires: ${form.neighborhood || "No indicado"}`,
-      `Motivo para comenzar terapia: ${form.reason}`,
+      `Disponibilidad de dias y horarios: ${form.availability}`,
+      `Motivo de la consulta: ${form.reason}`,
       `Preferencia de profesional: ${form.professionalPreference || "Sin preferencia"}`,
       selectedProfessional?.specialty ? `Especialidad del profesional elegido: ${selectedProfessional.specialty}` : null,
-      `Numero para WhatsApp u otro medio: ${form.whatsappContact || form.phone}`,
+      "Nota: no trabajan por IOMA.",
     ].filter(Boolean).join("\n");
 
     window.open(`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
@@ -87,12 +81,12 @@ export function TeamReferralForm({
   return (
     <section className="referral-section" id="derivacion">
       <div className="referral-copy">
-        <span className="section-kicker">Derivacion administrada</span>
-        <h2>Estas a un paso de tener tu turno con nuestro equipo</h2>
+        <span className="section-kicker">Consulta simple</span>
+        <h2>Dejanos los datos basicos y seguimos por WhatsApp</h2>
         <p>
-          La derivacion no es al azar: administracion revisa la informacion y elige
-          el profesional mas adecuado para vos. Si alguna pregunta no te resulta
-          comoda, podes dejarla sin responder cuando no sea obligatoria.
+          El formulario solo prepara el mensaje para Delta. No reserva turnos ni
+          abre una agenda automatica: administracion o el profesional responde
+          por WhatsApp para coordinar.
         </p>
       </div>
 
@@ -119,7 +113,7 @@ export function TeamReferralForm({
         </label>
 
         <label>
-          Quiero comenzar *
+          Tipo de consulta *
           <select
             value={form.startType}
             onChange={(event) => updateField("startType", event.target.value)}
@@ -132,7 +126,7 @@ export function TeamReferralForm({
         </label>
 
         <fieldset>
-          <legend>De ser posible te gustaria que las sesiones sean presenciales *</legend>
+          <legend>Modalidad preferida *</legend>
           {modalityOptions.map((option) => (
             <label className="radio-row" key={option}>
               <input
@@ -170,32 +164,17 @@ export function TeamReferralForm({
         </div>
 
         <label>
-          Si vivis en Argentina, de que provincia sos? *
+          Disponibilidad de dias y horarios *
           <input
-            value={form.province}
-            onChange={(event) => updateField("province", event.target.value)}
+            value={form.availability}
+            onChange={(event) => updateField("availability", event.target.value)}
+            placeholder="Ej: lunes por la tarde, viernes por la manana"
             required
           />
         </label>
 
         <label>
-          Si no sos de Argentina, donde vivis?
-          <input
-            value={form.country}
-            onChange={(event) => updateField("country", event.target.value)}
-          />
-        </label>
-
-        <label>
-          Si sos de CABA o Buenos Aires, de que barrio sos?
-          <input
-            value={form.neighborhood}
-            onChange={(event) => updateField("neighborhood", event.target.value)}
-          />
-        </label>
-
-        <label>
-          Por que te gustaria comenzar terapia? *
+          Motivo de la consulta *
           <textarea
             rows={4}
             value={form.reason}
@@ -205,7 +184,7 @@ export function TeamReferralForm({
         </label>
 
         <label>
-          Preferencia acerca del profesional
+          Profesional preferido
           <select
             value={form.professionalPreference}
             onChange={(event) => updateField("professionalPreference", event.target.value)}
@@ -219,16 +198,9 @@ export function TeamReferralForm({
           </select>
         </label>
 
-        <label>
-          Repetinos el numero tal como se agenda para WhatsApp
-          <input
-            type="tel"
-            value={form.whatsappContact}
-            onChange={(event) => updateField("whatsappContact", event.target.value)}
-          />
-        </label>
+        <p className="form-note">Delta Consultorios no trabaja por IOMA.</p>
 
-        <button type="submit">Enviar por WhatsApp a administracion</button>
+        <button type="submit">Abrir WhatsApp con mis datos</button>
         {feedback ? <p className="status-text" aria-live="polite">{feedback}</p> : null}
       </form>
     </section>

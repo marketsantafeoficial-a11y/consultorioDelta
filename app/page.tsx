@@ -11,17 +11,17 @@ export const metadata = {
 };
 
 const features = [
-  "Consultorios equipados",
-  "Alquiler por modulos",
-  "Centro de City Bell",
-  "Gestion administrada",
+  "Equipo profesional",
+  "WhatsApp directo",
+  "Consultorios en City Bell",
+  "Administracion simple",
 ];
 
 const steps = [
-  ["01", "Ver modulos"],
-  ["02", "Contactar administracion"],
-  ["03", "Conocer equipo"],
-  ["04", "Derivacion por WhatsApp"],
+  ["01", "Conocer perfiles"],
+  ["02", "Elegir profesional"],
+  ["03", "Enviar WhatsApp"],
+  ["04", "Coordinar atencion"],
 ];
 
 export default function HomePage() {
@@ -37,26 +37,26 @@ export default function HomePage() {
               <RevealOnScroll direction="left">
                 <p className="lp-eyebrow">Cantilo N 146 · City Bell</p>
                 <h1 className="lp-hero-title">
-                  <TypewriterText text="Hoy es el dia" speed={55} startDelay={250} />
+                  <TypewriterText text="Vida para tu espacio" speed={55} startDelay={250} />
                   <br />
-                  <span className="lp-hero-title-accent">para encontrar tu espacio</span>
+                  <span className="lp-hero-title-accent">y profesionales para acompanarte</span>
                 </h1>
                 <div className="lp-hero-divider" aria-hidden="true" />
                 <p className="lp-hero-sub">
                   Delta ofrece espacios listos para profesionales de la salud,
-                  entrevistas, terapia, reuniones y atencion presencial. Los
-                  modulos se consultan por agenda y las derivaciones del equipo
-                  se coordinan por WhatsApp.
+                  entrevistas, terapia y atencion presencial. Tambien podes
+                  conocer al equipo, ver sus perfiles y escribir por WhatsApp
+                  sin pasar por una agenda automatica.
                 </p>
               </RevealOnScroll>
 
               <RevealOnScroll delay={180}>
                 <div className="lp-hero-actions">
-                  <Link href="/calendario" className="lp-cta-primary">
-                    Ver agenda de modulos
+                  <Link href="/profesionales" className="lp-cta-primary">
+                    Ver profesionales
                   </Link>
-                  <Link href="/profesionales" className="lp-cta-secondary">
-                    Nuestro equipo
+                  <Link href="/calendario" className="lp-cta-secondary">
+                    Alquiler de consultorios
                   </Link>
                 </div>
               </RevealOnScroll>
@@ -82,11 +82,11 @@ export default function HomePage() {
                   <div style={{ marginTop: "1rem" }}>
                     <div className="lp-hero-card-head">
                       <span className="lp-availability-dot" />
-                      <span>Disponibilidad por agenda</span>
+                      <span>Contacto directo</span>
                     </div>
                     <p className="lp-card-note">
-                      Modulos administrados por Delta con confirmacion por
-                      WhatsApp.
+                      Turnos y consultas se coordinan por WhatsApp. La agenda
+                      automatica queda para una etapa posterior.
                     </p>
                   </div>
                 </div>
@@ -112,10 +112,10 @@ export default function HomePage() {
             <div className="work-steps-grid">
               {steps.map(([value, label], index) => {
                 const bodies = [
-                  "Miramos juntos que estas necesitando para orientarte con criterio.",
-                  "Te ofrecemos profesionales del equipo y modalidades posibles.",
-                  "Podes entrar al perfil de cada profesional y consultar por WhatsApp.",
-                  "Administracion acompaña la coordinacion y tambien gestiona gabinetes.",
+                  "Cada profesional muestra foto, especialidad, areas de trabajo y una breve presentacion.",
+                  "La persona puede comparar perfiles y elegir con quien quiere conversar.",
+                  "El contacto abre WhatsApp con un mensaje preparado para consultar rapido.",
+                  "Administracion carga perfiles, fotos, formularios y datos del espacio desde el panel.",
                 ];
 
                 return (
@@ -141,9 +141,29 @@ export default function HomePage() {
             </RevealOnScroll>
             <RevealOnScroll delay={120}>
               <p className="lp-section-sub">
-                Fotos cargadas desde el material del emprendimiento para mostrar los
-                ambientes y servicios durante la demo.
+                Consultorios amplios, luminosos y equipados con wifi, sala de
+                espera, bano, cocina, escritorio, aire frio/calor y divan.
               </p>
+            </RevealOnScroll>
+            <RevealOnScroll delay={160}>
+              <div className="module-info-grid">
+                <article>
+                  <span>Manana</span>
+                  <strong>8 a 12 hs</strong>
+                </article>
+                <article>
+                  <span>Mediodia</span>
+                  <strong>12 a 16 hs</strong>
+                </article>
+                <article>
+                  <span>Tarde</span>
+                  <strong>16 a 20 hs</strong>
+                </article>
+                <article>
+                  <span>Uso ocasional</span>
+                  <strong>Hora suelta</strong>
+                </article>
+              </div>
             </RevealOnScroll>
             <div className="lp-spec-grid">
               {instagramDemo.posts.slice(0, 6).map((post, index) => (
@@ -159,9 +179,20 @@ export default function HomePage() {
               ))}
             </div>
             <RevealOnScroll delay={160}>
-              <Link href="/calendario" className="lp-cta-primary lp-cta-center">
-                Ver disponibilidad de modulos
-              </Link>
+              <a
+                href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20consultar%20por%20alquiler%20de%20consultorios%20en%20Delta.%20Mi%20profesion%20es%3A"
+                className="lp-cta-primary lp-cta-center"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Consultar alquiler por WhatsApp
+              </a>
+            </RevealOnScroll>
+            <RevealOnScroll delay={220}>
+              <p className="lp-section-note">
+                Se alquila por modulo o jornada completa. No cuenta con servicio
+                de secretaria.
+              </p>
             </RevealOnScroll>
           </div>
         </section>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">City Bell</title>
+  <desc id="desc">Ilustracion de ubicacion de Delta Consultorios en City Bell.</desc>
+  <rect width="900" height="900" fill="#f3eeea"/>
+  <rect x="110" y="128" width="680" height="644" rx="28" fill="#fffefc" stroke="#d8cdc7" stroke-width="4"/>
+  <path d="M450 220c-102 0-184 82-184 184 0 139 184 290 184 290s184-151 184-290c0-102-82-184-184-184Z" fill="#62615d"/>
+  <circle cx="450" cy="404" r="74" fill="#fffefc"/>
+  <text x="450" y="735" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#8f7d72">Cantilo 146</text>
+</svg>

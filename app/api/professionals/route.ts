@@ -3,12 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { getSessionPayload } from "@/lib/session";
 import { z } from "zod";
 
+const imagePathSchema = z.string().trim().optional().or(z.literal(""));
+
 const professionalSchema = z.object({
   fullName: z.string().trim().min(2),
   specialty: z.string().trim().min(2),
   bio: z.string().trim().min(8),
   serves: z.string().trim().optional(),
-  photoUrl: z.string().trim().url().optional().or(z.literal("")),
+  photoUrl: imagePathSchema,
+  whatsapp: z.string().trim().optional().or(z.literal("")),
   email: z.string().trim().email().optional().or(z.literal("")),
   consultoryId: z.number().int().positive(),
 });
@@ -73,6 +76,7 @@ export async function POST(request: Request) {
         bio: parsed.data.bio,
         serves: parsed.data.serves || null,
         photoUrl: parsed.data.photoUrl || null,
+        whatsapp: parsed.data.whatsapp || null,
         email,
         yearsPractice: 1,
         colorToken: "team",

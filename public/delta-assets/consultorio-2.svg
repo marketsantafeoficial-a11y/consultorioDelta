@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Espacio equipado Delta</title>
+  <desc id="desc">Ilustracion de sala profesional con escritorio, divan y luz natural.</desc>
+  <rect width="900" height="900" fill="#ece4df"/>
+  <rect x="100" y="96" width="700" height="708" rx="28" fill="#fffefc" stroke="#d8cdc7" stroke-width="4"/>
+  <rect x="150" y="146" width="250" height="330" rx="12" fill="#f7f2ee" stroke="#d8cdc7" stroke-width="4"/>
+  <rect x="430" y="146" width="320" height="180" rx="12" fill="#d8c6bb"/>
+  <rect x="470" y="184" width="110" height="104" rx="8" fill="#fffefc"/>
+  <rect x="604" y="184" width="110" height="104" rx="8" fill="#f3eeea"/>
+  <path d="M178 628c0-54 44-98 98-98h210c54 0 98 44 98 98v74H178v-74Z" fill="#62615d"/>
+  <rect x="516" y="560" width="194" height="142" rx="16" fill="#8f7d72"/>
+  <rect x="222" y="700" width="450" height="46" rx="10" fill="#d8c6bb"/>
+  <circle cx="246" cy="410" r="44" fill="#d8c6bb"/>
+  <circle cx="330" cy="410" r="44" fill="#8f7d72"/>
+  <path d="M172 760h556" stroke="#d8cdc7" stroke-width="6" stroke-linecap="round"/>
+</svg>

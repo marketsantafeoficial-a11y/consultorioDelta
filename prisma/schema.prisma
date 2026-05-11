@@ -45,6 +45,7 @@ model Professional {
   specialty     String
   bio           String
   photoUrl      String?
+  whatsapp      String?
   serves        String?
   yearsPractice Int
   email         String        @unique

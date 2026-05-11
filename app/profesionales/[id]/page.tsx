@@ -49,7 +49,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
 
       <section className="profile-hero">
         <img
-          src={professional.photoUrl ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(professional.fullName)}&size=260&background=eee5df&color=62615d&bold=true&rounded=true`}
+          src={professional.photoUrl ?? "/delta-assets/professional-avatar.svg"}
           alt={professional.fullName}
           className="profile-avatar"
         />

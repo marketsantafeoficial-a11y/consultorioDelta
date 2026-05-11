@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Modulos de alquiler Delta</title>
+  <desc id="desc">Ilustracion de modulos horarios manana, mediodia y tarde.</desc>
+  <rect width="900" height="900" fill="#f3eeea"/>
+  <rect x="94" y="112" width="712" height="676" rx="28" fill="#fffefc" stroke="#d8cdc7" stroke-width="4"/>
+  <text x="450" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#62615d">Modulos</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="170" y="300" width="560" height="104" rx="14" fill="#ece4df"/>
+    <text x="224" y="365" font-size="34" font-weight="700" fill="#62615d">Manana</text>
+    <text x="604" y="365" font-size="30" fill="#8f7d72">8 a 12</text>
+    <rect x="170" y="430" width="560" height="104" rx="14" fill="#d8c6bb"/>
+    <text x="224" y="495" font-size="34" font-weight="700" fill="#62615d">Mediodia</text>
+    <text x="590" y="495" font-size="30" fill="#62615d">12 a 16</text>
+    <rect x="170" y="560" width="560" height="104" rx="14" fill="#62615d"/>
+    <text x="224" y="625" font-size="34" font-weight="700" fill="#fffefc">Tarde</text>
+    <text x="590" y="625" font-size="30" fill="#fffefc">16 a 20</text>
+  </g>
+</svg>

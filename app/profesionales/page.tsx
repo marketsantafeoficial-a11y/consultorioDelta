@@ -23,8 +23,8 @@ export default async function ProfesionalesPage() {
         <div className="section-head">
           <h1>Nuestro equipo</h1>
           <p>
-            Encontraras profesionales de la salud mental con diferentes
-            especialidades, recorridos y modalidades de atencion.
+            Conoce los perfiles del equipo, sus areas de trabajo y su forma de
+            atencion. Podes escribir por WhatsApp directamente desde cada ficha.
           </p>
         </div>
 
@@ -35,6 +35,7 @@ export default async function ProfesionalesPage() {
             specialty: professional.specialty,
             bio: professional.bio,
             photoUrl: professional.photoUrl,
+            whatsapp: professional.whatsapp,
             serves: professional.serves,
             consultory: professional.consultory
               ? {
