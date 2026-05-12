@@ -41,6 +41,42 @@ const FIXED_MODULES = [
   { label: "Tarde", startTime: "16:00", endTime: "20:00" },
 ];
 
+function toMinutes(time: string) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function normalizeFixedSchedules(schedules: Professional["schedules"]) {
+  if (!schedules || schedules.length === 0) {
+    return Array.from({ length: 6 }).flatMap((_, index) =>
+      FIXED_MODULES.map((module) => ({
+        dayOfWeek: index + 1,
+        startTime: module.startTime,
+        endTime: module.endTime,
+        telehealth: false,
+      })),
+    );
+  }
+
+  return schedules.flatMap((schedule) => {
+    if (schedule.telehealth) return [schedule];
+
+    const start = toMinutes(schedule.startTime);
+    const end = toMinutes(schedule.endTime);
+    const coveredModules = FIXED_MODULES.filter(
+      (module) => start <= toMinutes(module.startTime) && end >= toMinutes(module.endTime),
+    );
+
+    if (coveredModules.length === 0) return [schedule];
+
+    return coveredModules.map((module) => ({
+      ...schedule,
+      startTime: module.startTime,
+      endTime: module.endTime,
+    }));
+  });
+}
+
 function getWeekDays(offset = 0) {
   const start = new Date();
   const day = start.getDay();
@@ -156,14 +192,18 @@ function ProfCard({
   const [weekOffset, setWeekOffset] = useState(0);
 
   const days = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
+  const schedulesForDisplay = useMemo(
+    () => purpose === "spaces" ? normalizeFixedSchedules(professional.schedules) : professional.schedules,
+    [professional.schedules, purpose],
+  );
   const allSlots = useMemo(
     () => generateSlots(
-      professional.schedules,
+      schedulesForDisplay,
       mode,
       purpose === "spaces" ? 60 : 30,
       purpose === "spaces",
     ),
-    [professional.schedules, mode, purpose],
+    [schedulesForDisplay, mode, purpose],
   );
   const displaySlots = allSlots.length > 0
     ? allSlots
@@ -171,8 +211,8 @@ function ProfCard({
       ? FIXED_MODULES.map((module) => module.startTime)
       : ["09:00", "09:30", "10:00", "10:30", "11:00", "14:00", "14:30", "15:00", "16:00"];
 
-  const hasOnline = professional.schedules?.some((s) => s.telehealth) ?? false;
-  const hasPresencial = professional.schedules?.some((s) => !s.telehealth) ?? true;
+  const hasOnline = schedulesForDisplay?.some((s) => s.telehealth) ?? false;
+  const hasPresencial = schedulesForDisplay?.some((s) => !s.telehealth) ?? true;
   const specsRaw = professional.serves ?? professional.specialty ?? "";
   const specs = specsRaw.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 5);
 
@@ -278,7 +318,7 @@ function ProfCard({
           <div className="slots-grid">
             {days.map((day) => {
               const dayOfWeek = day.getDay();
-              const daySchedules = professional.schedules?.filter(
+              const daySchedules = schedulesForDisplay?.filter(
                 (s) => s.dayOfWeek === dayOfWeek &&
                   (mode === "online" ? s.telehealth : !s.telehealth),
               ) ?? [];

@@ -78,6 +78,31 @@ function defaultFixedSchedules() {
   );
 }
 
+function toMinutes(time: string) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function normalizeFixedSchedules(schedules: ScheduleInput[]) {
+  if (schedules.length === 0) return defaultFixedSchedules();
+
+  return schedules.flatMap((schedule) => {
+    const start = toMinutes(schedule.startTime);
+    const end = toMinutes(schedule.endTime);
+    const coveredModules = fixedModules.filter(
+      (module) => start <= toMinutes(module.startTime) && end >= toMinutes(module.endTime),
+    );
+
+    if (coveredModules.length === 0) return [schedule];
+
+    return coveredModules.map((module) => ({
+      dayOfWeek: schedule.dayOfWeek,
+      startTime: module.startTime,
+      endTime: module.endTime,
+    }));
+  });
+}
+
 function isScheduleEnabled(schedules: ScheduleInput[], dayOfWeek: number, startTime: string) {
   return schedules.some((schedule) => schedule.dayOfWeek === dayOfWeek && schedule.startTime === startTime);
 }
@@ -95,7 +120,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     photoUrl: selectedModule?.photoUrl ?? "",
     consultoryId: String(selectedModule?.consultoryId ?? consultories[0]?.id ?? ""),
   }));
-  const [schedules, setSchedules] = useState<ScheduleInput[]>(selectedModule?.schedules ?? []);
+  const [schedules, setSchedules] = useState<ScheduleInput[]>(normalizeFixedSchedules(selectedModule?.schedules ?? []));
   const [occupancyForm, setOccupancyForm] = useState({
     professionalId: String(selectedModule?.id ?? ""),
     date: todayString(),
@@ -125,7 +150,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
       photoUrl: room.photoUrl ?? "",
       consultoryId: String(room.consultoryId),
     });
-    setSchedules(room.schedules);
+    setSchedules(normalizeFixedSchedules(room.schedules));
     setOccupancyForm((current) => ({ ...current, professionalId: String(room.id) }));
   }
 
