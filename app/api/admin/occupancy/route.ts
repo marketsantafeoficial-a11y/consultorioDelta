@@ -16,15 +16,38 @@ const deleteSchema = z.object({
   appointmentId: z.number().int().positive(),
 });
 
+const fixedModuleStarts = ["08:00", "12:00", "16:00"];
+
 function buildStartsAt(date: string, time: string) {
   const [year, month, day] = date.split("-").map(Number);
   const [hours, minutes] = time.split(":").map(Number);
   return new Date(year, month - 1, day, hours, minutes, 0, 0);
 }
 
+function buildModuleEnd(startsAt: Date) {
+  return new Date(startsAt.getTime() + 4 * 60 * 60 * 1000);
+}
+
 async function requireAdmin() {
   const session = await getSessionPayload();
   return Boolean(session && session.role === "ADMIN");
+}
+
+async function isModuleAvailable(professionalId: number, startsAt: Date, time: string) {
+  const endTime = fixedModuleStarts[fixedModuleStarts.indexOf(time) + 1] ?? "20:00";
+
+  const schedule = await prisma.schedule.findFirst({
+    where: {
+      professionalId,
+      dayOfWeek: startsAt.getDay(),
+      startTime: time,
+      endTime,
+      telehealth: false,
+    },
+    select: { id: true },
+  });
+
+  return Boolean(schedule);
 }
 
 export async function POST(request: Request) {
@@ -39,6 +62,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Revisa los datos de ocupacion." }, { status: 400 });
   }
 
+  if (!fixedModuleStarts.includes(parsed.data.time)) {
+    return NextResponse.json({ error: "Selecciona un modulo fijo valido." }, { status: 400 });
+  }
+
   const room = await prisma.professional.findUnique({
     where: { id: parsed.data.professionalId },
     select: { id: true, consultoryId: true },
@@ -49,10 +76,19 @@ export async function POST(request: Request) {
   }
 
   const startsAt = buildStartsAt(parsed.data.date, parsed.data.time);
+  const moduleEnd = buildModuleEnd(startsAt);
+
+  if (!(await isModuleAvailable(parsed.data.professionalId, startsAt, parsed.data.time))) {
+    return NextResponse.json({ error: "Ese modulo no esta disponible para ese dia." }, { status: 400 });
+  }
+
   const existing = await prisma.appointment.findFirst({
     where: {
       professionalId: parsed.data.professionalId,
-      startsAt,
+      startsAt: {
+        gte: startsAt,
+        lt: moduleEnd,
+      },
       status: { in: [AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED] },
     },
     select: { id: true },
@@ -91,6 +127,10 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Revisa los datos para mover el horario." }, { status: 400 });
   }
 
+  if (!fixedModuleStarts.includes(parsed.data.time)) {
+    return NextResponse.json({ error: "Selecciona un modulo fijo valido." }, { status: 400 });
+  }
+
   const room = await prisma.professional.findUnique({
     where: { id: parsed.data.professionalId },
     select: { id: true, consultoryId: true },
@@ -101,11 +141,20 @@ export async function PATCH(request: Request) {
   }
 
   const startsAt = buildStartsAt(parsed.data.date, parsed.data.time);
+  const moduleEnd = buildModuleEnd(startsAt);
+
+  if (!(await isModuleAvailable(parsed.data.professionalId, startsAt, parsed.data.time))) {
+    return NextResponse.json({ error: "Ese modulo no esta disponible para ese dia." }, { status: 400 });
+  }
+
   const existing = await prisma.appointment.findFirst({
     where: {
       id: { not: parsed.data.appointmentId },
       professionalId: parsed.data.professionalId,
-      startsAt,
+      startsAt: {
+        gte: startsAt,
+        lt: moduleEnd,
+      },
       status: { in: [AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED] },
     },
     select: { id: true },

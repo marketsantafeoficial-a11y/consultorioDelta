@@ -51,6 +51,12 @@ const dayNames = [
   { value: 6, label: "Sabado" },
 ];
 
+const fixedModules = [
+  { id: "morning", label: "Manana", startTime: "08:00", endTime: "12:00" },
+  { id: "midday", label: "Mediodia", startTime: "12:00", endTime: "16:00" },
+  { id: "afternoon", label: "Tarde", startTime: "16:00", endTime: "20:00" },
+];
+
 function todayString() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -60,6 +66,20 @@ function toTime(date: string) {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(date));
+}
+
+function defaultFixedSchedules() {
+  return dayNames.flatMap((day) =>
+    fixedModules.map((module) => ({
+      dayOfWeek: day.value,
+      startTime: module.startTime,
+      endTime: module.endTime,
+    })),
+  );
+}
+
+function isScheduleEnabled(schedules: ScheduleInput[], dayOfWeek: number, startTime: string) {
+  return schedules.some((schedule) => schedule.dayOfWeek === dayOfWeek && schedule.startTime === startTime);
 }
 
 export function AdminModulesManager({ consultories, modules, occupancies }: Props) {
@@ -79,7 +99,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
   const [occupancyForm, setOccupancyForm] = useState({
     professionalId: String(selectedModule?.id ?? ""),
     date: todayString(),
-    time: "09:00",
+    time: fixedModules[0].startTime,
     patientName: "",
     reason: "",
   });
@@ -121,17 +141,27 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
       consultoryId: String(consultories[0]?.id ?? ""),
     });
     setSchedules([
-      { dayOfWeek: 1, startTime: "08:00", endTime: "20:00" },
-      { dayOfWeek: 2, startTime: "08:00", endTime: "20:00" },
-      { dayOfWeek: 3, startTime: "08:00", endTime: "20:00" },
-      { dayOfWeek: 4, startTime: "08:00", endTime: "20:00" },
-      { dayOfWeek: 5, startTime: "08:00", endTime: "20:00" },
-      { dayOfWeek: 6, startTime: "08:00", endTime: "20:00" },
+      ...defaultFixedSchedules(),
     ]);
   }
 
-  function updateSchedule(index: number, patch: Partial<ScheduleInput>) {
-    setSchedules((current) => current.map((item, idx) => idx === index ? { ...item, ...patch } : item));
+  function toggleFixedSchedule(dayOfWeek: number, module: (typeof fixedModules)[number]) {
+    setSchedules((current) => {
+      const exists = isScheduleEnabled(current, dayOfWeek, module.startTime);
+
+      if (exists) {
+        return current.filter((schedule) => !(schedule.dayOfWeek === dayOfWeek && schedule.startTime === module.startTime));
+      }
+
+      return [
+        ...current,
+        {
+          dayOfWeek,
+          startTime: module.startTime,
+          endTime: module.endTime,
+        },
+      ].sort((a, b) => a.dayOfWeek - b.dayOfWeek || a.startTime.localeCompare(b.startTime));
+    });
   }
 
   async function saveModule() {
@@ -218,7 +248,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     setOccupancyForm({
       professionalId: String(selectedModule?.id ?? ""),
       date: todayString(),
-      time: "09:00",
+      time: fixedModules[0].startTime,
       patientName: "",
       reason: "",
     });
@@ -264,7 +294,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
         <section className="card admin-edit-card admin-board-card">
           <span className="admin-board-kicker">Paso 1</span>
           <h3>Datos del modulo</h3>
-          <p className="admin-board-note">Crea o edita el gabinete que se muestra en la agenda publica.</p>
+          <p className="admin-board-note">Crea o edita el consultorio que se muestra en la agenda publica.</p>
           <div className="form-two-cols">
             <label>
               Nombre
@@ -306,25 +336,36 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
         <section className="card admin-edit-card admin-board-card">
           <span className="admin-board-kicker">Paso 2</span>
           <h3>Disponibilidad semanal</h3>
-          <p className="admin-board-note">Define que dias y rangos horarios existen para este modulo.</p>
-          <div className="availability-grid">
-            {schedules.map((schedule, index) => (
-              <article className="availability-row" key={`${schedule.dayOfWeek}-${index}`}>
-                <select value={schedule.dayOfWeek} onChange={(event) => updateSchedule(index, { dayOfWeek: Number(event.target.value) })}>
-                  {dayNames.map((day) => (
-                    <option key={day.value} value={day.value}>{day.label}</option>
-                  ))}
-                </select>
-                <input type="time" value={schedule.startTime} onChange={(event) => updateSchedule(index, { startTime: event.target.value })} />
-                <input type="time" value={schedule.endTime} onChange={(event) => updateSchedule(index, { endTime: event.target.value })} />
-                <button type="button" onClick={() => setSchedules((current) => current.filter((_, idx) => idx !== index))}>Quitar</button>
-              </article>
+          <p className="admin-board-note">Activa los modulos fijos disponibles para este consultorio.</p>
+          <div className="fixed-module-grid">
+            <div className="fixed-module-row fixed-module-header-row">
+              <span />
+              {fixedModules.map((module) => (
+                <div className="fixed-module-head" key={module.id}>
+                  <strong>{module.label}</strong>
+                  <span>{module.startTime} a {module.endTime} hs</span>
+                </div>
+              ))}
+            </div>
+            {dayNames.map((day) => (
+              <div className="fixed-module-row" key={day.value}>
+                <strong>{day.label}</strong>
+                {fixedModules.map((module) => (
+                  <label className="fixed-module-check" key={module.id}>
+                    <input
+                      type="checkbox"
+                      checked={isScheduleEnabled(schedules, day.value, module.startTime)}
+                      onChange={() => toggleFixedSchedule(day.value, module)}
+                    />
+                    <span>Disponible</span>
+                  </label>
+                ))}
+              </div>
             ))}
           </div>
           <div className="admin-inline-actions">
-            <button type="button" onClick={() => setSchedules((current) => [...current, { dayOfWeek: 1, startTime: "08:00", endTime: "20:00" }])}>
-              Agregar horario
-            </button>
+            <button type="button" onClick={() => setSchedules(defaultFixedSchedules())}>Activar todos</button>
+            <button type="button" onClick={() => setSchedules([])}>Vaciar disponibilidad</button>
             <button type="button" onClick={saveModule}>Guardar horarios</button>
           </div>
         </section>
@@ -332,7 +373,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
         <section className="card admin-edit-card admin-board-card">
           <span className="admin-board-kicker">Paso 3</span>
           <h3>{editingAppointmentId ? "Mover / editar horario" : "Ocupar horario"}</h3>
-          <p className="admin-board-note">Carga un nombre en un dia y hora, o mueve una ocupacion existente.</p>
+          <p className="admin-board-note">Carga un nombre en un dia y modulo fijo, o mueve una ocupacion existente.</p>
           <form className="admin-professional-form" onSubmit={saveOccupancy}>
             <label>
               Modulo
@@ -348,8 +389,14 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
                 <input type="date" value={occupancyForm.date} onChange={(event) => setOccupancyForm({ ...occupancyForm, date: event.target.value })} />
               </label>
               <label>
-                Hora
-                <input type="time" value={occupancyForm.time} onChange={(event) => setOccupancyForm({ ...occupancyForm, time: event.target.value })} />
+                Modulo horario
+                <select value={occupancyForm.time} onChange={(event) => setOccupancyForm({ ...occupancyForm, time: event.target.value })}>
+                  {fixedModules.map((module) => (
+                    <option key={module.id} value={module.startTime}>
+                      {module.label} - {module.startTime} a {module.endTime} hs
+                    </option>
+                  ))}
+                </select>
               </label>
             </div>
             <label>

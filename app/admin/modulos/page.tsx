@@ -27,13 +27,13 @@ export default async function AdminModulosPage() {
   return (
     <AdminPageShell
       title="Modulos y agenda"
-      description="Crear gabinetes, editar disponibilidad, ocupar, mover y liberar horarios."
+      description="Crear consultorios, editar disponibilidad, ocupar, mover y liberar modulos."
     >
       <section className="admin-panel-card card">
         <div className="admin-panel-head">
           <span>Agenda interna</span>
           <h2>Editar modulos y horarios</h2>
-          <p>Esta pantalla es solo para administrar gabinetes y ocupaciones.</p>
+          <p>Esta pantalla es solo para administrar consultorios, modulos y ocupaciones.</p>
         </div>
         <AdminModulesManager
           consultories={sedes.map((sede) => ({

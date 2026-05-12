@@ -12,6 +12,12 @@ const scheduleSchema = z.object({
   })),
 });
 
+const fixedModuleTimes = new Map([
+  ["08:00", "12:00"],
+  ["12:00", "16:00"],
+  ["16:00", "20:00"],
+]);
+
 export async function PATCH(request: Request) {
   const session = await getSessionPayload();
 
@@ -24,6 +30,12 @@ export async function PATCH(request: Request) {
 
   if (!parsed.success) {
     return NextResponse.json({ error: "Horarios invalidos." }, { status: 400 });
+  }
+
+  const hasInvalidModule = parsed.data.schedules.some((schedule) => fixedModuleTimes.get(schedule.startTime) !== schedule.endTime);
+
+  if (hasInvalidModule) {
+    return NextResponse.json({ error: "Solo se permiten modulos fijos: 8-12, 12-16 o 16-20." }, { status: 400 });
   }
 
   const room = await prisma.professional.findUnique({

@@ -201,25 +201,22 @@ async function main() {
   const resources = [consultorio1, consultorio2, oficina, licAgustina, licTomas];
   for (const resource of resources) {
     for (const dayOfWeek of [1, 2, 3, 4, 5]) {
-      await prisma.schedule.create({
-        data: {
-          dayOfWeek,
-          startTime: "08:00",
-          endTime: "20:00",
-          telehealth: false,
-          professionalId: resource.id,
-        },
-      });
+      for (const module of [
+        { startTime: "08:00", endTime: "12:00" },
+        { startTime: "12:00", endTime: "16:00" },
+        { startTime: "16:00", endTime: "20:00" },
+      ]) {
+        await prisma.schedule.create({
+          data: {
+            dayOfWeek,
+            startTime: module.startTime,
+            endTime: module.endTime,
+            telehealth: false,
+            professionalId: resource.id,
+          },
+        });
+      }
     }
-    await prisma.schedule.create({
-      data: {
-        dayOfWeek: 6,
-        startTime: "09:00",
-        endTime: "13:00",
-        telehealth: false,
-        professionalId: resource.id,
-      },
-    });
   }
 
   const reservationBase = new Date();

@@ -107,7 +107,7 @@ export default async function DashboardPage() {
           <Link href="/admin/modulos" className="admin-hub-card">
             <span>01</span>
             <strong>Modulos y agenda</strong>
-            <p>Crear gabinetes, editar horarios, ocupar, mover y liberar turnos.</p>
+            <p>Crear consultorios, editar modulos, ocupar, mover y liberar turnos.</p>
           </Link>
           <Link href="/admin/profesionales" className="admin-hub-card">
             <span>02</span>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
             <span>Modulo de administracion</span>
             <h2 style={{ fontSize: "1.25rem", margin: 0 }}>Editar modulos y horarios</h2>
             <p style={{ color: "var(--color-muted)", margin: "0.25rem 0 0" }}>
-              Desde aca podes crear gabinetes, cambiar su disponibilidad semanal y cargar nombres ocupando dia/hora como en la planilla.
+              Desde aca podes crear consultorios, cambiar su disponibilidad semanal y cargar nombres ocupando dia/modulo como en la planilla.
             </p>
           </div>
           <AdminModulesManager

@@ -35,6 +35,11 @@ const MONTH_NAMES = [
 ];
 const ADMIN_PHONE = "5492214778280";
 const ADMIN_EMAIL = "administracion@delta.local";
+const FIXED_MODULES = [
+  { label: "Manana", startTime: "08:00", endTime: "12:00" },
+  { label: "Mediodia", startTime: "12:00", endTime: "16:00" },
+  { label: "Tarde", startTime: "16:00", endTime: "20:00" },
+];
 
 function getWeekDays(offset = 0) {
   const start = new Date();
@@ -64,6 +69,16 @@ function generateSlots(
     mode === "online" ? s.telehealth : !s.telehealth,
   );
 
+  if (intervalMinutes === 240) {
+    return relevant
+      .filter((schedule) =>
+        FIXED_MODULES.some((module) => module.startTime === schedule.startTime && module.endTime === schedule.endTime),
+      )
+      .map((schedule) => schedule.startTime)
+      .filter((slot, index, all) => all.indexOf(slot) === index)
+      .sort();
+  }
+
   for (const s of relevant) {
     const [sh, sm] = s.startTime.split(":").map(Number);
     const [eh, em] = s.endTime.split(":").map(Number);
@@ -87,13 +102,18 @@ function findAppointmentForSlot(appts: Appointment[], day: Date, slot: string) {
   const [h, m] = slot.split(":").map(Number);
   const start = new Date(day);
   start.setHours(h, m, 0, 0);
-  const end = new Date(start.getTime() + 50 * 60 * 1000);
+  const end = new Date(start.getTime() + 4 * 60 * 60 * 1000);
 
   return appts.find((a) => {
     const s = new Date(a.startsAt);
-    const e = new Date(s.getTime() + 50 * 60 * 1000);
+    const e = new Date(s.getTime() + 4 * 60 * 60 * 1000);
     return s < end && e > start;
   });
+}
+
+function getFixedModuleLabel(slot: string) {
+  const module = FIXED_MODULES.find((item) => item.startTime === slot);
+  return module ? `${module.label} ${module.startTime}-${module.endTime}` : slot;
 }
 
 function getContactHref(professional: Professional, day: Date, slot: string) {
@@ -148,7 +168,7 @@ function ProfCard({
   const displaySlots = allSlots.length > 0
     ? allSlots
     : purpose === "spaces"
-      ? ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"]
+      ? FIXED_MODULES.map((module) => module.startTime)
       : ["09:00", "09:30", "10:00", "10:30", "11:00", "14:00", "14:30", "15:00", "16:00"];
 
   const hasOnline = professional.schedules?.some((s) => s.telehealth) ?? false;
@@ -258,15 +278,19 @@ function ProfCard({
           <div className="slots-grid">
             {days.map((day) => {
               const dayOfWeek = day.getDay();
-              const hasSchedule = professional.schedules?.some(
+              const daySchedules = professional.schedules?.filter(
                 (s) => s.dayOfWeek === dayOfWeek &&
                   (mode === "online" ? s.telehealth : !s.telehealth),
-              ) ?? true;
+              ) ?? [];
+              const daySlots = purpose === "spaces"
+                ? generateSlots(daySchedules, mode, 240)
+                : displaySlots;
+              const hasSchedule = purpose === "spaces" ? daySlots.length > 0 : daySchedules.length > 0;
 
               return (
                 <div key={day.toISOString()} className="slots-col">
                   {hasSchedule ? (
-                    displaySlots.map((slot) => {
+                    daySlots.map((slot) => {
                       const appointment = findAppointmentForSlot(appointments, day, slot);
                       const busy = Boolean(appointment);
                       const statusClass = appointment?.status === "PENDING"
@@ -283,9 +307,9 @@ function ProfCard({
                           target={busy || purpose === "appointments" ? undefined : "_blank"}
                           rel={busy || purpose === "appointments" ? undefined : "noreferrer"}
                           aria-disabled={busy}
-                          title={busy ? getStatusLabel(appointment?.status) : purpose === "spaces" ? `Consultar ${slot}` : `Pedir turno ${slot}`}
+                          title={busy ? getStatusLabel(appointment?.status) : purpose === "spaces" ? `Consultar ${getFixedModuleLabel(slot)}` : `Pedir turno ${slot}`}
                         >
-                          {slot}
+                          {purpose === "spaces" ? getFixedModuleLabel(slot) : slot}
                           <span>
                             {busy
                               ? purpose === "spaces"
