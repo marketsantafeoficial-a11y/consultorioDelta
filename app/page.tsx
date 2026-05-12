@@ -28,7 +28,6 @@ const moduleBlocks = [
   ["Manana", "8 a 12 hs", "Modulo fijo"],
   ["Mediodia", "12 a 16 hs", "Modulo fijo"],
   ["Tarde", "16 a 20 hs", "Modulo fijo"],
-  ["Hora suelta", "$5.000", "Uso ocasional"],
 ];
 
 const priceBlocks = [
@@ -36,6 +35,13 @@ const priceBlocks = [
   ["2 modulos (8 hs)", "$3.500 por hora", "Total: $28.000"],
   ["3 modulos (dia completo)", "$3.000 por hora", "Total: $36.000"],
   ["Promo lanzamiento", "Modulo manana 4x3", "Total: $12.000"],
+];
+
+const moduleExamples = [
+  ["Ejemplo manana", "8 a 12 hs", "Ideal para atencion semanal fija."],
+  ["Ejemplo mediodia", "12 a 16 hs", "Para entrevistas, evaluaciones o admisiones."],
+  ["Ejemplo tarde", "16 a 20 hs", "Para agenda despues del horario laboral."],
+  ["Ejemplo jornada", "8 a 20 hs", "Tres modulos seguidos para dia completo."],
 ];
 
 export default function HomePage() {
@@ -120,7 +126,7 @@ export default function HomePage() {
               <p className="lp-section-sub">
                 Te orientamos para elegir el mejor camino: si buscas atencion,
                 te conectamos con el profesional adecuado; si sos profesional,
-                podes consultar por alquiler de gabinetes equipados.
+                podes consultar por alquiler de consultorios equipados.
               </p>
             </RevealOnScroll>
             <div className="work-steps-grid">
@@ -146,7 +152,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="alquiler-gabinetes" className="lp-section">
+        <section id="alquiler-consultorios" className="lp-section">
           <div className="lp-section-inner">
             <RevealOnScroll>
               <DrawTitle tag="h2" className="lp-section-title" accentColor="#059669">
@@ -162,6 +168,9 @@ export default function HomePage() {
             </RevealOnScroll>
             <RevealOnScroll delay={160}>
               <div className="module-info-grid">
+                <div className="module-info-title">
+                  <span>Disponibilidad por modulos fijos</span>
+                </div>
                 {moduleBlocks.map(([label, value, detail]) => (
                   <article key={label}>
                     <span>{label}</span>
@@ -172,6 +181,17 @@ export default function HomePage() {
               </div>
             </RevealOnScroll>
             <RevealOnScroll delay={180}>
+              <div className="rental-example-grid">
+                {moduleExamples.map(([title, hours, detail]) => (
+                  <article key={title}>
+                    <span>{title}</span>
+                    <strong>{hours}</strong>
+                    <p>{detail}</p>
+                  </article>
+                ))}
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll delay={200}>
               <div className="rental-detail-grid">
                 <article>
                   <h3>El espacio cuenta con</h3>
@@ -187,7 +207,7 @@ export default function HomePage() {
                 </article>
               </div>
             </RevealOnScroll>
-            <RevealOnScroll delay={220}>
+            <RevealOnScroll delay={240}>
               <div className="rental-price-grid">
                 {priceBlocks.map(([title, rate, total]) => (
                   <article key={title}>
