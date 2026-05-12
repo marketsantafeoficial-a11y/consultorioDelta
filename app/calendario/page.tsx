@@ -47,23 +47,24 @@ export default async function CalendarioPage() {
 
       <main className="cal-main">
         <div className="cal-hero-text">
-          <h1 className="cal-hero-title">Agenda de modulos Delta</h1>
+          <h1 className="cal-hero-title">Alquiler de consultorios</h1>
           <p className="cal-hero-sub">
-            Consulta la disponibilidad de {spaces.length} espacios para alquilar por modulo.
+            En pleno centro de City Bell. Consulta la disponibilidad de {spaces.length} espacios
+            amplios, luminosos y equipados.
           </p>
           <div className="cal-flow-panel">
-            <strong>Reserva administrada:</strong>
-            <span>1. Elegi un modulo libre como referencia.</span>
-            <span>2. Contacta a administracion por WhatsApp con el dia y horario.</span>
-            <span>3. Administracion valida disponibilidad, condiciones y confirma la reserva.</span>
+            <strong>Programa de alquiler</strong>
+            <span>Wifi, sala de espera, bano, cocina, escritorio, AA frio/calor y divan.</span>
+            <span>Modulos fijos: manana 8 a 12, mediodia 12 a 16 y tarde 16 a 20 hs.</span>
+            <span>Ajustes: noviembre, marzo y julio. No contamos con servicio de secretaria.</span>
           </div>
         </div>
 
         <section className="calendar-demo-section">
           <div className="calendar-demo-head">
-            <span>Flujo 1</span>
-            <h2>Alquiler de modulos</h2>
-            <p>Los profesionales externos ven espacios libres, pero la reserva comercial la maneja administracion.</p>
+            <span>Disponibilidad por modulos fijos</span>
+            <h2>Agenda</h2>
+            <p>Usa los horarios libres como referencia y escribinos por WhatsApp para confirmar condiciones.</p>
           </div>
           <ProfessionalCalendar
             purpose="spaces"

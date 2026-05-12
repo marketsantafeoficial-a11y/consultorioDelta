@@ -866,6 +866,80 @@ input, textarea, select { border: 1px solid var(--color-border); background: whi
   font-size: 1.35rem;
   font-weight: 600;
 }
+.module-info-grid small {
+  color: var(--color-muted);
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+.rental-detail-grid,
+.rental-price-grid {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0 auto 2.25rem;
+  max-width: 920px;
+}
+.rental-detail-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rental-price-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rental-detail-grid article,
+.rental-price-grid article {
+  background: rgba(255, 254, 252, 0.72);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
+}
+.rental-detail-grid h3 {
+  color: var(--color-primary);
+  font-size: 1.35rem;
+  margin-bottom: 0.45rem;
+}
+.rental-detail-grid p,
+.rental-price-grid p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.rental-price-grid span {
+  color: var(--color-secondary);
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.45rem;
+  text-transform: uppercase;
+}
+.rental-price-grid strong {
+  color: var(--color-primary);
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+.space-agenda-card {
+  display: block;
+}
+.space-agenda-card .prof-card-calendar {
+  padding: 1.2rem;
+}
+.space-calendar-title {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+}
+.space-calendar-title span {
+  color: var(--color-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.space-calendar-title strong {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+}
 .lp-section-note,
 .form-note {
   color: var(--color-muted);
@@ -1035,6 +1109,8 @@ input, textarea, select {
   .referral-copy { position: static; }
   .work-steps-grid { grid-template-columns: repeat(2, 1fr); }
   .module-info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rental-detail-grid,
+  .rental-price-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .team-modal { text-align: center; }
   .team-modal .profile-actions { justify-content: center; }
   .admin-module-grid, .admin-board-grid { grid-template-columns: 1fr; }
@@ -1059,6 +1135,8 @@ input, textarea, select {
   .team-grid { grid-template-columns: 1fr; }
   .work-steps-grid { grid-template-columns: 1fr; }
   .module-info-grid { grid-template-columns: 1fr; margin-top: -1rem; }
+  .rental-detail-grid,
+  .rental-price-grid { grid-template-columns: 1fr; }
   .work-step-card { min-height: auto; text-align: center; }
   .whatsapp-float span:last-child { display: none; }
   .whatsapp-float { padding: 0.55rem; }

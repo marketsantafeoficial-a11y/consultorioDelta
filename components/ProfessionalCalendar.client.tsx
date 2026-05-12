@@ -157,41 +157,49 @@ function ProfCard({
   const specs = specsRaw.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 5);
 
   return (
-    <article className="prof-card">
-      <div className="prof-card-bio">
-        <div className="prof-avatar-wrap">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={professional.photoUrl ?? "/delta-assets/professional-avatar.svg"}
-            alt={professional.fullName}
-            className="prof-avatar"
-          />
-          <div className="prof-mode-badges">
-            {hasOnline && <span className="mode-badge online">Virtual</span>}
-            {hasPresencial && <span className="mode-badge presencial">Presencial</span>}
+    <article className={`prof-card ${purpose === "spaces" ? "space-agenda-card" : ""}`}>
+      {purpose === "appointments" && (
+        <div className="prof-card-bio">
+          <div className="prof-avatar-wrap">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={professional.photoUrl ?? "/delta-assets/professional-avatar.svg"}
+              alt={professional.fullName}
+              className="prof-avatar"
+            />
+            <div className="prof-mode-badges">
+              {hasOnline && <span className="mode-badge online">Virtual</span>}
+              {hasPresencial && <span className="mode-badge presencial">Presencial</span>}
+            </div>
+          </div>
+
+          <div className="prof-bio-text">
+            <p className="prof-card-name">{professional.fullName}</p>
+            <p className="prof-card-specialty">{professional.specialty}</p>
+            {professional.consultory?.name && (
+              <p className="prof-card-location">
+                {professional.consultory.name} - {professional.consultory.city}
+              </p>
+            )}
+            {specs.length > 0 && (
+              <div className="prof-specs">
+                {specs.map((s) => <SpecialtyTag key={s} label={s} />)}
+              </div>
+            )}
+            <Link href={`/profesionales/${professional.id}`} className="link-button" style={{ marginTop: "0.75rem", width: "fit-content" }}>
+              Pedir turno
+            </Link>
           </div>
         </div>
-
-        <div className="prof-bio-text">
-          <p className="prof-card-name">{professional.fullName}</p>
-          <p className="prof-card-specialty">{professional.specialty}</p>
-          {professional.consultory?.name && (
-            <p className="prof-card-location">
-              {professional.consultory.name} - {professional.consultory.city}
-            </p>
-          )}
-          {specs.length > 0 && (
-            <div className="prof-specs">
-              {specs.map((s) => <SpecialtyTag key={s} label={s} />)}
-            </div>
-          )}
-          <Link href={`/profesionales/${professional.id}`} className="link-button" style={{ marginTop: "0.75rem", width: "fit-content" }}>
-            {purpose === "spaces" ? "Consultar modulo" : "Pedir turno"}
-          </Link>
-        </div>
-      </div>
+      )}
 
       <div className="prof-card-calendar">
+        {purpose === "spaces" && (
+          <div className="space-calendar-title">
+            <span>{professional.specialty}</span>
+            <strong>{professional.fullName}</strong>
+          </div>
+        )}
         <div className="calendar-toolbar">
           <div className="mode-toggle">
             {hasOnline && (
@@ -339,12 +347,12 @@ export default function ProfessionalCalendar({
         <div>
           <strong>
             {purpose === "spaces"
-              ? "Agenda de modulos: la reserva la confirma administracion."
+              ? "Agenda de disponibilidad para alquiler de consultorios."
               : "Agenda de profesionales: el paciente puede pedir turno."}
           </strong>
           <p>
             {purpose === "spaces"
-              ? "Usa los horarios libres como referencia para armar la consulta; los ocupados ya aparecen bloqueados."
+              ? "Los modulos fijos son manana 8 a 12, mediodia 12 a 16 y tarde 16 a 20 hs."
               : "Cada profesional tiene su propia agenda. Los turnos pedidos quedan pendientes y se ven en su panel independiente."}
           </p>
         </div>

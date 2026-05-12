@@ -24,6 +24,20 @@ const steps = [
   ["04", "Coordinar atencion"],
 ];
 
+const moduleBlocks = [
+  ["Manana", "8 a 12 hs", "Modulo fijo"],
+  ["Mediodia", "12 a 16 hs", "Modulo fijo"],
+  ["Tarde", "16 a 20 hs", "Modulo fijo"],
+  ["Hora suelta", "$5.000", "Uso ocasional"],
+];
+
+const priceBlocks = [
+  ["1 modulo (4 hs)", "$4.000 por hora", "Total: $16.000"],
+  ["2 modulos (8 hs)", "$3.500 por hora", "Total: $28.000"],
+  ["3 modulos (dia completo)", "$3.000 por hora", "Total: $36.000"],
+  ["Promo lanzamiento", "Modulo manana 4x3", "Total: $12.000"],
+];
+
 export default function HomePage() {
   return (
     <div className="lp-shell">
@@ -141,28 +155,47 @@ export default function HomePage() {
             </RevealOnScroll>
             <RevealOnScroll delay={120}>
               <p className="lp-section-sub">
-                Consultorios amplios, luminosos y equipados con wifi, sala de
-                espera, bano, cocina, escritorio, aire frio/calor y divan.
+                Alquiler de consultorios en pleno centro de City Bell. Los
+                espacios son amplios, luminosos y estan equipados para atencion
+                profesional.
               </p>
             </RevealOnScroll>
             <RevealOnScroll delay={160}>
               <div className="module-info-grid">
+                {moduleBlocks.map(([label, value, detail]) => (
+                  <article key={label}>
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                    <small>{detail}</small>
+                  </article>
+                ))}
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll delay={180}>
+              <div className="rental-detail-grid">
                 <article>
-                  <span>Manana</span>
-                  <strong>8 a 12 hs</strong>
+                  <h3>El espacio cuenta con</h3>
+                  <p>Wifi, sala de espera, bano, cocina, escritorios, aire frio/calor y divan.</p>
                 </article>
                 <article>
-                  <span>Mediodia</span>
-                  <strong>12 a 16 hs</strong>
+                  <h3>Modalidad</h3>
+                  <p>Se alquilan por modulos fijos o jornada completa. No contamos con servicio de secretaria.</p>
                 </article>
                 <article>
-                  <span>Tarde</span>
-                  <strong>16 a 20 hs</strong>
+                  <h3>Ajustes</h3>
+                  <p>Noviembre, marzo y julio.</p>
                 </article>
-                <article>
-                  <span>Uso ocasional</span>
-                  <strong>Hora suelta</strong>
-                </article>
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll delay={220}>
+              <div className="rental-price-grid">
+                {priceBlocks.map(([title, rate, total]) => (
+                  <article key={title}>
+                    <span>{title}</span>
+                    <strong>{rate}</strong>
+                    <p>{total}</p>
+                  </article>
+                ))}
               </div>
             </RevealOnScroll>
             <div className="lp-spec-grid">
@@ -190,8 +223,8 @@ export default function HomePage() {
             </RevealOnScroll>
             <RevealOnScroll delay={220}>
               <p className="lp-section-note">
-                Se alquila por modulo o jornada completa. No cuenta con servicio
-                de secretaria.
+                Promo lanzamiento: modulo de la manana 4x3. Usas 4 horas y
+                pagas solo 3.
               </p>
             </RevealOnScroll>
           </div>
