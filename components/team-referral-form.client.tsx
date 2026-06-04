@@ -59,7 +59,7 @@ export function TeamReferralForm({
     event.preventDefault();
 
     const message = [
-      "Hola, quiero iniciar una derivacion para terapia con el equipo de Delta Consultorios.",
+      "Hola, quiero iniciar una derivacion para terapia con el equipo de DELTA – ESPACIOS PROFESIONALES.",
       "",
       `Correo electronico: ${form.email}`,
       `Nombre y apellido: ${form.fullName}`,
@@ -198,7 +198,7 @@ export function TeamReferralForm({
           </select>
         </label>
 
-        <p className="form-note">Delta Consultorios no trabaja por IOMA.</p>
+        <p className="form-note">DELTA – ESPACIOS PROFESIONALES no trabaja por IOMA.</p>
 
         <button type="submit">Abrir WhatsApp con mis datos</button>
         {feedback ? <p className="status-text" aria-live="polite">{feedback}</p> : null}

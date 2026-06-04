@@ -21,7 +21,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
   const [selected, setSelected] = useState<TeamProfessional | null>(null);
 
   function getProfessionalWhatsAppHref(professional: TeamProfessional) {
-    const message = `Hola, quiero consultar por ${professional.fullName} de Delta Consultorios.`;
+    const message = `Hola, quiero consultar por ${professional.fullName} de DELTA – ESPACIOS PROFESIONALES.`;
 
     if (!professional.whatsapp) {
       return getWhatsAppHref(message);

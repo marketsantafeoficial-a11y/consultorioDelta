@@ -57,7 +57,7 @@ export function BookingForm({ professionalId, purpose = "appointments" }: Bookin
     if (purpose === "spaces") {
       const selectedDate = dtFormatter.format(new Date(selectedSlot));
       const message = [
-        "Hola, quiero consultar por un modulo en Delta Consultorios.",
+        "Hola, quiero consultar por un modulo en DELTA – ESPACIOS PROFESIONALES.",
         "Necesidad: alquiler de consultorio / modulo.",
         `Fecha y horario: ${selectedDate}`,
         `Nombre / estudio: ${patientName}`,

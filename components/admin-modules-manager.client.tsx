@@ -45,15 +45,15 @@ type Props = {
 const dayNames = [
   { value: 1, label: "Lunes" },
   { value: 2, label: "Martes" },
-  { value: 3, label: "Miercoles" },
+  { value: 3, label: "Miércoles" },
   { value: 4, label: "Jueves" },
   { value: 5, label: "Viernes" },
-  { value: 6, label: "Sabado" },
+  { value: 6, label: "Sábado" },
 ];
 
 const fixedModules = [
-  { id: "morning", label: "Manana", startTime: "08:00", endTime: "12:00" },
-  { id: "midday", label: "Mediodia", startTime: "12:00", endTime: "16:00" },
+  { id: "morning", label: "Mañana", startTime: "09:00", endTime: "12:00" },
+  { id: "midday", label: "Mediodía", startTime: "12:00", endTime: "16:00" },
   { id: "afternoon", label: "Tarde", startTime: "16:00", endTime: "20:00" },
 ];
 
@@ -114,8 +114,8 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
   const [moduleForm, setModuleForm] = useState(() => ({
     id: selectedModule?.id as number | undefined,
     fullName: selectedModule?.fullName ?? "Consultorio nuevo",
-    specialty: selectedModule?.specialty ?? "Modulo por hora",
-    bio: selectedModule?.bio ?? "Espacio disponible para alquiler por modulo.",
+    specialty: selectedModule?.specialty ?? "Módulo por hora",
+    bio: selectedModule?.bio ?? "Espacio disponible para alquiler por módulo.",
     serves: selectedModule?.serves ?? "",
     photoUrl: selectedModule?.photoUrl ?? "",
     consultoryId: String(selectedModule?.consultoryId ?? consultories[0]?.id ?? ""),
@@ -130,6 +130,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
   });
   const [editingAppointmentId, setEditingAppointmentId] = useState<number | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"info" | "schedule" | "occupy">("info");
 
   const visibleOccupancies = useMemo(
     () => occupancies.filter((item) => item.status !== "CANCELED").slice(0, 30),
@@ -152,6 +153,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     });
     setSchedules(normalizeFixedSchedules(room.schedules));
     setOccupancyForm((current) => ({ ...current, professionalId: String(room.id) }));
+    setActiveTab("info");
   }
 
   function newModule() {
@@ -159,15 +161,14 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     setModuleForm({
       id: undefined,
       fullName: "Consultorio nuevo",
-      specialty: "Modulo por hora",
-      bio: "Espacio disponible para alquiler por modulo.",
+      specialty: "Módulo por hora",
+      bio: "Espacio disponible para alquiler por módulo.",
       serves: "",
       photoUrl: "",
       consultoryId: String(consultories[0]?.id ?? ""),
     });
-    setSchedules([
-      ...defaultFixedSchedules(),
-    ]);
+    setSchedules([...defaultFixedSchedules()]);
+    setActiveTab("info");
   }
 
   function toggleFixedSchedule(dayOfWeek: number, module: (typeof fixedModules)[number]) {
@@ -201,7 +202,7 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     const payload = await response.json();
 
     if (!response.ok) {
-      setMessage(payload.error ?? "No se pudo guardar el modulo.");
+      setMessage(payload.error ?? "No se pudo guardar el módulo.");
       return;
     }
 
@@ -217,11 +218,11 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     const schedulePayload = await scheduleResponse.json();
 
     if (!scheduleResponse.ok) {
-      setMessage(schedulePayload.error ?? "Modulo guardado, pero no se pudieron guardar horarios.");
+      setMessage(schedulePayload.error ?? "Módulo guardado, pero no se pudieron guardar horarios.");
       return;
     }
 
-    setMessage("Modulo y horarios guardados.");
+    setMessage("✓ Módulo y horarios guardados correctamente.");
     router.refresh();
   }
 
@@ -239,11 +240,11 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
     const payload = await response.json();
 
     if (!response.ok) {
-      setMessage(payload.error ?? "No se pudo guardar la ocupacion.");
+      setMessage(payload.error ?? "No se pudo guardar la ocupación.");
       return;
     }
 
-    setMessage(editingAppointmentId ? "Horario movido/editado." : "Ocupacion cargada en agenda.");
+    setMessage(editingAppointmentId ? "✓ Horario movido/editado." : "✓ Ocupación cargada en agenda.");
     setOccupancyForm((current) => ({ ...current, patientName: "", reason: "" }));
     setEditingAppointmentId(null);
     router.refresh();
@@ -263,9 +264,10 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
       date: `${yyyy}-${mm}-${dd}`,
       time: `${hh}:${min}`,
       patientName: item.patientName,
-      reason: "Editado manualmente por administracion",
+      reason: "Editado manualmente por administración",
     });
-    setMessage("Editando horario: cambia modulo, fecha, hora o nombre y guarda.");
+    setMessage("Editando horario: cambia módulo, fecha, hora o nombre y guarda.");
+    setActiveTab("occupy");
   }
 
   function cancelEdit() {
@@ -293,128 +295,159 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
       return;
     }
 
-    setMessage("Horario liberado.");
+    setMessage("✓ Horario liberado.");
     router.refresh();
   }
 
   return (
-    <div className="admin-modules-manager">
-      <div className="module-picker">
-        {modules.map((room) => (
-          <button
-            type="button"
-            key={room.id}
-            className={`filter-pill ${selectedId === room.id ? "active" : ""}`}
-            onClick={() => selectModule(room.id)}
-          >
-            {room.fullName}
+    <div className="admin-modules-simple">
+      <div className="admin-module-selector">
+        <div className="admin-module-tabs">
+          {modules.map((room) => (
+            <button
+              type="button"
+              key={room.id}
+              className={`admin-module-tab ${selectedId === room.id ? "active" : ""}`}
+              onClick={() => selectModule(room.id)}
+            >
+              {room.fullName}
+            </button>
+          ))}
+          <button type="button" className="admin-module-tab add-new" onClick={newModule}>
+            + Nuevo
           </button>
-        ))}
-        <button type="button" className="ghost-button" onClick={newModule}>
-          Nuevo modulo
+        </div>
+      </div>
+
+      <div className="admin-module-tabs-nav">
+        <button
+          type="button"
+          className={`admin-tab-btn ${activeTab === "info" ? "active" : ""}`}
+          onClick={() => setActiveTab("info")}
+        >
+          Información
+        </button>
+        <button
+          type="button"
+          className={`admin-tab-btn ${activeTab === "schedule" ? "active" : ""}`}
+          onClick={() => setActiveTab("schedule")}
+        >
+          Horarios
+        </button>
+        <button
+          type="button"
+          className={`admin-tab-btn ${activeTab === "occupy" ? "active" : ""}`}
+          onClick={() => setActiveTab("occupy")}
+        >
+          Ocupar horario
         </button>
       </div>
 
-      <div className="admin-board-grid">
-        <section className="card admin-edit-card admin-board-card">
-          <span className="admin-board-kicker">Paso 1</span>
-          <h3>Datos del modulo</h3>
-          <p className="admin-board-note">Crea o edita el consultorio que se muestra en la agenda publica.</p>
-          <div className="form-two-cols">
-            <label>
-              Nombre
-              <input value={moduleForm.fullName} onChange={(event) => setModuleForm({ ...moduleForm, fullName: event.target.value })} />
-            </label>
-            <label>
-              Detalle
-              <input value={moduleForm.specialty} onChange={(event) => setModuleForm({ ...moduleForm, specialty: event.target.value })} />
-            </label>
-          </div>
-          <label>
-            Descripcion
-            <textarea rows={3} value={moduleForm.bio} onChange={(event) => setModuleForm({ ...moduleForm, bio: event.target.value })} />
-          </label>
-          <label>
-            Usos / equipamiento
-            <input value={moduleForm.serves} onChange={(event) => setModuleForm({ ...moduleForm, serves: event.target.value })} />
-          </label>
-          <div className="form-two-cols">
-            <label>
-              Foto URL
-              <input value={moduleForm.photoUrl} onChange={(event) => setModuleForm({ ...moduleForm, photoUrl: event.target.value })} />
-            </label>
-            <label>
-              Sede
-              <select value={moduleForm.consultoryId} onChange={(event) => setModuleForm({ ...moduleForm, consultoryId: event.target.value })}>
-                {consultories.map((consultory) => (
-                  <option key={consultory.id} value={consultory.id}>{consultory.name}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="admin-inline-actions">
-            <button type="button" onClick={saveModule}>Guardar datos del modulo</button>
+      {activeTab === "info" && (
+        <section className="admin-tab-panel">
+          <h3>Datos del consultorio</h3>
+          <div className="admin-simple-form">
+            <div className="admin-form-section">
+              <label>
+                <span>Nombre</span>
+                <input value={moduleForm.fullName} onChange={(event) => setModuleForm({ ...moduleForm, fullName: event.target.value })} />
+              </label>
+              <label>
+                <span>Detalle</span>
+                <input value={moduleForm.specialty} onChange={(event) => setModuleForm({ ...moduleForm, specialty: event.target.value })} />
+              </label>
+              <label>
+                <span>Descripción</span>
+                <textarea rows={3} value={moduleForm.bio} onChange={(event) => setModuleForm({ ...moduleForm, bio: event.target.value })} />
+              </label>
+              <label>
+                <span>Usos / equipamiento</span>
+                <input value={moduleForm.serves} onChange={(event) => setModuleForm({ ...moduleForm, serves: event.target.value })} />
+              </label>
+              <label>
+                <span>Foto (URL)</span>
+                <input value={moduleForm.photoUrl} onChange={(event) => setModuleForm({ ...moduleForm, photoUrl: event.target.value })} />
+              </label>
+              <label>
+                <span>Sede</span>
+                <select value={moduleForm.consultoryId} onChange={(event) => setModuleForm({ ...moduleForm, consultoryId: event.target.value })}>
+                  {consultories.map((consultory) => (
+                    <option key={consultory.id} value={consultory.id}>{consultory.name}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <button type="button" onClick={saveModule} className="admin-submit-btn">
+              Guardar información
+            </button>
           </div>
         </section>
+      )}
 
-        <section className="card admin-edit-card admin-board-card">
-          <span className="admin-board-kicker">Paso 2</span>
+      {activeTab === "schedule" && (
+        <section className="admin-tab-panel">
           <h3>Disponibilidad semanal</h3>
-          <p className="admin-board-note">Activa los modulos fijos disponibles para este consultorio.</p>
-          <div className="fixed-module-grid">
-            <div className="fixed-module-row fixed-module-header-row">
-              <span />
+          <p className="admin-tab-note">Activá los módulos disponibles para este consultorio.</p>
+          <div className="admin-schedule-grid">
+            <div className="admin-schedule-header">
+              <span></span>
               {fixedModules.map((module) => (
-                <div className="fixed-module-head" key={module.id}>
+                <div key={module.id} className="admin-schedule-module-head">
                   <strong>{module.label}</strong>
                   <span>{module.startTime} a {module.endTime} hs</span>
                 </div>
               ))}
             </div>
             {dayNames.map((day) => (
-              <div className="fixed-module-row" key={day.value}>
+              <div key={day.value} className="admin-schedule-row">
                 <strong>{day.label}</strong>
                 {fixedModules.map((module) => (
-                  <label className="fixed-module-check" key={module.id}>
+                  <label key={module.id} className="admin-schedule-checkbox">
                     <input
                       type="checkbox"
                       checked={isScheduleEnabled(schedules, day.value, module.startTime)}
                       onChange={() => toggleFixedSchedule(day.value, module)}
                     />
-                    <span>Disponible</span>
+                    <span>✓</span>
                   </label>
                 ))}
               </div>
             ))}
           </div>
-          <div className="admin-inline-actions">
-            <button type="button" onClick={() => setSchedules(defaultFixedSchedules())}>Activar todos</button>
-            <button type="button" onClick={() => setSchedules([])}>Vaciar disponibilidad</button>
-            <button type="button" onClick={saveModule}>Guardar horarios</button>
+          <div className="admin-schedule-actions">
+            <button type="button" onClick={() => setSchedules(defaultFixedSchedules())} className="admin-ghost-btn">
+              Activar todos
+            </button>
+            <button type="button" onClick={() => setSchedules([])} className="admin-ghost-btn">
+              Vaciar
+            </button>
+            <button type="button" onClick={saveModule} className="admin-submit-btn">
+              Guardar horarios
+            </button>
           </div>
         </section>
+      )}
 
-        <section className="card admin-edit-card admin-board-card">
-          <span className="admin-board-kicker">Paso 3</span>
+      {activeTab === "occupy" && (
+        <section className="admin-tab-panel">
           <h3>{editingAppointmentId ? "Mover / editar horario" : "Ocupar horario"}</h3>
-          <p className="admin-board-note">Carga un nombre en un dia y modulo fijo, o mueve una ocupacion existente.</p>
-          <form className="admin-professional-form" onSubmit={saveOccupancy}>
-            <label>
-              Modulo
-              <select value={occupancyForm.professionalId} onChange={(event) => setOccupancyForm({ ...occupancyForm, professionalId: event.target.value })}>
-                {modules.map((room) => (
-                  <option key={room.id} value={room.id}>{room.fullName}</option>
-                ))}
-              </select>
-            </label>
-            <div className="form-two-cols">
+          <p className="admin-tab-note">Cargá un nombre en un día y módulo, o mové una ocupación existente.</p>
+          <form className="admin-simple-form" onSubmit={saveOccupancy}>
+            <div className="admin-form-section">
               <label>
-                Fecha
+                <span>Consultorio</span>
+                <select value={occupancyForm.professionalId} onChange={(event) => setOccupancyForm({ ...occupancyForm, professionalId: event.target.value })}>
+                  {modules.map((room) => (
+                    <option key={room.id} value={room.id}>{room.fullName}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>Fecha</span>
                 <input type="date" value={occupancyForm.date} onChange={(event) => setOccupancyForm({ ...occupancyForm, date: event.target.value })} />
               </label>
               <label>
-                Modulo horario
+                <span>Módulo horario</span>
                 <select value={occupancyForm.time} onChange={(event) => setOccupancyForm({ ...occupancyForm, time: event.target.value })}>
                   {fixedModules.map((module) => (
                     <option key={module.id} value={module.startTime}>
@@ -423,48 +456,55 @@ export function AdminModulesManager({ consultories, modules, occupancies }: Prop
                   ))}
                 </select>
               </label>
+              <label>
+                <span>Nombre que aparece en agenda</span>
+                <input value={occupancyForm.patientName} onChange={(event) => setOccupancyForm({ ...occupancyForm, patientName: event.target.value })} required />
+              </label>
+              <label>
+                <span>Nota</span>
+                <input value={occupancyForm.reason} onChange={(event) => setOccupancyForm({ ...occupancyForm, reason: event.target.value })} />
+              </label>
             </div>
-            <label>
-              Nombre que aparece en agenda
-              <input value={occupancyForm.patientName} onChange={(event) => setOccupancyForm({ ...occupancyForm, patientName: event.target.value })} required />
-            </label>
-            <label>
-              Nota
-              <input value={occupancyForm.reason} onChange={(event) => setOccupancyForm({ ...occupancyForm, reason: event.target.value })} />
-            </label>
-            <div className="admin-inline-actions">
-              <button type="submit">{editingAppointmentId ? "Guardar cambios" : "Cargar ocupacion"}</button>
-              {editingAppointmentId ? (
-                <button type="button" onClick={cancelEdit}>Cancelar edicion</button>
-              ) : null}
+            <div className="admin-form-actions">
+              <button type="submit" className="admin-submit-btn">
+                {editingAppointmentId ? "Guardar cambios" : "Cargar ocupación"}
+              </button>
+              {editingAppointmentId && (
+                <button type="button" onClick={cancelEdit} className="admin-ghost-btn">
+                  Cancelar edición
+                </button>
+              )}
             </div>
           </form>
-        </section>
 
-        <section className="card admin-edit-card admin-board-card">
-          <span className="admin-board-kicker">Paso 4</span>
-          <h3>Ultimos horarios ocupados</h3>
-          <p className="admin-board-note">Usa Mover para cambiar dia, hora o modulo. Usa Liberar para dejarlo disponible.</p>
-          <div className="admin-occupancy-list">
-            {visibleOccupancies.map((item) => (
-              <article key={item.id} className="admin-occupancy-row">
-                <div>
-                  <strong>{item.patientName}</strong>
-                  <span>{item.professionalName} - {toTime(item.startsAt)}</span>
-                </div>
-                <div className="admin-row-actions">
-                  <button type="button" onClick={() => editOccupancy(item)}>Mover</button>
-                  <button type="button" onClick={() => cancelOccupancy(item.id)}>Liberar</button>
-                </div>
-              </article>
-            ))}
-            {visibleOccupancies.length === 0 ? (
-              <p className="muted">Todavia no hay horarios ocupados.</p>
-            ) : null}
+          <div className="admin-occupancies-section">
+            <h4>Últimos horarios ocupados</h4>
+            <div className="admin-occupancies-list">
+              {visibleOccupancies.map((item) => (
+                <article key={item.id} className="admin-occupancy-row">
+                  <div>
+                    <strong>{item.patientName}</strong>
+                    <span>{item.professionalName} - {toTime(item.startsAt)}</span>
+                  </div>
+                  <div className="admin-occupancy-actions">
+                    <button type="button" onClick={() => editOccupancy(item)} className="admin-ghost-btn">
+                      Mover
+                    </button>
+                    <button type="button" onClick={() => cancelOccupancy(item.id)} className="admin-ghost-btn danger">
+                      Liberar
+                    </button>
+                  </div>
+                </article>
+              ))}
+              {visibleOccupancies.length === 0 && (
+                <p className="admin-empty">No hay horarios ocupados todavía.</p>
+              )}
+            </div>
           </div>
         </section>
-      </div>
-      {message ? <p className="status-text">{message}</p> : null}
+      )}
+
+      {message && <p className="admin-feedback">{message}</p>}
     </div>
   );
 }

@@ -21,7 +21,7 @@ export function AdminPageShell({ title, description, children }: AdminPageShellP
         }}
       >
         <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
-          <img src="/delta-logo.svg" alt="Delta Consultorios City Bell" className="brand-logo small" />
+          <img src="/delta-logo.svg" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo small" />
           <div>
             <p style={{ color: "var(--color-muted)", fontSize: "0.8rem", fontWeight: 700, margin: 0 }}>
               ADMINISTRACION

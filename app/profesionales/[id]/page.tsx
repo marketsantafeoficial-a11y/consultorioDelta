@@ -65,7 +65,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
             <div className="profile-actions">
               <a
                 className="lp-cta-primary"
-                href={getWhatsAppHref(`Hola, quiero consultar por ${professional.fullName} de Delta Consultorios.`)}
+                href={getWhatsAppHref(`Hola, quiero consultar por ${professional.fullName} de DELTA – ESPACIOS PROFESIONALES.`)}
                 target="_blank"
                 rel="noreferrer"
               >

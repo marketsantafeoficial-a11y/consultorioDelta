@@ -15,7 +15,7 @@ type AdminProfessionalFormProps = {
 
 const initialState = {
   fullName: "",
-  specialty: "Psicologa",
+  specialty: "",
   bio: "",
   serves: "",
   photoUrl: "",
@@ -60,104 +60,104 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
     }
 
     setForm({ ...initialState, consultoryId: String(consultories[0]?.id ?? "") });
-    setFeedback("Profesional cargado. Ya aparece en Nuestro equipo.");
+    setFeedback("✓ Profesional cargado correctamente.");
     router.refresh();
   }
 
   return (
-    <form className="admin-professional-form" onSubmit={onSubmit}>
-      <div className="form-two-cols">
+    <form className="admin-simple-form" onSubmit={onSubmit}>
+      <div className="admin-form-section">
+        <h3>Datos básicos</h3>
         <label>
-          Nombre y apellido *
+          <span>Nombre completo *</span>
           <input
             value={form.fullName}
             onChange={(event) => updateField("fullName", event.target.value)}
-            placeholder="Lic. Nombre Apellido"
+            placeholder="Ej: Lic. María González"
             required
           />
         </label>
         <label>
-          Especialidad *
+          <span>Especialidad *</span>
           <input
             value={form.specialty}
             onChange={(event) => updateField("specialty", event.target.value)}
-            placeholder="Psicologa, Psicologo, Psiquiatra..."
+            placeholder="Ej: Psicóloga, Nutricionista..."
             required
+          />
+        </label>
+        <label>
+          <span>Sede *</span>
+          <select
+            value={form.consultoryId}
+            onChange={(event) => updateField("consultoryId", event.target.value)}
+            required
+          >
+            {consultories.map((consultory) => (
+              <option key={consultory.id} value={consultory.id}>
+                {consultory.name} - {consultory.city}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Presentación</h3>
+        <label>
+          <span>Biografía / Descripción *</span>
+          <textarea
+            value={form.bio}
+            onChange={(event) => updateField("bio", event.target.value)}
+            placeholder="Breve presentación para mostrar en el perfil público..."
+            rows={4}
+            required
+          />
+        </label>
+        <label>
+          <span>Áreas de atención</span>
+          <input
+            value={form.serves}
+            onChange={(event) => updateField("serves", event.target.value)}
+            placeholder="Ej: Ansiedad, adolescentes, terapia de pareja..."
           />
         </label>
       </div>
 
-      <label>
-        Descripcion / bio *
-        <textarea
-          value={form.bio}
-          onChange={(event) => updateField("bio", event.target.value)}
-          placeholder="Breve presentacion para mostrar en el popup del equipo."
-          rows={3}
-          required
-        />
-      </label>
-
-      <label>
-        Areas de atencion
-        <input
-          value={form.serves}
-          onChange={(event) => updateField("serves", event.target.value)}
-          placeholder="Ansiedad, adultos, adolescentes, pareja..."
-        />
-      </label>
-
-      <div className="form-two-cols">
+      <div className="admin-form-section">
+        <h3>Contacto</h3>
         <label>
-          Foto URL
+          <span>WhatsApp directo</span>
+          <input
+            type="tel"
+            value={form.whatsapp}
+            onChange={(event) => updateField("whatsapp", event.target.value)}
+            placeholder="Ej: 5492214778280"
+          />
+        </label>
+        <label>
+          <span>Email interno</span>
+          <input
+            type="email"
+            value={form.email}
+            onChange={(event) => updateField("email", event.target.value)}
+            placeholder="opcional@ejemplo.com"
+          />
+        </label>
+        <label>
+          <span>Foto (URL)</span>
           <input
             value={form.photoUrl}
             onChange={(event) => updateField("photoUrl", event.target.value)}
             placeholder="https://..."
           />
         </label>
-        <label>
-          WhatsApp directo
-          <input
-            type="tel"
-            value={form.whatsapp}
-            onChange={(event) => updateField("whatsapp", event.target.value)}
-            placeholder="549221..."
-          />
-        </label>
       </div>
 
-      <div className="form-two-cols">
-        <label>
-          Email interno
-          <input
-            type="email"
-            value={form.email}
-            onChange={(event) => updateField("email", event.target.value)}
-            placeholder="opcional"
-          />
-        </label>
-      </div>
-
-      <label>
-        Sede *
-        <select
-          value={form.consultoryId}
-          onChange={(event) => updateField("consultoryId", event.target.value)}
-          required
-        >
-          {consultories.map((consultory) => (
-            <option key={consultory.id} value={consultory.id}>
-              {consultory.name} - {consultory.city}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <button type="submit" disabled={saving}>
+      <button type="submit" disabled={saving} className="admin-submit-btn">
         {saving ? "Cargando..." : "Cargar profesional"}
       </button>
-      {feedback ? <p className="status-text" aria-live="polite">{feedback}</p> : null}
+      {feedback && <p className="admin-feedback">{feedback}</p>}
     </form>
   );
 }

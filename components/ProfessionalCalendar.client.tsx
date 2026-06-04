@@ -157,7 +157,7 @@ function getContactHref(professional: Professional, day: Date, slot: string) {
     ? `alquiler de modulo para ${professional.specialty.toLowerCase()}`
     : "alquiler de modulo";
   const message = [
-    "Hola, quiero consultar disponibilidad para Delta Consultorios.",
+    "Hola, quiero consultar disponibilidad para DELTA – ESPACIOS PROFESIONALES.",
     `Necesidad: ${need}`,
     `Espacio: ${professional.fullName}`,
     professional.serves ? `Uso previsto: ${professional.serves}` : null,
@@ -425,8 +425,8 @@ export default function ProfessionalCalendar({
             className="link-button"
             href={`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(
               purpose === "spaces"
-                ? "Hola, quiero consultar por alquiler de modulos en Delta Consultorios. Necesito un espacio para: "
-                : "Hola, quiero consultar por turnos profesionales en Delta Consultorios. Busco atencion de: ",
+                ? "Hola, quiero consultar por alquiler de modulos en DELTA – ESPACIOS PROFESIONALES. Necesito un espacio para: "
+                : "Hola, quiero consultar por turnos profesionales en DELTA – ESPACIOS PROFESIONALES. Busco atencion de: ",
             )}`}
             target="_blank"
             rel="noreferrer"

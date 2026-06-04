@@ -17,7 +17,7 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Delta Consultorios | Psicólogos en La Plata",
+  title: "DELTA – ESPACIOS PROFESIONALES | Psicólogos en La Plata",
   description:
     "Encontrá tu psicólogo, terapeuta o especialista en salud en La Plata. Turnos online y presenciales, confirmación inmediata.",
 };

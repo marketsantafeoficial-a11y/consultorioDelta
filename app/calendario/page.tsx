@@ -6,7 +6,7 @@ import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Agenda | Delta Consultorios",
+  title: "Agenda | DELTA – ESPACIOS PROFESIONALES",
   description: "Agenda publica de modulos alquilables.",
 };
 

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Wireframe - DELTA (Mobile)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Noto+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#FBF9F6;--accent:#A78A6D;--muted:#6B5D4D}
+    body{font-family:"Noto Sans",sans-serif;background:var(--bg);color:var(--muted);margin:0}
+    .wrap{max-width:480px;margin:0 auto;padding:16px}
+    h1{font-family:'Cormorant Garamond',serif;font-size:28px;margin:10px 0}
+    .hero-media img{width:100%;height:220px;object-fit:cover;border-radius:10px}
+    .btn{display:block;width:100%;padding:14px;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:600;margin-top:12px}
+    .kpis{display:flex;gap:8px;margin-top:12px;overflow:auto}
+    .card{background:white;padding:12px;border-radius:10px;margin-top:12px}
+    .sticky-cta{position:fixed;left:16px;right:16px;bottom:16px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header style="display:flex;justify-content:space-between;align-items:center;padding-top:8px">
+      <div style="font-family:'Cormorant Garamond',serif;color:var(--accent)">DELTA</div>
+      <div>☰</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-media"><img src="/delta-assets/ig-highlight-ambientes.jpg" alt="Ambiente"></div>
+      <h1>Espacios profesionales para la salud y el bienestar</h1>
+      <p>Red interdisciplinaria de profesionales, consultorios equipados y agenda online.</p>
+      <div class="kpis">
+        <div style="min-width:120px;background:white;padding:10px;border-radius:10px;text-align:center"><strong>+20</strong><div>Profesionales</div></div>
+        <div style="min-width:120px;background:white;padding:10px;border-radius:10px;text-align:center"><strong>+500</strong><div>Pacientes</div></div>
+      </div>
+
+      <section id="profesionales" style="margin-top:12px">
+        <h2>Profesionales</h2>
+        <div class="card"><img src="/delta-assets/professional-avatar.svg" alt="" style="width:100%;height:160px;object-fit:cover;border-radius:8px"><h3>Nombre</h3><p>Especialidad</p></div>
+      </section>
+
+    </section>
+
+    <footer style="padding:18px 0;margin-top:80px">Cantilo N°146 • WhatsApp 221 477 8280</footer>
+  </div>
+
+  <div class="sticky-cta"><button class="btn">Reservar Turno</button></div>
+</body>
+</html>
