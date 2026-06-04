@@ -34,6 +34,13 @@ const testimonials = [
   { stars: 5, text: "Un espacio cálido y profesional. Se nota el cuidado en cada detalle del lugar.", author: "Lucía M." },
 ];
 
+const featuredProfessionals = [
+  { name: "Lic. María López", specialty: "Psicología", photoUrl: "/delta-assets/professional-avatar.svg" },
+  { name: "Lic. Carla Ruiz", specialty: "Psicopedagogía", photoUrl: "/delta-assets/professional-avatar.svg" },
+  { name: "Lic. Florencia Jaime", specialty: "Terapia Ocupacional", photoUrl: "/delta-assets/professional-avatar.svg" },
+  { name: "Lic. Julieta Gómez", specialty: "Nutrición", photoUrl: "/delta-assets/professional-avatar.svg" },
+];
+
 const moduleBlocks = [
   ["Mañana", "9 a 12 hs"],
   ["Mediodía", "12 a 16 hs"],
@@ -134,14 +141,14 @@ export default function HomePage() {
             <RevealOnScroll delay={100}>
               <p className="lp-section-sub">Conocé las disciplinas que se atienden en nuestro espacio. Hacé clic para ver los profesionales.</p>
             </RevealOnScroll>
-            <div className="specialties-cards-grid">
+            <div className="lp-spec-grid">
               {SPECIALTIES.map((spec, i) => (
                 <RevealOnScroll key={spec.id} delay={i * 60}>
-                  <Link href={`/profesionales?specialty=${spec.id}`} className="specialty-card">
-                    <span className="specialty-card-icon">{spec.icon}</span>
-                    <h3 className="specialty-card-title">{spec.label}</h3>
-                    <p className="specialty-card-desc">{spec.desc}</p>
-                    <span className="specialty-card-cta">Ver profesionales →</span>
+                  <Link href={`/profesionales?specialty=${spec.id}`} className="lp-spec-card">
+                    <span className="lp-spec-icon">{spec.icon}</span>
+                    <h3 className="lp-spec-name">{spec.label}</h3>
+                    <p className="lp-spec-desc">{spec.desc}</p>
+                    <span className="lp-spec-cta">Ver profesionales →</span>
                   </Link>
                 </RevealOnScroll>
               ))}
@@ -160,6 +167,18 @@ export default function HomePage() {
               <p className="lp-section-sub">Conocé a los profesionales que forman parte de Delta. Cada uno con su especialidad, enfoque y modalidad de atención.</p>
             </RevealOnScroll>
             <RevealOnScroll delay={180}>
+              <div className="featured-team-grid">
+                {featuredProfessionals.map((professional) => (
+                  <article className="featured-team-card" key={professional.name}>
+                    <img src={professional.photoUrl} alt={professional.name} className="featured-team-avatar" />
+                    <h3>{professional.name}</h3>
+                    <p>{professional.specialty}</p>
+                    <Link href="/profesionales" className="featured-team-link">Ver perfil</Link>
+                  </article>
+                ))}
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll delay={260}>
               <div className="lp-cta-center-wrap">
                 <Link href="/profesionales" className="lp-cta-primary">Ver todos los profesionales</Link>
               </div>
