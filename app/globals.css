@@ -2363,7 +2363,8 @@ input, textarea, select {
   gap: clamp(0.9rem, 2vw, 2rem);
 }
 
-.lp-menu-toggle {
+.lp-menu-toggle,
+button[type="button"].lp-menu-toggle {
   display: none;
 }
 
@@ -2724,7 +2725,8 @@ button[type="submit"] {
     position: relative;
   }
 
-  .lp-menu-toggle {
+  .lp-menu-toggle,
+  button[type="button"].lp-menu-toggle {
     align-items: center;
     background: rgba(255, 255, 255, 0.74);
     border: 1px solid rgba(48, 46, 40, 0.18);
