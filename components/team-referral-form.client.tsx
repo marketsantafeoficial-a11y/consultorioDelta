@@ -19,7 +19,8 @@ const startOptions = [
   "Terapia individual",
   "Terapia de pareja",
   "Terapia familiar / vincular",
-  "Alquiler de consultorio",
+  "Orientacion para elegir profesional",
+  "Consulta por autoestima, ansiedad o duelos",
   "Otra consulta",
 ];
 
@@ -36,7 +37,7 @@ export function TeamReferralForm({
   const [form, setForm] = useState({
     email: "",
     fullName: "",
-    startType: startOptions[0],
+    startType: "",
     modality: modalityOptions[2],
     phone: "",
     age: "",
@@ -92,12 +93,12 @@ export function TeamReferralForm({
 
       <form className="referral-form" onSubmit={onSubmit}>
         <label>
-          Correo electronico *
+          Telefono *
           <input
-            type="email"
-            autoComplete="email"
-            value={form.email}
-            onChange={(event) => updateField("email", event.target.value)}
+            type="tel"
+            autoComplete="tel"
+            value={form.phone}
+            onChange={(event) => updateField("phone", event.target.value)}
             required
           />
         </label>
@@ -114,15 +115,18 @@ export function TeamReferralForm({
 
         <label>
           Tipo de consulta *
-          <select
+          <input
+            list="consulta-sugerencias"
             value={form.startType}
             onChange={(event) => updateField("startType", event.target.value)}
+            placeholder="Escribi tu consulta o elegi una sugerencia"
             required
-          >
+          />
+          <datalist id="consulta-sugerencias">
             {startOptions.map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
-          </select>
+          </datalist>
         </label>
 
         <fieldset>
@@ -143,12 +147,12 @@ export function TeamReferralForm({
 
         <div className="form-two-cols">
           <label>
-            Telefono *
+            Correo electronico *
             <input
-              type="tel"
-              autoComplete="tel"
-              value={form.phone}
-              onChange={(event) => updateField("phone", event.target.value)}
+              type="email"
+              autoComplete="email"
+              value={form.email}
+              onChange={(event) => updateField("email", event.target.value)}
               required
             />
           </label>

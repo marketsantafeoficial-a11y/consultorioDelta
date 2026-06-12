@@ -168,7 +168,10 @@ export default function ConsultorioSchedules() {
                               key={i}
                               className={name ? "schedule-occupied" : "schedule-free"}
                             >
-                              {name || ""}
+                              <span className="schedule-state">
+                                {name ? "Ocupado" : "Disponible"}
+                              </span>
+                              {name ? <span className="schedule-owner">{name}</span> : null}
                             </td>
                           ))}
                         </tr>

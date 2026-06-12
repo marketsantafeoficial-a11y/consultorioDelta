@@ -64,6 +64,8 @@ export function DrawTitle({
           height: "10px",
           display: "block",
           marginTop: "0.5rem",
+          marginLeft: "auto",
+          marginRight: "auto",
           overflow: "visible",
         }}
       >

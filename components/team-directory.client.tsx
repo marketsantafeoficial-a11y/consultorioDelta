@@ -19,6 +19,15 @@ type TeamProfessional = {
 
 export function TeamDirectory({ professionals }: { professionals: TeamProfessional[] }) {
   const [selected, setSelected] = useState<TeamProfessional | null>(null);
+  const [selectedSpecialty, setSelectedSpecialty] = useState("Todas");
+  const specialties = [
+    "Todas",
+    ...Array.from(new Set(professionals.map((professional) => professional.specialty))).sort(),
+  ];
+  const filteredProfessionals =
+    selectedSpecialty === "Todas"
+      ? professionals
+      : professionals.filter((professional) => professional.specialty === selectedSpecialty);
 
   function getProfessionalWhatsAppHref(professional: TeamProfessional) {
     const message = `Hola, quiero consultar por ${professional.fullName} de DELTA – ESPACIOS PROFESIONALES.`;
@@ -33,8 +42,28 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
 
   return (
     <>
+      <div className="team-filter-panel" aria-label="Filtrar profesionales">
+        <label>
+          <span>Seleccionar por especialidad</span>
+          <select
+            value={selectedSpecialty}
+            onChange={(event) => setSelectedSpecialty(event.target.value)}
+          >
+            {specialties.map((specialty) => (
+              <option key={specialty} value={specialty}>
+                {specialty}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p>
+          {filteredProfessionals.length} profesional{filteredProfessionals.length === 1 ? "" : "es"} disponible
+          {selectedSpecialty === "Todas" ? " en la red." : ` en ${selectedSpecialty}.`}
+        </p>
+      </div>
+
       <div className="team-grid">
-        {professionals.map((professional) => (
+        {filteredProfessionals.map((professional) => (
           <article className="team-card" key={professional.id}>
             <button
               type="button"
