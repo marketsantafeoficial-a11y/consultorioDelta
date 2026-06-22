@@ -6,11 +6,10 @@ import Link from "next/link";
 const ADMIN_PHONE = "5492214778280";
 
 const navLinks = [
-  { href: "/#quienes-somos", label: "Inicio" },
-  { href: "/profesionales", label: "Profesionales" },
+  { href: "/", label: "Inicio" },
+  { href: "/#quienes-somos", label: "Quienes somos" },
   { href: "/#especialidades", label: "Especialidades" },
-  { href: "/#alquila-espacio", label: "Consultorios" },
-  { href: "/#agenda-turno", label: "Turnos" },
+  { href: "/profesionales", label: "Profesionales" },
   { href: "/#alquila-espacio", label: "Alquiler de espacios" },
   { href: "/#contacto", label: "Contacto" },
 ];
@@ -35,6 +34,7 @@ export function SiteHeader() {
             alt="Delta Espacios Profesionales City Bell"
             className="brand-logo"
           />
+          <span className="lp-brand-text">Delta - Espacios Profesionales</span>
         </Link>
 
         <button

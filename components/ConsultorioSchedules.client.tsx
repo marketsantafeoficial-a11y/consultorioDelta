@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 
-const DAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábados"];
+const DAYS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+const MODULES = [
+  { id: "manana", label: "Modulo MANANA", time: "9 a 12 hs", hours: [9, 10, 11] },
+  { id: "mediodia", label: "Modulo MEDIODIA", time: "12 a 16 hs", hours: [12, 13, 14, 15] },
+  { id: "tarde", label: "Modulo TARDE", time: "16 a 20 hs", hours: [16, 17, 18, 19] },
+];
 
 type ScheduleGrid = Record<number, string[]>;
 
@@ -19,20 +24,20 @@ const CONSULTORIOS: Consultorio[] = [
     id: "c1",
     name: "Consultorio 1",
     subtitle: "Planta Baja",
-    schedule: Object.fromEntries(HOURS.map((h) => [h, ["", "", "", "", "", ""]])),
+    schedule: Object.fromEntries(HOURS.map((h) => [h, ["", "", "", "", "", ""]])) as ScheduleGrid,
   },
   {
     id: "c2",
     name: "Consultorio 2",
     subtitle: "Planta Baja",
-    schedule: Object.fromEntries(HOURS.map((h) => [h, ["", "", "", "", "", ""]])),
+    schedule: Object.fromEntries(HOURS.map((h) => [h, ["", "", "", "", "", ""]])) as ScheduleGrid,
   },
   {
     id: "c3",
     name: "Consultorio 3",
-    subtitle: "Planta Baja Niños",
+    subtitle: "Planta Baja Ninos",
     schedule: {
-      9:  ["", "", "Antonella", "", "", ""],
+      9: ["", "", "Antonella", "", "", ""],
       10: ["", "", "Antonella", "", "", ""],
       11: ["", "", "Antonella", "", "", ""],
       12: ["", "", "", "M Julia", "Angie", ""],
@@ -50,7 +55,7 @@ const CONSULTORIOS: Consultorio[] = [
     name: "Consultorio 4",
     subtitle: "1er Piso Frente",
     schedule: {
-      9:  ["Patricia", "", "Noelia", "", "", ""],
+      9: ["Patricia", "", "Noelia", "", "", ""],
       10: ["Patricia", "", "Noelia", "", "", ""],
       11: ["Patricia", "", "Noelia", "", "", ""],
       12: ["Patricia", "", "", "", "Fernanda", ""],
@@ -68,7 +73,7 @@ const CONSULTORIOS: Consultorio[] = [
     name: "Consultorio 5",
     subtitle: "1er Piso Frente",
     schedule: {
-      9:  ["", "Dalila", "Dalila", "", "", ""],
+      9: ["", "Dalila", "Dalila", "", "", ""],
       10: ["", "Dalila", "Dalila", "", "", ""],
       11: ["", "Dalila", "Dalila", "", "", ""],
       12: ["", "", "Dalila", "", "", ""],
@@ -84,9 +89,9 @@ const CONSULTORIOS: Consultorio[] = [
   {
     id: "c6",
     name: "Consultorio 6",
-    subtitle: "1er Piso Atrás",
+    subtitle: "1er Piso Atras",
     schedule: {
-      9:  ["", "Lujan", "", "", "", ""],
+      9: ["", "Lujan", "", "", "", ""],
       10: ["", "Lujan", "", "", "", ""],
       11: ["", "Lujan", "", "", "", ""],
       12: ["Angeles", "", "Veronica", "", "Paula", ""],
@@ -102,9 +107,9 @@ const CONSULTORIOS: Consultorio[] = [
   {
     id: "c7",
     name: "Consultorio 7",
-    subtitle: "1er Piso Atrás",
+    subtitle: "1er Piso Atras",
     schedule: {
-      9:  ["", "", "Yanina", "Patricia", "", ""],
+      9: ["", "", "Yanina", "Patricia", "", ""],
       10: ["", "", "Yanina", "Patricia", "", ""],
       11: ["", "", "Yanina", "Patricia", "", ""],
       12: ["", "Angeles", "", "Patricia", "", ""],
@@ -118,6 +123,18 @@ const CONSULTORIOS: Consultorio[] = [
     },
   },
 ];
+
+function getModuleDayStatus(schedule: ScheduleGrid, hours: number[], dayIndex: number) {
+  const owners = hours
+    .map((hour) => schedule[hour]?.[dayIndex]?.trim())
+    .filter(Boolean);
+  const uniqueOwners = Array.from(new Set(owners));
+
+  return {
+    occupied: uniqueOwners.length > 0,
+    owners: uniqueOwners.join(", "),
+  };
+}
 
 export default function ConsultorioSchedules() {
   const [openId, setOpenId] = useState<string | null>(null);
@@ -153,27 +170,33 @@ export default function ConsultorioSchedules() {
                   <table className="schedule-table">
                     <thead>
                       <tr>
-                        <th>Hs</th>
+                        <th>Modulo</th>
                         {DAYS.map((d) => (
                           <th key={d}>{d}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {HOURS.map((hour) => (
-                        <tr key={hour}>
-                          <td className="schedule-hour">{hour}</td>
-                          {c.schedule[hour]?.map((name, i) => (
-                            <td
-                              key={i}
-                              className={name ? "schedule-occupied" : "schedule-free"}
-                            >
-                              <span className="schedule-state">
-                                {name ? "Ocupado" : "Disponible"}
-                              </span>
-                              {name ? <span className="schedule-owner">{name}</span> : null}
-                            </td>
-                          ))}
+                      {MODULES.map((module) => (
+                        <tr key={module.id}>
+                          <td className="schedule-hour">
+                            <strong>{module.label}</strong>
+                            <span>{module.time}</span>
+                          </td>
+                          {DAYS.map((day, i) => {
+                            const status = getModuleDayStatus(c.schedule, module.hours, i);
+                            return (
+                              <td
+                                key={day}
+                                className={status.occupied ? "schedule-occupied" : "schedule-free"}
+                              >
+                                <span className="schedule-state">
+                                  {status.occupied ? "Ocupado" : "Disponible"}
+                                </span>
+                                {status.occupied ? <span className="schedule-owner">{status.owners}</span> : null}
+                              </td>
+                            );
+                          })}
                         </tr>
                       ))}
                     </tbody>

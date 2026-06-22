@@ -309,7 +309,7 @@ table { width: 100%; border-collapse: collapse; }
 thead { background: var(--color-muted-bg); }
 th, td { text-align: left; padding: 0.72rem 0.78rem; border-bottom: 1px solid var(--color-border); font-size: 0.88rem; }
 .status-pill { display: inline-flex; border-radius: 999px; border: 1px solid var(--color-secondary); color: var(--color-primary); padding: 0.15rem 0.55rem; background: var(--color-background); font-weight: 600; }
-.link-button, .ghost-button, button[type="submit"], button[type="button"]:not(.mode-btn):not(.mode-toggle *):not(.week-arrow):not(.slot-btn):not(.filter-pill):not(.nav-cta):not(.cal-nav-cta) {
+.link-button, .ghost-button, button[type="submit"], button[type="button"]:not(.mode-btn):not(.mode-toggle *):not(.week-arrow):not(.slot-btn):not(.filter-pill):not(.nav-cta):not(.cal-nav-cta):not(.lp-menu-toggle) {
   border: 1px solid var(--color-foreground); background: var(--color-foreground); color: white; border-radius: 0.7rem; padding: 0.5rem 0.8rem; font-size: 0.88rem; font-weight: 600; cursor: pointer;
   display: inline-flex; justify-content: center; text-decoration: none;
 }
@@ -1006,6 +1006,10 @@ input, textarea, select { border: 1px solid var(--color-border); background: whi
 .rental-example-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .rental-detail-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .rental-price-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rental-detail-grid-wide {
+  margin-top: 1.75rem;
+  max-width: 1040px;
+}
 .rental-detail-grid article,
 .rental-example-grid article,
 .rental-price-grid article {
@@ -1628,8 +1632,8 @@ input, textarea, select {
 .contact-grid {
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 720px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 1040px;
   margin: 0 auto;
 }
 .contact-info-card {
@@ -1807,7 +1811,17 @@ input, textarea, select {
   font-weight: 700;
   color: var(--color-primary);
   background: var(--color-muted-bg);
-  width: 50px;
+  min-width: 150px;
+}
+.schedule-hour strong,
+.schedule-hour span {
+  display: block;
+}
+.schedule-hour span {
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  margin-top: 0.2rem;
 }
 .schedule-free {
   background: rgba(5, 150, 105, 0.06);
@@ -2359,13 +2373,33 @@ input, textarea, select {
   width: 78px;
 }
 
+.lp-brand {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.lp-brand-text {
+  color: #2d2a22;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .lp-nav-links {
   gap: clamp(0.9rem, 2vw, 2rem);
 }
 
 .lp-menu-toggle,
 button[type="button"].lp-menu-toggle {
+  background: transparent;
+  border: 0;
+  color: #302e28;
   display: none;
+  padding: 0;
 }
 
 .lp-nav-links a {
@@ -2454,6 +2488,13 @@ button[type="submit"] {
 .lp-hero-showcase .lp-hero-sub {
   color: #34312b;
   font-size: clamp(1rem, 1.5vw, 1.35rem);
+  margin: 0 0 1rem;
+  max-width: 590px;
+}
+
+.lp-hero-note {
+  color: #201e19;
+  font-weight: 800;
   margin: 0 0 2rem;
   max-width: 590px;
 }
