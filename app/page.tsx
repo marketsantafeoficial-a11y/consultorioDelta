@@ -29,10 +29,12 @@ const stats = [
 ];
 
 const consultorioGallery = [
-  ["Recepcion", "/delta-assets/consultorio-hero-ai.png"],
-  ["Sala de espera", "/delta-assets/consultorio-equipo-ai.png"],
-  ["Consultorio 1", "/delta-assets/consultorio-alquiler-ai.png"],
-  ["Consultorio 3", "/delta-assets/ig-post-consultorio.jpg"],
+  ["Sala de espera", "/delta-assets/delta-sala-espera.webp"],
+  ["Consultorio 3 - planta baja", "/delta-assets/delta-consultorio-3.webp"],
+  ["Consultorio 4 - arriba", "/delta-assets/delta-consultorio-4.webp"],
+  ["Consultorio 5 - arriba", "/delta-assets/delta-consultorio-5.webp"],
+  ["Consultorio 6 - arriba", "/delta-assets/delta-consultorio-6.webp"],
+  ["Consultorio 7 - arriba", "/delta-assets/delta-consultorio-7.webp"],
 ];
 
 const testimonials = [
@@ -65,7 +67,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="lp-hero-visual" aria-hidden="true">
-            <img src="/delta-assets/consultorio-hero-ai.png" alt="" />
+            <img src="/delta-assets/delta-sala-espera.webp" alt="" />
           </div>
         </section>
 
@@ -94,7 +96,7 @@ export default function HomePage() {
                   <h2>Buscas un espacio para atender?</h2>
                   <p>Sumate a nuestro equipo de profesionales y empeza a trabajar con nosotros.</p>
                   <a
-                    href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20alquilar%20un%20modulo%20en%20Delta.%20Mi%20profesion%20es%3A"
+                    href="https://wa.me/message/deltaespaciosprofesionales"
                     className="lp-cta-primary"
                     target="_blank"
                     rel="noreferrer"
@@ -153,7 +155,7 @@ export default function HomePage() {
             </RevealOnScroll>
             <div className="lp-feature-row">
               <div>
-                <img src="/delta-assets/consultorio-equipo-ai.png" alt="Espacio de espera Delta" />
+                <img src="/delta-assets/delta-consultorio-4.webp" alt="Consultorio equipado de Delta" />
               </div>
               <article>
                 <h3>Atencion con cita previa</h3>
@@ -189,7 +191,7 @@ export default function HomePage() {
             <div className="consultorio-gallery">
               {consultorioGallery.map(([label, image]) => (
                 <article key={label}>
-                  <img src={image} alt={label} />
+                  <img src={image} alt={label} loading="lazy" />
                   <span>{label}</span>
                 </article>
               ))}
@@ -230,7 +232,7 @@ export default function HomePage() {
                 <div className="contact-info-card">
                   <h3>WhatsApp</h3>
                   <p>221 477 8280</p>
-                  <a href="https://wa.me/5492214778280?text=Hola%2C%20quiero%20consultar%20por%20Delta." className="lp-cta-primary" target="_blank" rel="noreferrer">Escribinos por WhatsApp</a>
+                  <a href="https://wa.me/message/deltaespaciosprofesionales" className="lp-cta-primary" target="_blank" rel="noreferrer">Escribinos por WhatsApp</a>
                 </div>
                 <div className="contact-info-card">
                   <h3>Ubicacion</h3>

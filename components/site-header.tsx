@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 
 const ADMIN_PHONE = "5492214778280";
+const WHATSAPP_ALIAS = "deltaespaciosprofesionales";
+const WHATSAPP_ALIAS_URL = `https://wa.me/message/${WHATSAPP_ALIAS}`;
 
 const navLinks = [
   { href: "/", label: "Inicio" },
@@ -69,7 +71,7 @@ export function FloatingWhatsApp() {
   return (
     <a
       className="whatsapp-float"
-      href={getWhatsAppHref("Hola, quiero consultar por Delta Espacios Profesionales.")}
+      href={WHATSAPP_ALIAS_URL}
       target="_blank"
       rel="noreferrer"
       aria-label="Contactar por WhatsApp"
