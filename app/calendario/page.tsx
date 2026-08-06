@@ -55,7 +55,7 @@ export default async function CalendarioPage() {
           <div className="cal-flow-panel">
             <strong>Programa de alquiler</strong>
             <span>Wifi, sala de espera, bano, cocina, escritorio, AA frio/calor y divan.</span>
-            <span>Modulos fijos: manana 8 a 12, mediodia 12 a 16 y tarde 16 a 20 hs.</span>
+            <span>Modulos fijos: manana 9 a 12, mediodia 12 a 16 y tarde 16 a 20 hs.</span>
             <span>Ajustes: noviembre, marzo y julio. No contamos con servicio de secretaria.</span>
           </div>
         </div>

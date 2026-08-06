@@ -1,4 +1,5 @@
 import { AdminProfessionalForm } from "@/components/admin-professional-form.client";
+import { AdminProfessionalsTable } from "@/components/admin-professionals-table.client";
 import { AdminPageShell } from "@/components/admin-page-shell";
 import { prisma } from "@/lib/prisma";
 import { isSpaceResource } from "@/lib/resource-kind";
@@ -46,33 +47,23 @@ export default async function AdminProfesionalesPage() {
             <h2>Profesionales cargados</h2>
             <p>Resumen de perfiles visibles para visitantes.</p>
           </div>
-          <div style={{ overflowX: "auto" }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Profesional</th>
-                  <th>Especialidad</th>
-                  <th>Areas</th>
-                  <th>WhatsApp</th>
-                  <th>Sede</th>
-                </tr>
-              </thead>
-              <tbody>
-                {profesionalesEquipo.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <strong style={{ display: "block" }}>{item.fullName}</strong>
-                      <span style={{ color: "var(--color-muted)", fontSize: "0.8rem" }}>{item.email}</span>
-                    </td>
-                    <td>{item.specialty}</td>
-                    <td>{item.serves ?? "Sin cargar"}</td>
-                    <td>{item.whatsapp ?? "General"}</td>
-                    <td>{item.consultory.name}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <AdminProfessionalsTable
+            professionals={profesionalesEquipo.map((item) => ({
+              id: item.id,
+              fullName: item.fullName,
+              email: item.email,
+              specialty: item.specialty,
+              serves: item.serves,
+              whatsapp: item.whatsapp,
+              consultoryId: item.consultoryId,
+              consultoryName: item.consultory.name,
+            }))}
+            consultories={sedes.map((sede) => ({
+              id: sede.id,
+              name: sede.name,
+              city: sede.city,
+            }))}
+          />
         </article>
       </section>
     </AdminPageShell>

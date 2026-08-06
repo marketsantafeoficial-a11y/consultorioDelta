@@ -16,7 +16,7 @@ const deleteSchema = z.object({
   appointmentId: z.number().int().positive(),
 });
 
-const fixedModuleStarts = ["08:00", "12:00", "16:00"];
+const fixedModuleStarts = ["09:00", "12:00", "16:00"];
 
 function buildStartsAt(date: string, time: string) {
   const [year, month, day] = date.split("-").map(Number);

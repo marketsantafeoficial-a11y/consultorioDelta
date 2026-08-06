@@ -36,7 +36,7 @@ const MONTH_NAMES = [
 const ADMIN_PHONE = "5492214778280";
 const ADMIN_EMAIL = "administracion@delta.local";
 const FIXED_MODULES = [
-  { label: "Manana", startTime: "08:00", endTime: "12:00" },
+  { label: "Manana", startTime: "09:00", endTime: "12:00" },
   { label: "Mediodia", startTime: "12:00", endTime: "16:00" },
   { label: "Tarde", startTime: "16:00", endTime: "20:00" },
 ];
@@ -416,7 +416,7 @@ export default function ProfessionalCalendar({
           </strong>
           <p>
             {purpose === "spaces"
-              ? "Los modulos fijos son manana 8 a 12, mediodia 12 a 16 y tarde 16 a 20 hs."
+              ? "Los modulos fijos son manana 9 a 12, mediodia 12 a 16 y tarde 16 a 20 hs."
               : "Cada profesional tiene su propia agenda. Los turnos pedidos quedan pendientes y se ven en su panel independiente."}
           </p>
         </div>

@@ -4,7 +4,7 @@ export const instagramDemo = {
   username: "deltaconsultorioscitybell",
   displayName: "Delta CB",
   category: "Alquiler de Consultorios/Oficinas",
-  location: "Cantilo N 146, City Bell 1896",
+  location: "Calle 467 N 164, e/13A y 13B, City Bell 1896",
   bio: "En el centro de City Bell. Totalmente equipados. Sumate a nuestro equipo de profesionales.",
   profileImage: asset("ig-profile.jpg"),
   whatsapp: "wa.me/message/LHCMI2KUSMFIJ1",
@@ -72,7 +72,7 @@ export const instagramDemo = {
     },
   ],
   records: [
-    { label: "Direccion", value: "Cantilo N 146 - City Bell" },
+    { label: "Direccion", value: "Calle 467 N 164, e/13A y 13B - City Bell" },
     { label: "Telefono visible", value: "221 477 8280" },
     { label: "Servicios", value: "Psicologia, aptos psicologicos, terapia de pareja" },
     { label: "Modalidad", value: "Presencial y virtual" },

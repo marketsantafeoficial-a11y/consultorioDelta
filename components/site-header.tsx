@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 const ADMIN_PHONE = "5492214778280";
-const WHATSAPP_ALIAS = "deltaespaciosprofesionales";
-const WHATSAPP_ALIAS_URL = `https://wa.me/message/${WHATSAPP_ALIAS}`;
+const WHATSAPP_ALIAS_URL = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent("Hola! Quiero consultar por Delta Espacios Profesionales.")}`;
 
 const navLinks = [
   { href: "/", label: "Inicio" },

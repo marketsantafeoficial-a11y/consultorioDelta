@@ -202,7 +202,7 @@ async function main() {
   for (const resource of resources) {
     for (const dayOfWeek of [1, 2, 3, 4, 5]) {
       for (const module of [
-        { startTime: "08:00", endTime: "12:00" },
+        { startTime: "09:00", endTime: "12:00" },
         { startTime: "12:00", endTime: "16:00" },
         { startTime: "16:00", endTime: "20:00" },
       ]) {

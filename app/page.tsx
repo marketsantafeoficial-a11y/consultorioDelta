@@ -2,9 +2,12 @@ import Link from "next/link";
 import { DrawTitle } from "@/components/TextAnimations.client";
 import { RevealOnScroll } from "@/components/RevealOnScroll.client";
 import { instagramDemo } from "@/lib/instagram-demo";
-import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
+import { getConsultorioAvailability } from "@/lib/dashboard-data";
+import { FloatingWhatsApp, SiteHeader, getWhatsAppHref } from "@/components/site-header";
 import ConsultorioSchedules from "@/components/ConsultorioSchedules.client";
 import { CalendarIcon, HeartIcon, PinIcon, SpecialtyIcon, StarIcon, UserIcon, UsersIcon } from "@/components/ui/site-icons";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Delta Espacios Profesionales | City Bell",
@@ -28,6 +31,12 @@ const stats = [
   [<PinIcon key="pin" />, "City Bell", ""],
 ];
 
+const FIXED_MODULES: [string, string][] = [
+  ["Manana", "9 a 12 hs"],
+  ["Mediodia", "12 a 16 hs"],
+  ["Tarde", "16 a 20 hs"],
+];
+
 const consultorioGallery = [
   ["Sala de espera", "/delta-assets/delta-sala-espera.webp"],
   ["Consultorio 3 - planta baja", "/delta-assets/delta-consultorio-3.webp"],
@@ -43,7 +52,9 @@ const testimonials = [
   ["Profesional de la red", "Los consultorios son luminosos, funcionales y estan cuidados para trabajar con comodidad."],
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const consultorios = await getConsultorioAvailability();
+
   return (
     <div className="lp-shell">
       <SiteHeader />
@@ -96,7 +107,7 @@ export default function HomePage() {
                   <h2>Buscas un espacio para atender?</h2>
                   <p>Sumate a nuestro equipo de profesionales y empeza a trabajar con nosotros.</p>
                   <a
-                    href="https://wa.me/message/deltaespaciosprofesionales"
+                    href={getWhatsAppHref("Hola! Quiero consultar por alquilar un modulo en Delta.")}
                     className="lp-cta-primary"
                     target="_blank"
                     rel="noreferrer"
@@ -177,7 +188,7 @@ export default function HomePage() {
             <div className="rental-detail-grid rental-detail-grid-wide">
               <article>
                 <h3>El espacio cuenta con</h3>
-                <p>WiFi, sala de espera, bano, cocina, aire frio/calor, escritorio y divan. No contamos con servicio de secretaria.</p>
+                <p>WiFi, sala de espera, bano, cocina, AA frio/calor, escritorio, divan y portero individual. No contamos con secretaria.</p>
               </article>
               <article>
                 <h3>Modalidad de alquiler</h3>
@@ -200,7 +211,19 @@ export default function HomePage() {
               <div className="schedules-section">
                 <h3 className="schedules-title">Disponibilidad de consultorios</h3>
                 <p className="schedules-subtitle">Hace clic en cada consultorio para ver los modulos disponibles u ocupados.</p>
-                <ConsultorioSchedules />
+                <div className="fixed-modules-summary">
+                  <span className="fixed-modules-eyebrow">Disponibilidad por modulos fijos</span>
+                  <div className="fixed-modules-grid">
+                    {FIXED_MODULES.map(([label, hours]) => (
+                      <article key={label}>
+                        <span className="fixed-modules-label">{label}</span>
+                        <strong className="fixed-modules-hours">{hours}</strong>
+                        <span className="fixed-modules-tag">Modulo fijo</span>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+                <ConsultorioSchedules consultorios={consultorios} />
               </div>
             </RevealOnScroll>
           </div>
@@ -232,16 +255,16 @@ export default function HomePage() {
                 <div className="contact-info-card">
                   <h3>WhatsApp</h3>
                   <p>221 477 8280</p>
-                  <a href="https://wa.me/message/deltaespaciosprofesionales" className="lp-cta-primary" target="_blank" rel="noreferrer">Escribinos por WhatsApp</a>
+                  <a href={getWhatsAppHref("Hola! Quiero consultar por Delta Espacios Profesionales.")} className="lp-cta-primary" target="_blank" rel="noreferrer">Escribinos por WhatsApp</a>
                 </div>
                 <div className="contact-info-card">
                   <h3>Ubicacion</h3>
-                  <p>Cantilo N 146, City Bell 1896</p>
-                  <p>Solo con cita previa.</p>
+                  <p>Calle 467 N 164, e/13A y 13B, City Bell 1896</p>
+                  <p className="contact-highlight">Solo con cita previa</p>
                 </div>
                 <div className="contact-info-card">
                   <h3>Redes</h3>
-                  <p>Facebook: Delta Consultorio City Bell</p>
+                  <p>Facebook: Delta Espacios Profesionales</p>
                   <p>Instagram: Delta Espacios Profesionales</p>
                 </div>
               </div>

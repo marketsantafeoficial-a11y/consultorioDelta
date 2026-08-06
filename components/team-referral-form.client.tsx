@@ -70,7 +70,7 @@ export function TeamReferralForm({
       `Edad: ${form.age}`,
       `Disponibilidad de dias y horarios: ${form.availability}`,
       `Motivo de la consulta: ${form.reason}`,
-      `Preferencia de profesional: ${form.professionalPreference || "Sin preferencia"}`,
+      `Preferencia de profesional: ${form.professionalPreference || "Secretaria virtual de Delta"}`,
       selectedProfessional?.specialty ? `Especialidad del profesional elegido: ${selectedProfessional.specialty}` : null,
       "Nota: no trabajan por IOMA.",
     ].filter(Boolean).join("\n");
@@ -85,9 +85,9 @@ export function TeamReferralForm({
         <span className="section-kicker">Consulta simple</span>
         <h2>Dejanos los datos basicos y seguimos por WhatsApp</h2>
         <p>
-          El formulario solo prepara el mensaje para Delta. No reserva turnos ni
-          abre una agenda automatica: administracion o el profesional responde
-          por WhatsApp para coordinar.
+          Dejanos tu consulta en el siguiente formulario para comunicarnos por WhatsApp.
+          Podes contactar directamente al profesional de tu interes o comunicarte con la
+          secretaria virtual de Delta para recibir asesoramiento.
         </p>
       </div>
 
@@ -188,12 +188,12 @@ export function TeamReferralForm({
         </label>
 
         <label>
-          Profesional preferido
+          Profesional requerido
           <select
             value={form.professionalPreference}
             onChange={(event) => updateField("professionalPreference", event.target.value)}
           >
-            <option value="">Sin preferencia</option>
+            <option value="">Secretaria virtual de Delta</option>
             {professionals.map((professional) => (
               <option key={professional.id} value={professional.fullName}>
                 {professional.fullName} - {professional.specialty}
