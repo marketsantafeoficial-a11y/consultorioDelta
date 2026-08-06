@@ -4,7 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { BookingForm } from "@/components/booking-form";
 import { TeamReferralForm } from "@/components/team-referral-form.client";
 import { isSpaceResource } from "@/lib/resource-kind";
-import { FloatingWhatsApp, SiteHeader, getWhatsAppHref } from "@/components/site-header";
+import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
+import { getWhatsAppHref } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 

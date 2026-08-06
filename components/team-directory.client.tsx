@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getWhatsAppHref } from "@/components/site-header";
+import { getWhatsAppHref } from "@/lib/whatsapp";
 
 type TeamProfessional = {
   id: number;

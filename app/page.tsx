@@ -3,9 +3,10 @@ import { DrawTitle } from "@/components/TextAnimations.client";
 import { RevealOnScroll } from "@/components/RevealOnScroll.client";
 import { instagramDemo } from "@/lib/instagram-demo";
 import { getConsultorioAvailability } from "@/lib/dashboard-data";
-import { FloatingWhatsApp, SiteHeader, getWhatsAppHref } from "@/components/site-header";
+import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
 import ConsultorioSchedules from "@/components/ConsultorioSchedules.client";
 import { CalendarIcon, HeartIcon, PinIcon, SpecialtyIcon, StarIcon, UserIcon, UsersIcon } from "@/components/ui/site-icons";
+import { getWhatsAppHref } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
