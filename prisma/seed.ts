@@ -201,7 +201,7 @@ async function main() {
   const resources = [consultorio1, consultorio2, oficina, licAgustina, licTomas];
   for (const resource of resources) {
     for (const dayOfWeek of [1, 2, 3, 4, 5]) {
-      for (const module of [
+      for (const fixedModule of [
         { startTime: "09:00", endTime: "12:00" },
         { startTime: "12:00", endTime: "16:00" },
         { startTime: "16:00", endTime: "20:00" },
@@ -209,8 +209,8 @@ async function main() {
         await prisma.schedule.create({
           data: {
             dayOfWeek,
-            startTime: module.startTime,
-            endTime: module.endTime,
+            startTime: fixedModule.startTime,
+            endTime: fixedModule.endTime,
             telehealth: false,
             professionalId: resource.id,
           },

@@ -148,8 +148,8 @@ function findAppointmentForSlot(appts: Appointment[], day: Date, slot: string) {
 }
 
 function getFixedModuleLabel(slot: string) {
-  const module = FIXED_MODULES.find((item) => item.startTime === slot);
-  return module ? `${module.label} ${module.startTime}-${module.endTime}` : slot;
+  const fixedModule = FIXED_MODULES.find((item) => item.startTime === slot);
+  return fixedModule ? `${fixedModule.label} ${fixedModule.startTime}-${fixedModule.endTime}` : slot;
 }
 
 function getContactHref(professional: Professional, day: Date, slot: string) {
