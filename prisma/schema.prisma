@@ -40,23 +40,30 @@ model Consultory {
 }
 
 model Professional {
-  id            Int           @id @default(autoincrement())
-  fullName      String
-  specialty     String
-  bio           String
-  photoUrl      String?
-  whatsapp      String?
-  serves        String?
-  yearsPractice Int
-  email         String        @unique
-  colorToken    String
-  consultoryId  Int
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  consultory    Consultory    @relation(fields: [consultoryId], references: [id], onDelete: Cascade)
-  schedules     Schedule[]
-  appointments  Appointment[]
-  authUser      AuthUser?
+  id                   Int           @id @default(autoincrement())
+  fullName             String
+  specialty            String
+  bio                  String
+  photoUrl             String?
+  whatsapp             String?
+  serves               String?
+  yearsPractice        Int
+  email                String        @unique
+  colorToken           String
+  consultoryId         Int
+  modalidadAtencion    String?
+  atencionCobertura    String?
+  poblacion            String?
+  orientacionTeorica   String?
+  prestaciones         String?
+  areasExperiencia     String?
+  presentacionProfesional String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  consultory           Consultory    @relation(fields: [consultoryId], references: [id], onDelete: Cascade)
+  schedules            Schedule[]
+  appointments         Appointment[]
+  authUser             AuthUser?
 }
 
 model Schedule {

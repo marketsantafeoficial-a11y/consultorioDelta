@@ -22,10 +22,7 @@ export default async function ProfesionalesPage() {
       <section className="section-stack team-section">
         <div className="section-head">
           <h1>Nuestro equipo</h1>
-          <p>
-            Conoce los perfiles del equipo, sus areas de trabajo y su forma de
-            atencion. Podes escribir por WhatsApp directamente desde cada ficha.
-          </p>
+          <p>Conocé los profesionales que forman parte de nuestro espacio. Podes comunicarte directamente por WhatsApp desde cada perfil.</p>
         </div>
 
         <TeamDirectory
@@ -43,6 +40,13 @@ export default async function ProfesionalesPage() {
                   city: professional.consultory.city,
                 }
               : null,
+            modalidadAtencion: professional.modalidadAtencion,
+            atencionCobertura: professional.atencionCobertura,
+            poblacion: professional.poblacion,
+            orientacionTeorica: professional.orientacionTeorica,
+            prestaciones: professional.prestaciones,
+            areasExperiencia: professional.areasExperiencia,
+            presentacionProfesional: professional.presentacionProfesional,
           }))}
         />
 

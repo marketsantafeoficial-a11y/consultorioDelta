@@ -4,7 +4,7 @@ export const instagramDemo = {
   username: "deltaconsultorioscitybell",
   displayName: "Delta CB",
   category: "Alquiler de Consultorios/Oficinas",
-  location: "Calle 467 N 164, e/13A y 13B, City Bell 1896",
+  location: "467 N° 164, E/ 13A y 13B\nCity Bell, 1896",
   bio: "En el centro de City Bell. Totalmente equipados. Sumate a nuestro equipo de profesionales.",
   profileImage: asset("ig-profile.jpg"),
   whatsapp: "wa.me/message/LHCMI2KUSMFIJ1",

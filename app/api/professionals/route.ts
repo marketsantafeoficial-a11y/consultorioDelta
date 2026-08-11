@@ -8,12 +8,19 @@ const imagePathSchema = z.string().trim().optional().or(z.literal(""));
 const professionalSchema = z.object({
   fullName: z.string().trim().min(2),
   specialty: z.string().trim().min(2),
-  bio: z.string().trim().min(8),
+  bio: z.string().trim().optional(),
   serves: z.string().trim().optional(),
   photoUrl: imagePathSchema,
   whatsapp: z.string().trim().optional().or(z.literal("")),
   email: z.string().trim().email().optional().or(z.literal("")),
   consultoryId: z.number().int().positive(),
+  modalidadAtencion: z.string().trim().optional().or(z.literal("")),
+  atencionCobertura: z.string().trim().optional().or(z.literal("")),
+  poblacion: z.string().trim().optional().or(z.literal("")),
+  orientacionTeorica: z.string().trim().optional().or(z.literal("")),
+  prestaciones: z.string().trim().optional().or(z.literal("")),
+  areasExperiencia: z.string().trim().optional().or(z.literal("")),
+  presentacionProfesional: z.string().trim().optional().or(z.literal("")),
 });
 
 function slugify(input: string) {
@@ -73,7 +80,7 @@ export async function POST(request: Request) {
       data: {
         fullName: parsed.data.fullName,
         specialty: parsed.data.specialty,
-        bio: parsed.data.bio,
+        bio: parsed.data.bio || "",
         serves: parsed.data.serves || null,
         photoUrl: parsed.data.photoUrl || null,
         whatsapp: parsed.data.whatsapp || null,
@@ -81,6 +88,13 @@ export async function POST(request: Request) {
         yearsPractice: 1,
         colorToken: "team",
         consultoryId: parsed.data.consultoryId,
+        modalidadAtencion: parsed.data.modalidadAtencion || null,
+        atencionCobertura: parsed.data.atencionCobertura || null,
+        poblacion: parsed.data.poblacion || null,
+        orientacionTeorica: parsed.data.orientacionTeorica || null,
+        prestaciones: parsed.data.prestaciones || null,
+        areasExperiencia: parsed.data.areasExperiencia || null,
+        presentacionProfesional: parsed.data.presentacionProfesional || null,
       },
       include: {
         consultory: true,

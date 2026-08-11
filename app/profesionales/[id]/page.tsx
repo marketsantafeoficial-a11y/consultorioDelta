@@ -35,7 +35,18 @@ export default async function ProfesionalDetallePage({ params }: Params) {
     notFound();
   }
 
-  const isSpace = isSpaceResource(professional);
+  const prof = professional;
+  const isSpace = isSpaceResource(prof);
+
+  function getProfessionalWhatsAppHref(): string {
+    const message = `Hola, quiero consultar por ${prof.fullName} de DELTA  ESPACIOS PROFESIONALES.`;
+    if (prof.whatsapp) {
+      const phone = prof.whatsapp.replace(/\D/g, "");
+      return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    }
+    return getWhatsAppHref(message);
+  }
+
   const teamProfessionals = isSpace
     ? []
     : (await prisma.professional.findMany({ orderBy: { fullName: "asc" } })).filter(
@@ -57,8 +68,40 @@ export default async function ProfesionalDetallePage({ params }: Params) {
         <div>
           <span className="section-kicker">{isSpace ? "Modulo disponible" : "Profesional del equipo"}</span>
           <h1>{professional.fullName}</h1>
-          <p>{professional.specialty}</p>
-          <p>{professional.bio}</p>
+          <p style={{ whiteSpace: "pre-wrap" }}>{professional.specialty}</p>
+
+          {professional.presentacionProfesional ? (
+            <p style={{ whiteSpace: "pre-wrap" }}>{professional.presentacionProfesional}</p>
+          ) : (
+            <p>{professional.bio}</p>
+          )}
+
+          {professional.modalidadAtencion ? (
+            <p className="muted">Modalidad: {professional.modalidadAtencion}</p>
+          ) : null}
+
+          {professional.poblacion ? (
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Poblacion: {professional.poblacion}</p>
+          ) : null}
+
+          {professional.atencionCobertura ? (
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Cobertura: {professional.atencionCobertura}</p>
+          ) : null}
+
+          {professional.orientacionTeorica ? (
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Orientacion: {professional.orientacionTeorica}</p>
+          ) : null}
+
+          {professional.prestaciones ? (
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Prestaciones: {professional.prestaciones}</p>
+          ) : null}
+
+          {professional.areasExperiencia ? (
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Areas de experiencia: {professional.areasExperiencia}</p>
+          ) : professional.serves ? (
+            <p className="muted">Areas de experiencia: {professional.serves}</p>
+          ) : null}
+
           <p className="muted">
             {professional.consultory.name} - {professional.consultory.address}
           </p>
@@ -66,7 +109,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
             <div className="profile-actions">
               <a
                 className="lp-cta-primary"
-                href={getWhatsAppHref(`Hola, quiero consultar por ${professional.fullName} de DELTA – ESPACIOS PROFESIONALES.`)}
+                href={getProfessionalWhatsAppHref()}
                 target="_blank"
                 rel="noreferrer"
               >

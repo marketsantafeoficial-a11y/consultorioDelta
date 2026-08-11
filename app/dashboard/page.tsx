@@ -29,7 +29,7 @@ export default async function DashboardPage() {
     <div className="admin-shell">
       <header className="admin-header">
         <div className="admin-header-left">
-          <img src="/delta-logo.svg" alt="Delta" className="brand-logo small" />
+          <img src="/delta-logo-new.png" alt="Delta" className="brand-logo small" />
           <div>
             <p className="admin-header-kicker">ADMINISTRACIÓN</p>
             <h1 className="admin-header-title">Panel de control</h1>

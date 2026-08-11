@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { DrawTitle } from "@/components/TextAnimations.client";
 import { RevealOnScroll } from "@/components/RevealOnScroll.client";
-import { instagramDemo } from "@/lib/instagram-demo";
 import { getConsultorioAvailability } from "@/lib/dashboard-data";
 import { FloatingWhatsApp, SiteHeader } from "@/components/site-header";
 import ConsultorioSchedules from "@/components/ConsultorioSchedules.client";
@@ -63,7 +62,7 @@ export default async function HomePage() {
         <section className="lp-hero lp-hero-showcase">
           <div className="lp-hero-copy">
             <img
-              src="/delta-assets/delta-logo-citybell.png"
+              src="/delta-logo-new.png"
               alt="Delta Espacios Profesionales City Bell"
               className="lp-hero-logo"
             />
@@ -163,7 +162,7 @@ export default async function HomePage() {
               <DrawTitle tag="h2" className="lp-section-title">Nuestros profesionales</DrawTitle>
             </RevealOnScroll>
             <RevealOnScroll delay={120}>
-              <p className="lp-section-sub">Conoce a los profesionales que forman parte de Delta y coordina tu consulta de manera simple y directa.</p>
+              <p className="lp-section-sub">Conocé los profesionales que forman parte de nuestro espacio. Podes comunicarte directamente por WhatsApp desde cada perfil.</p>
             </RevealOnScroll>
             <div className="lp-feature-row">
               <div>
@@ -260,7 +259,7 @@ export default async function HomePage() {
                 </div>
                 <div className="contact-info-card">
                   <h3>Ubicacion</h3>
-                  <p>Calle 467 N 164, e/13A y 13B, City Bell 1896</p>
+                  <p>467 N° 164, E/ 13A y 13B<br />City Bell, 1896</p>
                   <p className="contact-highlight">Solo con cita previa</p>
                 </div>
                 <div className="contact-info-card">
@@ -277,8 +276,7 @@ export default async function HomePage() {
       <footer className="lp-footer">
         <div className="lp-footer-inner">
           <div>
-            <img src="/delta-assets/delta-logo-citybell.png" alt="Delta Espacios Profesionales" className="footer-logo" />
-            <p className="lp-footer-tagline">{instagramDemo.location}</p>
+            <img src="/delta-logo-new.png" alt="Delta Espacios Profesionales" className="footer-logo" />
           </div>
           <div className="lp-footer-links">
             <Link href="/">Inicio</Link>

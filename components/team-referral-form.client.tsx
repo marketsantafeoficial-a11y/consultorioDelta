@@ -72,7 +72,7 @@ export function TeamReferralForm({
       `Motivo de la consulta: ${form.reason}`,
       `Preferencia de profesional: ${form.professionalPreference || "Secretaria virtual de Delta"}`,
       selectedProfessional?.specialty ? `Especialidad del profesional elegido: ${selectedProfessional.specialty}` : null,
-      "Nota: no trabajan por IOMA.",
+      "Nota: No atendemos por IOMA.",
     ].filter(Boolean).join("\n");
 
     window.open(`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
@@ -82,13 +82,8 @@ export function TeamReferralForm({
   return (
     <section className="referral-section" id="derivacion">
       <div className="referral-copy">
-        <span className="section-kicker">Consulta simple</span>
-        <h2>Dejanos los datos basicos y seguimos por WhatsApp</h2>
-        <p>
-          Dejanos tu consulta en el siguiente formulario para comunicarnos por WhatsApp.
-          Podes contactar directamente al profesional de tu interes o comunicarte con la
-          secretaria virtual de Delta para recibir asesoramiento.
-        </p>
+        <h2>Dejanos tu consulta en el siguiente formulario para comunicarnos por WhatsApp.</h2>
+        <p>Desplegá la flecha para contactar directamente al profesional de tu interés o comunicate con la secretaria virtual de Delta para recibir asesoramiento.</p>
       </div>
 
       <form className="referral-form" onSubmit={onSubmit}>
@@ -202,7 +197,7 @@ export function TeamReferralForm({
           </select>
         </label>
 
-        <p className="form-note">DELTA – ESPACIOS PROFESIONALES no trabaja por IOMA.</p>
+        <p className="form-note">No atendemos por IOMA.</p>
 
         <button type="submit">Abrir WhatsApp con mis datos</button>
         {feedback ? <p className="status-text" aria-live="polite">{feedback}</p> : null}

@@ -55,8 +55,16 @@ export default async function AdminProfesionalesPage() {
               specialty: item.specialty,
               serves: item.serves,
               whatsapp: item.whatsapp,
+              photoUrl: item.photoUrl,
               consultoryId: item.consultoryId,
               consultoryName: item.consultory.name,
+              modalidadAtencion: item.modalidadAtencion,
+              atencionCobertura: item.atencionCobertura,
+              poblacion: item.poblacion,
+              orientacionTeorica: item.orientacionTeorica,
+              prestaciones: item.prestaciones,
+              areasExperiencia: item.areasExperiencia,
+              presentacionProfesional: item.presentacionProfesional,
             }))}
             consultories={sedes.map((sede) => ({
               id: sede.id,

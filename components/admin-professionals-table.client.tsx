@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type ConsultoryOption = {
   id: number;
@@ -16,24 +16,48 @@ export type AdminProfessionalRow = {
   specialty: string;
   serves: string | null;
   whatsapp: string | null;
+  photoUrl: string | null;
   consultoryId: number;
   consultoryName: string;
+  modalidadAtencion: string | null;
+  atencionCobertura: string | null;
+  poblacion: string | null;
+  orientacionTeorica: string | null;
+  prestaciones: string | null;
+  areasExperiencia: string | null;
+  presentacionProfesional: string | null;
 };
 
-type EditState = {
+const MODALIDADES = ["Presencial", "Virtual", "Presencial y virtual"];
+
+type EditForm = {
   fullName: string;
   specialty: string;
-  serves: string;
+  modalidadAtencion: string;
+  atencionCobertura: string;
+  poblacion: string;
+  orientacionTeorica: string;
+  prestaciones: string;
+  areasExperiencia: string;
+  presentacionProfesional: string;
   whatsapp: string;
+  photoUrl: string;
   consultoryId: string;
 };
 
-function toEditState(row: AdminProfessionalRow): EditState {
+function toEditForm(row: AdminProfessionalRow): EditForm {
   return {
     fullName: row.fullName,
     specialty: row.specialty,
-    serves: row.serves ?? "",
+    modalidadAtencion: row.modalidadAtencion ?? "",
+    atencionCobertura: row.atencionCobertura ?? "",
+    poblacion: row.poblacion ?? "",
+    orientacionTeorica: row.orientacionTeorica ?? "",
+    prestaciones: row.prestaciones ?? "",
+    areasExperiencia: row.areasExperiencia ?? "",
+    presentacionProfesional: row.presentacionProfesional ?? "",
     whatsapp: row.whatsapp ?? "",
+    photoUrl: row.photoUrl ?? "",
     consultoryId: String(row.consultoryId),
   };
 }
@@ -46,25 +70,63 @@ export function AdminProfessionalsTable({
   consultories: ConsultoryOption[];
 }) {
   const router = useRouter();
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<EditState | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState<AdminProfessionalRow | null>(null);
+  const [editForm, setEditForm] = useState<EditForm | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   function startEdit(row: AdminProfessionalRow) {
-    setEditingId(row.id);
-    setEditForm(toEditState(row));
+    setEditing(row);
+    setEditForm(toEditForm(row));
+    setPreviewUrl(row.photoUrl ?? null);
     setError(null);
   }
 
   function cancelEdit() {
-    setEditingId(null);
+    setEditing(null);
     setEditForm(null);
+    setPreviewUrl(null);
     setError(null);
+    if (fileRef.current) fileRef.current.value = "";
   }
 
-  function updateEditField(field: keyof EditState, value: string) {
+  function updateEditField(field: keyof EditForm, value: string) {
     setEditForm((current) => (current ? { ...current, [field]: value } : current));
+  }
+
+  async function handleEditFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => setPreviewUrl(reader.result as string);
+    reader.readAsDataURL(file);
+
+    setUploading(true);
+    setError(null);
+
+    const body = new FormData();
+    body.append("file", file);
+
+    const res = await fetch("/api/upload", { method: "POST", body });
+    const payload = await res.json();
+    setUploading(false);
+
+    if (!res.ok) {
+      setError(payload.error ?? "No se pudo subir la imagen.");
+      return;
+    }
+
+    updateEditField("photoUrl", payload.url);
+  }
+
+  function handleEditPreviewRemove() {
+    updateEditField("photoUrl", "");
+    setPreviewUrl(null);
+    if (fileRef.current) fileRef.current.value = "";
   }
 
   async function saveEdit(id: number) {
@@ -76,10 +138,7 @@ export function AdminProfessionalsTable({
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        fullName: editForm.fullName,
-        specialty: editForm.specialty,
-        serves: editForm.serves,
-        whatsapp: editForm.whatsapp,
+        ...editForm,
         consultoryId: Number(editForm.consultoryId),
       }),
     });
@@ -92,8 +151,10 @@ export function AdminProfessionalsTable({
       return;
     }
 
-    setEditingId(null);
+    setEditing(null);
     setEditForm(null);
+    setPreviewUrl(null);
+    if (fileRef.current) fileRef.current.value = "";
     router.refresh();
   }
 
@@ -116,6 +177,8 @@ export function AdminProfessionalsTable({
     router.refresh();
   }
 
+  const displayPreview = previewUrl || editForm?.photoUrl;
+
   return (
     <div style={{ overflowX: "auto" }}>
       {error ? <p className="admin-feedback">{error}</p> : null}
@@ -124,7 +187,6 @@ export function AdminProfessionalsTable({
           <tr>
             <th>Profesional</th>
             <th>Especialidad</th>
-            <th>Areas</th>
             <th>WhatsApp</th>
             <th>Sede</th>
             <th>Acciones</th>
@@ -132,68 +194,14 @@ export function AdminProfessionalsTable({
         </thead>
         <tbody>
           {professionals.map((row) => {
-            const isEditing = editingId === row.id;
             const isBusy = busyId === row.id;
-
-            if (isEditing && editForm) {
-              return (
-                <tr key={row.id}>
-                  <td>
-                    <input
-                      value={editForm.fullName}
-                      onChange={(event) => updateEditField("fullName", event.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      value={editForm.specialty}
-                      onChange={(event) => updateEditField("specialty", event.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      value={editForm.serves}
-                      onChange={(event) => updateEditField("serves", event.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      value={editForm.whatsapp}
-                      onChange={(event) => updateEditField("whatsapp", event.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <select
-                      value={editForm.consultoryId}
-                      onChange={(event) => updateEditField("consultoryId", event.target.value)}
-                    >
-                      {consultories.map((consultory) => (
-                        <option key={consultory.id} value={consultory.id}>
-                          {consultory.name}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td style={{ whiteSpace: "nowrap" }}>
-                    <button type="button" disabled={isBusy} onClick={() => saveEdit(row.id)}>
-                      {isBusy ? "Guardando..." : "Guardar"}
-                    </button>{" "}
-                    <button type="button" disabled={isBusy} onClick={cancelEdit}>
-                      Cancelar
-                    </button>
-                  </td>
-                </tr>
-              );
-            }
 
             return (
               <tr key={row.id}>
                 <td>
                   <strong style={{ display: "block" }}>{row.fullName}</strong>
-                  <span style={{ color: "var(--color-muted)", fontSize: "0.8rem" }}>{row.email}</span>
                 </td>
-                <td>{row.specialty}</td>
-                <td>{row.serves ?? "Sin cargar"}</td>
+                <td style={{ whiteSpace: "pre-wrap" }}>{row.specialty}</td>
                 <td>{row.whatsapp ?? "General"}</td>
                 <td>{row.consultoryName}</td>
                 <td style={{ whiteSpace: "nowrap" }}>
@@ -209,6 +217,183 @@ export function AdminProfessionalsTable({
           })}
         </tbody>
       </table>
+
+      {editing && editForm ? (
+        <div className="team-modal-backdrop" role="presentation" onClick={cancelEdit}>
+          <section
+            className="team-modal admin-edit-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-modal-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="team-modal-close"
+              onClick={cancelEdit}
+              aria-label="Cerrar edicion"
+            >
+              x
+            </button>
+            <h2 id="edit-modal-title">Editar: {editing.fullName}</h2>
+            {error ? <p className="admin-feedback">{error}</p> : null}
+
+            <div className="admin-edit-form-content">
+              <div className="admin-form-section">
+                <h3>Informacion basica</h3>
+                <div className="admin-form-two-cols">
+                  <label>
+                    <span>Nombre completo *</span>
+                    <input
+                      value={editForm.fullName}
+                      onChange={(e) => updateEditField("fullName", e.target.value)}
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Especialidad *</span>
+                    <textarea
+                      value={editForm.specialty}
+                      onChange={(e) => updateEditField("specialty", e.target.value)}
+                      rows={3}
+                      required
+                    />
+                  </label>
+                </div>
+                <div className="admin-form-two-cols">
+                  <label>
+                    <span>Sede</span>
+                    <select
+                      value={editForm.consultoryId}
+                      onChange={(e) => updateEditField("consultoryId", e.target.value)}
+                    >
+                      {consultories.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name} - {c.city}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>Modalidad de atencion</span>
+                    <select
+                      value={editForm.modalidadAtencion}
+                      onChange={(e) => updateEditField("modalidadAtencion", e.target.value)}
+                    >
+                      <option value="">Seleccionar...</option>
+                      {MODALIDADES.map((mod) => (
+                        <option key={mod} value={mod}>{mod}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  <span>Foto</span>
+                  <div className="admin-photo-upload">
+                    {displayPreview ? (
+                      <div className="admin-photo-preview">
+                        <img src={displayPreview} alt="Vista previa" />
+                        <button type="button" className="admin-photo-remove" onClick={handleEditPreviewRemove}>
+                          Quitar
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="admin-photo-placeholder">Sin foto</div>
+                    )}
+                    <input
+                      ref={fileRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleEditFileChange}
+                    />
+                    {uploading ? <span className="admin-uploading">Subiendo imagen...</span> : null}
+                  </div>
+                </label>
+              </div>
+
+              <div className="admin-form-section">
+                <h3>Atencion profesional</h3>
+                <label>
+                  <span>Atencion / Obras sociales / Reintegro / Particular</span>
+                  <textarea
+                    value={editForm.atencionCobertura}
+                    onChange={(e) => updateEditField("atencionCobertura", e.target.value)}
+                    rows={3}
+                  />
+                </label>
+                <div className="admin-form-two-cols">
+                  <label>
+                    <span>Poblacion</span>
+                    <textarea
+                      value={editForm.poblacion}
+                      onChange={(e) => updateEditField("poblacion", e.target.value)}
+                      rows={3}
+                    />
+                  </label>
+                  <label>
+                    <span>Orientacion teorica</span>
+                    <textarea
+                      value={editForm.orientacionTeorica}
+                      onChange={(e) => updateEditField("orientacionTeorica", e.target.value)}
+                      rows={3}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="admin-form-section">
+                <h3>Experiencia y servicios</h3>
+                <div className="admin-form-two-cols">
+                  <label>
+                    <span>Prestaciones</span>
+                    <textarea
+                      value={editForm.prestaciones}
+                      onChange={(e) => updateEditField("prestaciones", e.target.value)}
+                      rows={5}
+                    />
+                  </label>
+                  <label>
+                    <span>Areas de experiencia</span>
+                    <textarea
+                      value={editForm.areasExperiencia}
+                      onChange={(e) => updateEditField("areasExperiencia", e.target.value)}
+                      rows={5}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="admin-form-section">
+                <h3>Presentacion y contacto</h3>
+                <label>
+                  <span>Presentacion profesional</span>
+                  <textarea
+                    value={editForm.presentacionProfesional}
+                    onChange={(e) => updateEditField("presentacionProfesional", e.target.value)}
+                    rows={4}
+                  />
+                </label>
+                <label>
+                  <span>WhatsApp *</span>
+                  <input
+                    type="tel"
+                    value={editForm.whatsapp}
+                    onChange={(e) => updateEditField("whatsapp", e.target.value)}
+                    required
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="admin-edit-modal-actions">
+              <button type="button" disabled={busyId !== null || uploading} onClick={() => saveEdit(editing.id)}>
+                {busyId !== null ? "Guardando..." : "Guardar cambios"}
+              </button>
+              <button type="button" className="ghost-button" disabled={busyId !== null} onClick={cancelEdit}>
+                Cancelar
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }

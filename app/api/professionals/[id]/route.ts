@@ -6,12 +6,19 @@ import { z } from "zod";
 const updateSchema = z.object({
   fullName: z.string().trim().min(2),
   specialty: z.string().trim().min(2),
-  bio: z.string().trim().min(8).optional(),
+  bio: z.string().trim().optional(),
   serves: z.string().trim().optional().or(z.literal("")),
   photoUrl: z.string().trim().optional().or(z.literal("")),
   whatsapp: z.string().trim().optional().or(z.literal("")),
   email: z.string().trim().email().optional().or(z.literal("")),
   consultoryId: z.number().int().positive().optional(),
+  modalidadAtencion: z.string().trim().optional().or(z.literal("")),
+  atencionCobertura: z.string().trim().optional().or(z.literal("")),
+  poblacion: z.string().trim().optional().or(z.literal("")),
+  orientacionTeorica: z.string().trim().optional().or(z.literal("")),
+  prestaciones: z.string().trim().optional().or(z.literal("")),
+  areasExperiencia: z.string().trim().optional().or(z.literal("")),
+  presentacionProfesional: z.string().trim().optional().or(z.literal("")),
 });
 
 async function requireAdmin() {
@@ -61,6 +68,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         whatsapp: parsed.data.whatsapp || null,
         email: parsed.data.email || existing.email,
         consultoryId: parsed.data.consultoryId ?? existing.consultoryId,
+        modalidadAtencion: parsed.data.modalidadAtencion || null,
+        atencionCobertura: parsed.data.atencionCobertura || null,
+        poblacion: parsed.data.poblacion || null,
+        orientacionTeorica: parsed.data.orientacionTeorica || null,
+        prestaciones: parsed.data.prestaciones || null,
+        areasExperiencia: parsed.data.areasExperiencia || null,
+        presentacionProfesional: parsed.data.presentacionProfesional || null,
       },
       include: { consultory: true },
     });

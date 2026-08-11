@@ -15,22 +15,34 @@ type TeamProfessional = {
     name: string;
     city: string;
   } | null;
+  modalidadAtencion?: string | null;
+  atencionCobertura?: string | null;
+  poblacion?: string | null;
+  orientacionTeorica?: string | null;
+  prestaciones?: string | null;
+  areasExperiencia?: string | null;
+  presentacionProfesional?: string | null;
 };
+
+function textToLines(text: string | null | undefined): string {
+  if (!text) return "";
+  return text;
+}
 
 export function TeamDirectory({ professionals }: { professionals: TeamProfessional[] }) {
   const [selected, setSelected] = useState<TeamProfessional | null>(null);
   const [selectedSpecialty, setSelectedSpecialty] = useState("Todas");
   const specialties = [
     "Todas",
-    ...Array.from(new Set(professionals.map((professional) => professional.specialty))).sort(),
+    ...Array.from(new Set(professionals.map((professional) => professional.specialty.split("\n")[0]))).sort(),
   ];
   const filteredProfessionals =
     selectedSpecialty === "Todas"
       ? professionals
-      : professionals.filter((professional) => professional.specialty === selectedSpecialty);
+      : professionals.filter((professional) => professional.specialty.split("\n")[0] === selectedSpecialty);
 
   function getProfessionalWhatsAppHref(professional: TeamProfessional) {
-    const message = `Hola, quiero consultar por ${professional.fullName} de DELTA – ESPACIOS PROFESIONALES.`;
+    const message = `Hola, quiero consultar por ${professional.fullName} de DELTA  ESPACIOS PROFESIONALES.`;
 
     if (!professional.whatsapp) {
       return getWhatsAppHref(message);
@@ -78,7 +90,12 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
               />
             </button>
             <h2>{professional.fullName}</h2>
-            <p>{professional.specialty}</p>
+            <p style={{ whiteSpace: "pre-wrap", textAlign: "center", fontStyle: "normal" }}>
+              {professional.specialty.split("\n")[0]}
+            </p>
+            {professional.modalidadAtencion ? (
+              <span className="team-modalidad-badge">{professional.modalidadAtencion}</span>
+            ) : null}
             <button type="button" className="ghost-button" onClick={() => setSelected(professional)}>
               Ver perfil
             </button>
@@ -97,7 +114,7 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
       {selected ? (
         <div className="team-modal-backdrop" role="presentation" onClick={() => setSelected(null)}>
           <section
-            className="team-modal"
+            className="team-modal team-modal-detail"
             role="dialog"
             aria-modal="true"
             aria-labelledby="team-modal-title"
@@ -119,14 +136,73 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
             <div className="team-modal-copy">
               <span className="section-kicker">Profesional del equipo</span>
               <h2 id="team-modal-title">{selected.fullName}</h2>
-              <p className="team-modal-specialty">{selected.specialty}</p>
-              <p>{selected.bio}</p>
-              {selected.serves ? <p className="muted">Areas: {selected.serves}</p> : null}
+              <p className="team-modal-specialty" style={{ whiteSpace: "pre-wrap" }}>
+                {selected.specialty}
+              </p>
+
+              {selected.modalidadAtencion ? (
+                <div className="team-modal-field">
+                  <strong>Modalidad</strong>
+                  <span>{selected.modalidadAtencion}</span>
+                </div>
+              ) : null}
+
+              {selected.presentacionProfesional ? (
+                <div className="team-modal-field">
+                  <p style={{ whiteSpace: "pre-wrap" }}>{selected.presentacionProfesional}</p>
+                </div>
+              ) : selected.bio ? (
+                <div className="team-modal-field">
+                  <p style={{ whiteSpace: "pre-wrap" }}>{selected.bio}</p>
+                </div>
+              ) : null}
+
+              {selected.poblacion ? (
+                <div className="team-modal-field">
+                  <strong>Poblacion</strong>
+                  <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.poblacion)}</span>
+                </div>
+              ) : null}
+
+              {selected.atencionCobertura ? (
+                <div className="team-modal-field">
+                  <strong>Cobertura / Atencion</strong>
+                  <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.atencionCobertura)}</span>
+                </div>
+              ) : null}
+
+              {selected.orientacionTeorica ? (
+                <div className="team-modal-field">
+                  <strong>Orientacion</strong>
+                  <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.orientacionTeorica)}</span>
+                </div>
+              ) : null}
+
+              {selected.prestaciones ? (
+                <div className="team-modal-field">
+                  <strong>Prestaciones</strong>
+                  <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.prestaciones)}</span>
+                </div>
+              ) : null}
+
+              {selected.areasExperiencia ? (
+                <div className="team-modal-field">
+                  <strong>Areas de experiencia</strong>
+                  <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.areasExperiencia)}</span>
+                </div>
+              ) : selected.serves ? (
+                <div className="team-modal-field">
+                  <strong>Areas de experiencia</strong>
+                  <span>{selected.serves}</span>
+                </div>
+              ) : null}
+
               {selected.consultory ? (
                 <p className="muted">
                   {selected.consultory.name} - {selected.consultory.city}
                 </p>
               ) : null}
+
               <div className="profile-actions">
                 <a
                   className="lp-cta-primary"

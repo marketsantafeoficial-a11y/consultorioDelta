@@ -28,7 +28,7 @@ export function SiteHeader() {
       <nav className="lp-nav">
         <Link href="/" className="lp-brand" aria-label="Delta Espacios Profesionales" onClick={closeMenu}>
           <img
-            src="/delta-assets/delta-logo-citybell.png"
+            src="/delta-logo-new.png"
             alt="Delta Espacios Profesionales City Bell"
             className="brand-logo"
           />
