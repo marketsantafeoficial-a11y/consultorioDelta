@@ -66,7 +66,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
           className="profile-avatar"
         />
         <div>
-          <span className="section-kicker">{isSpace ? "Modulo disponible" : "Profesional del equipo"}</span>
+          <span className="section-kicker">{isSpace ? "Módulo disponible" : "Profesional del equipo"}</span>
           <h1>{professional.fullName}</h1>
           <p style={{ whiteSpace: "pre-wrap" }}>{professional.specialty}</p>
 
@@ -81,7 +81,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
           ) : null}
 
           {professional.poblacion ? (
-            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Poblacion: {professional.poblacion}</p>
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Población: {professional.poblacion}</p>
           ) : null}
 
           {professional.atencionCobertura ? (
@@ -89,7 +89,7 @@ export default async function ProfesionalDetallePage({ params }: Params) {
           ) : null}
 
           {professional.orientacionTeorica ? (
-            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Orientacion: {professional.orientacionTeorica}</p>
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Orientación: {professional.orientacionTeorica}</p>
           ) : null}
 
           {professional.prestaciones ? (
@@ -97,9 +97,9 @@ export default async function ProfesionalDetallePage({ params }: Params) {
           ) : null}
 
           {professional.areasExperiencia ? (
-            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Areas de experiencia: {professional.areasExperiencia}</p>
+            <p className="muted" style={{ whiteSpace: "pre-wrap" }}>Áreas de experiencia: {professional.areasExperiencia}</p>
           ) : professional.serves ? (
-            <p className="muted">Areas de experiencia: {professional.serves}</p>
+            <p className="muted">Áreas de experiencia: {professional.serves}</p>
           ) : null}
 
           <p className="muted">

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const DAYS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+const DAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
 export type ConsultorioAvailability = {
   id: string;
@@ -29,7 +29,7 @@ export default function ConsultorioSchedules({
   if (consultorios.length === 0) {
     return (
       <p className="schedules-empty">
-        Todavia no hay consultorios cargados. Escribinos por WhatsApp para consultar disponibilidad.
+        Todavía no hay consultorios cargados. Escribinos por WhatsApp para consultar disponibilidad.
       </p>
     );
   }
@@ -44,6 +44,7 @@ export default function ConsultorioSchedules({
               type="button"
               className="schedule-header"
               onClick={() => toggle(c.id)}
+              aria-expanded={isOpen}
             >
               <div className="schedule-header-text">
                 <strong>{c.name}</strong>
@@ -60,7 +61,7 @@ export default function ConsultorioSchedules({
                   <table className="schedule-table">
                     <thead>
                       <tr>
-                        <th>Modulo</th>
+                        <th>Módulo</th>
                         {DAYS.map((d) => (
                           <th key={d}>{d}</th>
                         ))}

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Agenda | DELTA – ESPACIOS PROFESIONALES",
-  description: "Agenda publica de modulos alquilables.",
+  description: "Agenda pública de módulos alquilables.",
 };
 
 function mapAppointments(upcomingAppointments: Awaited<ReturnType<typeof getDashboardData>>["upcomingAppointments"]) {
@@ -49,22 +49,22 @@ export default async function CalendarioPage() {
         <div className="cal-hero-text">
           <h1 className="cal-hero-title">Alquiler de consultorios</h1>
           <p className="cal-hero-sub">
-            En pleno centro de City Bell. Consulta la disponibilidad de {spaces.length} espacios
+            En pleno centro de City Bell. Consultá la disponibilidad de {spaces.length} espacios
             amplios, luminosos y equipados.
           </p>
           <div className="cal-flow-panel">
             <strong>Programa de alquiler</strong>
-            <span>Wifi, sala de espera, bano, cocina, escritorio, AA frio/calor y divan.</span>
-            <span>Modulos fijos: manana 9 a 12, mediodia 12 a 16 y tarde 16 a 20 hs.</span>
-            <span>Ajustes: noviembre, marzo y julio. No contamos con servicio de secretaria.</span>
+            <span>Wifi, sala de espera, baño, cocina, escritorio, AA frío/calor y diván.</span>
+            <span>Módulos fijos: mañana 9 a 12, mediodía 12 a 16 y tarde 16 a 20 hs.</span>
+            <span>Ajustes: noviembre, marzo y julio. No contamos con servicio de secretaría.</span>
           </div>
         </div>
 
         <section className="calendar-demo-section">
           <div className="calendar-demo-head">
-            <span>Disponibilidad por modulos fijos</span>
+            <span>Disponibilidad por módulos fijos</span>
             <h2>Agenda</h2>
-            <p>Usa los horarios libres como referencia y escribinos por WhatsApp para confirmar condiciones.</p>
+            <p>Usá los horarios libres como referencia y escribinos por WhatsApp para confirmar condiciones.</p>
           </div>
           <ProfessionalCalendar
             purpose="spaces"

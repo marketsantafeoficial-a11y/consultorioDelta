@@ -159,21 +159,21 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
 
               {selected.poblacion ? (
                 <div className="team-modal-field">
-                  <strong>Poblacion</strong>
+                  <strong>Población</strong>
                   <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.poblacion)}</span>
                 </div>
               ) : null}
 
               {selected.atencionCobertura ? (
                 <div className="team-modal-field">
-                  <strong>Cobertura / Atencion</strong>
+                  <strong>Cobertura / Atención</strong>
                   <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.atencionCobertura)}</span>
                 </div>
               ) : null}
 
               {selected.orientacionTeorica ? (
                 <div className="team-modal-field">
-                  <strong>Orientacion</strong>
+                  <strong>Orientación</strong>
                   <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.orientacionTeorica)}</span>
                 </div>
               ) : null}
@@ -187,12 +187,12 @@ export function TeamDirectory({ professionals }: { professionals: TeamProfession
 
               {selected.areasExperiencia ? (
                 <div className="team-modal-field">
-                  <strong>Areas de experiencia</strong>
+                  <strong>Áreas de experiencia</strong>
                   <span style={{ whiteSpace: "pre-wrap" }}>{textToLines(selected.areasExperiencia)}</span>
                 </div>
               ) : selected.serves ? (
                 <div className="team-modal-field">
-                  <strong>Areas de experiencia</strong>
+                  <strong>Áreas de experiencia</strong>
                   <span>{selected.serves}</span>
                 </div>
               ) : null}

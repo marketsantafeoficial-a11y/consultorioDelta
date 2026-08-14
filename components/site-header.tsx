@@ -9,7 +9,7 @@ const WHATSAPP_ALIAS_URL = `https://wa.me/${ADMIN_PHONE}?text=${encodeURICompone
 
 const navLinks = [
   { href: "/", label: "Inicio" },
-  { href: "/#quienes-somos", label: "Quienes somos" },
+  { href: "/#quienes-somos", label: "Quiénes somos" },
   { href: "/#especialidades", label: "Especialidades" },
   { href: "/profesionales", label: "Profesionales" },
   { href: "/#alquila-espacio", label: "Alquiler de espacios" },
@@ -28,7 +28,7 @@ export function SiteHeader() {
       <nav className="lp-nav">
         <Link href="/" className="lp-brand" aria-label="Delta Espacios Profesionales" onClick={closeMenu}>
           <img
-            src="/delta-logo-new.png"
+            src="/delta-logo-round.jpeg"
             alt="Delta Espacios Profesionales City Bell"
             className="brand-logo"
           />

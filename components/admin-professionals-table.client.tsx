@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { prepareProfessionalPhoto } from "@/lib/client-image";
 
 type ConsultoryOption = {
   id: number;
@@ -101,26 +102,33 @@ export function AdminProfessionalsTable({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => setPreviewUrl(reader.result as string);
-    reader.readAsDataURL(file);
-
     setUploading(true);
     setError(null);
 
-    const body = new FormData();
-    body.append("file", file);
+    try {
+      const preparedFile = await prepareProfessionalPhoto(file);
+      const localPreview = URL.createObjectURL(preparedFile);
+      setPreviewUrl(localPreview);
 
-    const res = await fetch("/api/upload", { method: "POST", body });
-    const payload = await res.json();
-    setUploading(false);
+      const body = new FormData();
+      body.append("file", preparedFile);
 
-    if (!res.ok) {
-      setError(payload.error ?? "No se pudo subir la imagen.");
-      return;
+      const res = await fetch("/api/upload", { method: "POST", body });
+      const payload = await res.json();
+
+      if (!res.ok) {
+        setError(payload.error ?? "No se pudo subir la imagen.");
+        return;
+      }
+
+      updateEditField("photoUrl", payload.url);
+      setPreviewUrl(payload.url);
+      URL.revokeObjectURL(localPreview);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo preparar la imagen.");
+    } finally {
+      setUploading(false);
     }
-
-    updateEditField("photoUrl", payload.url);
   }
 
   function handleEditPreviewRemove() {
@@ -231,7 +239,7 @@ export function AdminProfessionalsTable({
               type="button"
               className="team-modal-close"
               onClick={cancelEdit}
-              aria-label="Cerrar edicion"
+              aria-label="Cerrar edición"
             >
               x
             </button>
@@ -240,7 +248,7 @@ export function AdminProfessionalsTable({
 
             <div className="admin-edit-form-content">
               <div className="admin-form-section">
-                <h3>Informacion basica</h3>
+                <h3>Información básica</h3>
                 <div className="admin-form-two-cols">
                   <label>
                     <span>Nombre completo *</span>
@@ -273,7 +281,7 @@ export function AdminProfessionalsTable({
                     </select>
                   </label>
                   <label>
-                    <span>Modalidad de atencion</span>
+                    <span>Modalidad de atención</span>
                     <select
                       value={editForm.modalidadAtencion}
                       onChange={(e) => updateEditField("modalidadAtencion", e.target.value)}
@@ -310,9 +318,9 @@ export function AdminProfessionalsTable({
               </div>
 
               <div className="admin-form-section">
-                <h3>Atencion profesional</h3>
+                <h3>Atención profesional</h3>
                 <label>
-                  <span>Atencion / Obras sociales / Reintegro / Particular</span>
+                  <span>Atención / Obras sociales / Reintegro / Particular</span>
                   <textarea
                     value={editForm.atencionCobertura}
                     onChange={(e) => updateEditField("atencionCobertura", e.target.value)}
@@ -321,7 +329,7 @@ export function AdminProfessionalsTable({
                 </label>
                 <div className="admin-form-two-cols">
                   <label>
-                    <span>Poblacion</span>
+                    <span>Población</span>
                     <textarea
                       value={editForm.poblacion}
                       onChange={(e) => updateEditField("poblacion", e.target.value)}
@@ -329,7 +337,7 @@ export function AdminProfessionalsTable({
                     />
                   </label>
                   <label>
-                    <span>Orientacion teorica</span>
+                    <span>Orientación teórica</span>
                     <textarea
                       value={editForm.orientacionTeorica}
                       onChange={(e) => updateEditField("orientacionTeorica", e.target.value)}
@@ -351,7 +359,7 @@ export function AdminProfessionalsTable({
                     />
                   </label>
                   <label>
-                    <span>Areas de experiencia</span>
+                    <span>Áreas de experiencia</span>
                     <textarea
                       value={editForm.areasExperiencia}
                       onChange={(e) => updateEditField("areasExperiencia", e.target.value)}
@@ -362,9 +370,9 @@ export function AdminProfessionalsTable({
               </div>
 
               <div className="admin-form-section">
-                <h3>Presentacion y contacto</h3>
+                <h3>Presentación y contacto</h3>
                 <label>
-                  <span>Presentacion profesional</span>
+                  <span>Presentación profesional</span>
                   <textarea
                     value={editForm.presentacionProfesional}
                     onChange={(e) => updateEditField("presentacionProfesional", e.target.value)}

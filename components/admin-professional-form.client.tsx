@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { prepareProfessionalPhoto } from "@/lib/client-image";
 
 type ConsultoryOption = {
   id: number;
@@ -50,26 +51,33 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => setPreviewUrl(reader.result as string);
-    reader.readAsDataURL(file);
-
     setUploading(true);
     setFeedback(null);
 
-    const body = new FormData();
-    body.append("file", file);
+    try {
+      const preparedFile = await prepareProfessionalPhoto(file);
+      const localPreview = URL.createObjectURL(preparedFile);
+      setPreviewUrl(localPreview);
 
-    const res = await fetch("/api/upload", { method: "POST", body });
-    const payload = await res.json();
-    setUploading(false);
+      const body = new FormData();
+      body.append("file", preparedFile);
 
-    if (!res.ok) {
-      setFeedback(payload.error ?? "No se pudo subir la imagen.");
-      return;
+      const res = await fetch("/api/upload", { method: "POST", body });
+      const payload = await res.json();
+
+      if (!res.ok) {
+        setFeedback(payload.error ?? "No se pudo subir la imagen.");
+        return;
+      }
+
+      updateField("photoUrl", payload.url);
+      setPreviewUrl(payload.url);
+      URL.revokeObjectURL(localPreview);
+    } catch (error) {
+      setFeedback(error instanceof Error ? error.message : "No se pudo preparar la imagen.");
+    } finally {
+      setUploading(false);
     }
-
-    updateField("photoUrl", payload.url);
   }
 
   function handlePreviewRemove() {
@@ -112,7 +120,7 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
   return (
     <form className="admin-professional-form" onSubmit={onSubmit}>
       <div className="admin-form-section">
-        <h3>Informacion basica</h3>
+        <h3>Información básica</h3>
         <div className="admin-form-two-cols">
           <label>
             <span>Nombre completo *</span>
@@ -149,7 +157,7 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
             </select>
           </label>
           <label>
-            <span>Modalidad de atencion</span>
+            <span>Modalidad de atención</span>
             <select
               value={form.modalidadAtencion}
               onChange={(event) => updateField("modalidadAtencion", event.target.value)}
@@ -186,9 +194,9 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
       </div>
 
       <div className="admin-form-section">
-        <h3>Atencion profesional</h3>
+        <h3>Atención profesional</h3>
         <label>
-          <span>Atencion / Obras sociales / Reintegro / Particular</span>
+          <span>Atención / Obras sociales / Reintegro / Particular</span>
           <textarea
             value={form.atencionCobertura}
             onChange={(event) => updateField("atencionCobertura", event.target.value)}
@@ -198,7 +206,7 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
         </label>
         <div className="admin-form-two-cols">
           <label>
-            <span>Poblacion con la que trabaja</span>
+            <span>Población con la que trabaja</span>
             <textarea
               value={form.poblacion}
               onChange={(event) => updateField("poblacion", event.target.value)}
@@ -207,11 +215,11 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
             />
           </label>
           <label>
-            <span>Orientacion teorica</span>
+            <span>Orientación teórica</span>
             <textarea
               value={form.orientacionTeorica}
               onChange={(event) => updateField("orientacionTeorica", event.target.value)}
-              placeholder="Orientacion teorica del profesional"
+              placeholder="Orientación teórica del profesional"
               rows={3}
             />
           </label>
@@ -226,12 +234,12 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
             <textarea
               value={form.prestaciones}
               onChange={(event) => updateField("prestaciones", event.target.value)}
-              placeholder="Ej: Evaluacion psicologica&#10;Psicoterapia individual&#10;Orientacion a padres&#10;Evaluaciones&#10;Tratamientos&#10;Seguimiento"
+              placeholder="Ej: Evaluación psicológica&#10;Psicoterapia individual&#10;Orientación a padres&#10;Evaluaciones&#10;Tratamientos&#10;Seguimiento"
               rows={6}
             />
           </label>
           <label>
-            <span>Areas de experiencia y problematicas que aborda</span>
+            <span>Áreas de experiencia y problemáticas que aborda</span>
             <textarea
               value={form.areasExperiencia}
               onChange={(event) => updateField("areasExperiencia", event.target.value)}
@@ -243,13 +251,13 @@ export function AdminProfessionalForm({ consultories }: AdminProfessionalFormPro
       </div>
 
       <div className="admin-form-section">
-        <h3>Presentacion y contacto</h3>
+        <h3>Presentación y contacto</h3>
         <label>
-          <span>Presentacion profesional</span>
+          <span>Presentación profesional</span>
           <textarea
             value={form.presentacionProfesional}
             onChange={(event) => updateField("presentacionProfesional", event.target.value)}
-            placeholder="Soy Licenciada en Psicologia con experiencia en atencion de adolescentes y adultos..."
+            placeholder="Soy Licenciada en Psicología con experiencia en atención de adolescentes y adultos..."
             rows={5}
           />
         </label>

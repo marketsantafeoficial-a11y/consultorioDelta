@@ -21,7 +21,7 @@ export function AdminPageShell({ title, description, children }: AdminPageShellP
         }}
       >
         <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
-          <img src="/delta-logo-new.png" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo small" />
+          <img src="/delta-logo-round.jpeg" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo small" />
           <div>
             <p style={{ color: "var(--color-muted)", fontSize: "0.8rem", fontWeight: 700, margin: 0 }}>
               ADMINISTRACION
@@ -34,7 +34,7 @@ export function AdminPageShell({ title, description, children }: AdminPageShellP
         </div>
         <div className="header-actions">
           <Link href="/dashboard" className="header-home-link">Panel</Link>
-          <Link href="/admin/modulos" className="header-home-link">Modulos</Link>
+          <Link href="/admin/modulos" className="header-home-link">Módulos</Link>
           <Link href="/admin/profesionales" className="header-home-link">Profesionales</Link>
           <Link href="/admin/reservas" className="header-home-link">Reservas</Link>
           <Link href="/" className="header-home-link">Inicio</Link>

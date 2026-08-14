@@ -55,7 +55,7 @@ export function LoginForm() {
       }}>
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <Link href="/" className="lp-brand" style={{ justifyContent: "center", marginBottom: "1rem" }}>
-            <img src="/delta-logo-new.png" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo" />
+            <img src="/delta-logo-round.jpeg" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo" />
             DELTA – ESPACIOS PROFESIONALES
           </Link>
           <h1 style={{ 

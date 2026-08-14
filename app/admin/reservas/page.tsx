@@ -27,7 +27,7 @@ export default async function AdminReservasPage() {
         <div className="admin-panel-head">
           <span>Tabla completa</span>
           <h2>Reservas de consultorios</h2>
-          <p>Para mover o liberar horarios, usa la pantalla Modulos y agenda.</p>
+          <p>Para mover o liberar horarios, usá la pantalla Módulos y agenda.</p>
         </div>
         <div style={{ overflowX: "auto" }}>
           <table>

@@ -1,11 +1,11 @@
 import { prisma } from "./prisma";
 import { isSpaceResource } from "./resource-kind";
 
-const AVAILABILITY_DAYS = [1, 2, 3, 4, 5, 6]; // Lunes a Sabado
+const AVAILABILITY_DAYS = [1, 2, 3, 4, 5, 6]; // Lunes a sábado
 const AVAILABILITY_MODULES = [
-  { id: "manana", label: "Modulo MANANA", time: "9 a 12 hs", startTime: "09:00" },
-  { id: "mediodia", label: "Modulo MEDIODIA", time: "12 a 16 hs", startTime: "12:00" },
-  { id: "tarde", label: "Modulo TARDE", time: "16 a 20 hs", startTime: "16:00" },
+  { id: "manana", label: "Módulo MAÑANA", time: "9 a 12 hs", startTime: "09:00" },
+  { id: "mediodia", label: "Módulo MEDIODÍA", time: "12 a 16 hs", startTime: "12:00" },
+  { id: "tarde", label: "Módulo TARDE", time: "16 a 20 hs", startTime: "16:00" },
 ];
 
 export async function getConsultorioAvailability() {

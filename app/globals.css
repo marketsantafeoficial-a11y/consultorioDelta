@@ -1789,7 +1789,7 @@ input, textarea, select {
 }
 .schedule-header {
   align-items: center;
-  background: transparent;
+  background: #393733;
   border: none;
   cursor: pointer;
   display: flex;
@@ -1800,7 +1800,7 @@ input, textarea, select {
   transition: background 0.15s;
 }
 .schedule-header:hover {
-  background: rgba(216, 198, 187, 0.12);
+  background: #2f2d29;
 }
 .schedule-header-text {
   display: flex;
@@ -1808,7 +1808,7 @@ input, textarea, select {
   gap: 0.65rem;
 }
 .schedule-header-text strong {
-  color: var(--color-primary);
+  color: #ffffff;
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 600;
@@ -1824,13 +1824,13 @@ input, textarea, select {
   text-transform: uppercase;
 }
 .schedule-chevron {
-  color: var(--color-muted);
+  color: #ffffff;
   transition: transform 0.3s ease;
   flex-shrink: 0;
 }
 .schedule-item.open .schedule-chevron {
   transform: rotate(180deg);
-  color: var(--color-primary);
+  color: #ffffff;
 }
 .schedule-table-wrap {
   padding: 0 1.5rem 1.5rem;

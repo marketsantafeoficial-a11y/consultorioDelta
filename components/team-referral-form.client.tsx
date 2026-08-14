@@ -19,7 +19,7 @@ const startOptions = [
   "Terapia individual",
   "Terapia de pareja",
   "Terapia familiar / vincular",
-  "Orientacion para elegir profesional",
+  "Orientación para elegir profesional",
   "Consulta por autoestima, ansiedad o duelos",
   "Otra consulta",
 ];
@@ -68,7 +68,7 @@ export function TeamReferralForm({
       `Modalidad preferida: ${form.modality}`,
       `Telefono: ${form.phone}`,
       `Edad: ${form.age}`,
-      `Disponibilidad de dias y horarios: ${form.availability}`,
+      `Disponibilidad de días y horarios: ${form.availability}`,
       `Motivo de la consulta: ${form.reason}`,
       `Preferencia de profesional: ${form.professionalPreference || "Secretaria virtual de Delta"}`,
       selectedProfessional?.specialty ? `Especialidad del profesional elegido: ${selectedProfessional.specialty}` : null,
@@ -76,7 +76,7 @@ export function TeamReferralForm({
     ].filter(Boolean).join("\n");
 
     window.open(`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
-    setFeedback("Te abrimos WhatsApp con la informacion lista para que administracion pueda derivarte.");
+    setFeedback("Te abrimos WhatsApp con la información lista para que administración pueda derivarte.");
   }
 
   return (
@@ -163,7 +163,7 @@ export function TeamReferralForm({
         </div>
 
         <label>
-          Disponibilidad de dias y horarios *
+          Disponibilidad de días y horarios *
           <input
             value={form.availability}
             onChange={(event) => updateField("availability", event.target.value)}

@@ -74,20 +74,6 @@ async function main() {
     },
   });
 
-  const oficina = await prisma.professional.create({
-    data: {
-      fullName: "Oficina / Sala de reuniones",
-      specialty: "Oficina por modulo",
-      bio: "Espacio funcional para reuniones, evaluaciones, entrevistas y trabajo administrativo.",
-      email: "oficina@delta.local",
-      yearsPractice: 1,
-      colorToken: "cyan",
-      consultoryId: sedeCityBell.id,
-      serves: "Reuniones, admisiones, consultoria profesional",
-      photoUrl: "/delta-assets/ig-post-oficina.jpg",
-    },
-  });
-
   const licAgustina = await prisma.professional.create({
     data: {
       fullName: "Lic. Agustina Ferraro",
@@ -198,7 +184,7 @@ async function main() {
   // Por ahora no se crean usuarios para profesionales ni pacientes.
 
   console.log("Creando horarios...");
-  const resources = [consultorio1, consultorio2, oficina, licAgustina, licTomas];
+  const resources = [consultorio1, consultorio2, licAgustina, licTomas];
   for (const resource of resources) {
     for (const dayOfWeek of [1, 2, 3, 4, 5]) {
       for (const fixedModule of [
@@ -245,26 +231,6 @@ async function main() {
       status: "PENDING" as const,
     },
     {
-      patientName: "ADN Funcional",
-      patientEmail: "adnfuncional@example.com",
-      reason: "Entrevistas iniciales y admisiones",
-      professionalId: oficina.id,
-      consultoryId: sedeCityBell.id,
-      dayOffset: 2,
-      hour: 9,
-      status: "CONFIRMED" as const,
-    },
-    {
-      patientName: "Abaco Inclusion",
-      patientEmail: "abaco@example.com",
-      reason: "Modulo para reuniones de equipo terapeutico",
-      professionalId: oficina.id,
-      consultoryId: sedeCityBell.id,
-      dayOffset: 3,
-      hour: 11,
-      status: "PENDING" as const,
-    },
-    {
       patientName: "Consultorios City Bell",
       patientEmail: "consultorioscb@example.com",
       reason: "Bloque de atencion profesional",
@@ -273,16 +239,6 @@ async function main() {
       dayOffset: 4,
       hour: 17,
       status: "CONFIRMED" as const,
-    },
-    {
-      patientName: "BE Club Gonnet",
-      patientEmail: "beclub@example.com",
-      reason: "Reunion de coordinacion mensual",
-      professionalId: oficina.id,
-      consultoryId: sedeCityBell.id,
-      dayOffset: 5,
-      hour: 12,
-      status: "PENDING" as const,
     },
     {
       patientName: "Marina Lopez",

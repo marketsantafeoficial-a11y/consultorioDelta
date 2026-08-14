@@ -50,7 +50,7 @@ export default async function ProfessionalPage() {
         alignItems: "center"
       }}>
         <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
-          <img src="/delta-logo-new.png" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo small" />
+          <img src="/delta-logo-round.jpeg" alt="DELTA – ESPACIOS PROFESIONALES City Bell" className="brand-logo small" />
           <h1 style={{ color: "var(--color-primary)", fontSize: "1.25rem", margin: 0 }}>DELTA | Panel Profesional</h1>
         </div>
         <div className="header-actions">

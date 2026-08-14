@@ -22,7 +22,7 @@ export default async function ProfesionalesPage() {
       <section className="section-stack team-section">
         <div className="section-head">
           <h1>Nuestro equipo</h1>
-          <p>Conocé los profesionales que forman parte de nuestro espacio. Podes comunicarte directamente por WhatsApp desde cada perfil.</p>
+          <p>Conocé los profesionales que forman parte de nuestro espacio. Podés comunicarte directamente por WhatsApp desde cada perfil.</p>
         </div>
 
         <TeamDirectory
