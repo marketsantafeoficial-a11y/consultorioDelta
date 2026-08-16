@@ -82,7 +82,7 @@ export function TeamReferralForm({
   return (
     <section className="referral-section" id="derivacion">
       <div className="referral-copy">
-        <h2>Dejanos tu consulta en el siguiente formulario para comunicarnos por WhatsApp.</h2>
+        <h2>Dejanos tu consulta en el siguiente formulario para comunicarnos por WhatsApp</h2>
         <p>Desplegá la flecha para contactar directamente al profesional de tu interés o comunicate con la secretaria virtual de Delta para recibir asesoramiento.</p>
       </div>
 
